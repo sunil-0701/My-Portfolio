@@ -1,11 +1,4 @@
-const VARIANT_CLASSES = {
-  primary: 'bg-paper text-ink hover:scale-[1.03]',
-  secondary:
-    'border border-white/25 bg-ink/35 text-paper backdrop-blur-md hover:bg-white/5',
-}
-
 export default function Button({
-  variant = 'primary',
   icon,
   children,
   className = '',
@@ -13,11 +6,16 @@ export default function Button({
 }) {
   return (
     <button
-      className={`flex items-center gap-2 rounded-[3px] px-5 py-3 text-xs font-semibold uppercase tracking-[0.06em] transition-all ${VARIANT_CLASSES[variant]} ${className}`}
+      className={`group inline-flex items-center gap-6 border border-white/20 bg-transparent px-7 py-3.5 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-[#eeeeec] transition-all duration-300 ease-out hover:border-white/45 hover:bg-white/[0.03] ${className}`}
       {...props}
     >
-      {children}
-      {icon}
+      <span>{children}</span>
+      {icon && (
+        <span className="inline-flex transition-transform duration-300 ease-out group-hover:translate-x-1.5">
+          {icon}
+        </span>
+      )}
     </button>
   )
 }
+

@@ -6,7 +6,7 @@ export default function PageLoader({ onDone }) {
 
   useEffect(() => {
     const start = performance.now()
-    const duration = 3200
+    const duration = 500
 
     let frame
     const tick = (now) => {
@@ -17,7 +17,7 @@ export default function PageLoader({ onDone }) {
       if (next < 100) {
         frame = requestAnimationFrame(tick)
       } else {
-        setTimeout(onDone, 350)
+        setTimeout(onDone, 150)
       }
     }
     frame = requestAnimationFrame(tick)
