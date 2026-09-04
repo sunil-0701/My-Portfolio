@@ -3,101 +3,314 @@
 @theme {
   --font-display: "Bebas Neue", sans-serif;
   --font-sans: "Manrope", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --color-ink: #070708;
+  /* Surfaces — one cool-neutral family, no warm/cool mixing */
+  --color-ink: #020304;
+  --color-ink-2: #07090b;
+  --color-ink-3: #0e1115;
+
+  /* Text */
   --color-paper: #f0f0ee;
   --color-muted: #8e8e93;
   --color-faint: #606064;
+
+  /* Single accent — desaturated "system online" signal (HSL 156 18% 63%) */
+  --color-signal: #8fb3a3;
+}
+
+:root {
+  /* z-index scale — no arbitrary 9999s */
+  --z-behind: 0;
+  --z-content: 10;
+  --z-grain: 20;
+  --z-sheet: 30;
+  --z-nav: 40;
+  --z-loader: 60;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.5, 1);
+
+  /* Pointer parallax, written by HeroBackground. Range roughly -1..1. */
+  --px: 0;
+  --py: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* The page is a full-bleed cinematic surface and the OS scrollbar cuts a
+     bright channel down the right edge of it. Wheel, touch, keyboard and
+     drag scrolling all still work. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 html, body {
   margin: 0;
   padding: 0;
-  background-color: #070708;
-  color: #f0f0ee;
+  background-color: var(--color-ink);
+  color: var(--color-paper);
   font-family: var(--font-sans);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Film grain — static subtle SVG noise */
-.bg-grain {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
+/* Numbers never jitter */
+.tabular {
+  font-variant-numeric: tabular-nums;
 }
 
-/* Period Blinking animation: opacity 1 -> 0.25 -> 1 */
+::selection {
+  background: rgba(240, 240, 238, 0.16);
+  color: var(--color-paper);
+}
+
+/* One consistent focus ring for keyboard users */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 1px solid rgba(240, 240, 238, 0.7);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Skip link — visible only when focused */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: var(--z-loader);
+  transform: translateY(-200%);
+  transition: transform 220ms var(--ease-out-expo);
+  background: var(--color-ink-3);
+  color: var(--color-paper);
+  border: 1px solid rgba(240, 240, 238, 0.2);
+  padding: 0.6rem 1rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* Glass.
+   Real glass needs more than a blur: a bright hairline along the lit edge, a
+   darker one along the shadowed edge, and a little saturation lift so colour
+   passing through the pane stays alive. */
+.glass-bar {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.055),
+    rgba(255, 255, 255, 0.02)
+  );
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    inset 0 -1px 0 rgba(2, 3, 4, 0.55),
+    0 14px 40px -18px rgba(2, 3, 4, 0.9);
+}
+
+/* Hero height fitting.
+   A laptop viewport minus browser chrome lands well under 900px, which is
+   where the hero used to spill and summon a scrollbar. */
+.hero-shell {
+  padding-top: 8rem;
+  padding-bottom: 2.5rem;
+}
+
+.hero-rail {
+  padding-top: 2.5rem;
+}
+
+@media (max-height: 900px) {
+  .hero-shell {
+    padding-top: 6.25rem;
+    padding-bottom: 1.5rem;
+  }
+  .hero-rail {
+    padding-top: 1.25rem;
+  }
+}
+
+@media (max-height: 780px) {
+  .hero-shell {
+    padding-top: 5.25rem;
+    padding-bottom: 1rem;
+  }
+  .hero-rail {
+    padding-top: 0.75rem;
+  }
+}
+
+/* Period blink on the wordmark */
 @keyframes blinkPeriod {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.25; }
 }
+
 .animate-blink-period {
   animation: blinkPeriod 1.2s ease-in-out infinite;
 }
 
-/* Vertical light beam sweep traveling TOP -> BOTTOM through role typography */
-@keyframes verticalBeamShine {
-  0% {
-    background-position: 0% -150%;
-  }
-  100% {
-    background-position: 0% 250%;
-  }
+/* Role reel.
+   Light sweeps across the word as the reel settles onto it. */
+@keyframes reelSweep {
+  0% { background-position: -140% 0; opacity: 0; }
+  12% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { background-position: 240% 0; opacity: 0; }
 }
 
-.shine-text-vertical {
-  position: relative;
-  display: inline-block;
-  color: #8e8e93;
-}
-
-.shine-text-vertical::after {
+.reel-sweep::after {
   content: attr(data-text);
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.95) 45%,
-    rgba(255, 255, 255, 0.95) 55%,
-    transparent 100%
+  inset: 0;
+  background-image: linear-gradient(
+    100deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.95) 50%,
+    transparent 62%
   );
-  background-size: 100% 300%;
+  background-size: 220% 100%;
   background-repeat: no-repeat;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   pointer-events: none;
-  animation: verticalBeamShine 4s linear infinite;
+  animation: reelSweep 1.5s var(--ease-out-expo) 0.18s both;
 }
 
-/* Orbital rotation */
-@keyframes orbitalDrift {
+/* Star dust subtle twinkle */
+@keyframes starDustTwinkle {
+  0%, 100% { opacity: 0.12; }
+  50% { opacity: 0.35; }
+}
+
+.animate-star-twinkle-1 { animation: starDustTwinkle 4.5s ease-in-out infinite; }
+.animate-star-twinkle-2 { animation: starDustTwinkle 7s ease-in-out infinite 1.8s; }
+.animate-star-twinkle-3 { animation: starDustTwinkle 9s ease-in-out infinite 3.4s; }
+
+/* Orbits — one slow forward, one slower reverse, so the field never repeats */
+@keyframes singleOrbitLoop {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-.animate-orbital-drift {
-  animation: orbitalDrift 120s linear infinite;
+
+.animate-single-orbit {
+  animation: singleOrbitLoop 45s linear infinite;
 }
 
-/* Dot pulse on scroll indicator */
-@keyframes subtlePulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.3); }
+.animate-orbit-reverse {
+  animation: singleOrbitLoop 78s linear infinite reverse;
 }
-.animate-subtle-pulse {
-  animation: subtlePulse 2s ease-in-out infinite;
+
+/* Ambient drift. Transform and opacity only, so the compositor carries it. */
+@keyframes driftA {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.5; }
+  50% { transform: translate3d(5vw, -4vh, 0) scale(1.18); opacity: 0.85; }
+}
+
+@keyframes driftB {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.1); opacity: 0.35; }
+  50% { transform: translate3d(-6vw, 5vh, 0) scale(0.92); opacity: 0.7; }
+}
+
+@keyframes driftC {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(0.95); opacity: 0.28; }
+  50% { transform: translate3d(3vw, 6vh, 0) scale(1.22); opacity: 0.6; }
+}
+
+.animate-drift-a { animation: driftA 34s ease-in-out infinite; }
+.animate-drift-b { animation: driftB 46s ease-in-out infinite; }
+.animate-drift-c { animation: driftC 58s ease-in-out infinite; }
+
+/* Breathing light field behind the portrait */
+@keyframes auraBreathe {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.07); opacity: 0.72; }
+}
+
+.animate-aura-breathe {
+  animation: auraBreathe 11s ease-in-out infinite;
+}
+
+/* A streak crosses the field roughly once every 16s */
+@keyframes shootingStar {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  1% { opacity: 0.9; }
+  7% { transform: translate3d(-52vw, 30vh, 0); opacity: 0; }
+  100% { transform: translate3d(-52vw, 30vh, 0); opacity: 0; }
+}
+
+.animate-shooting-1 { animation: shootingStar 16s linear 5s infinite; }
+.animate-shooting-2 { animation: shootingStar 23s linear 13s infinite; }
+
+/* Parallax layers. The transition is what makes the pointer feel weighted
+   rather than glued to the cursor. */
+.parallax {
+  transition: transform 700ms var(--ease-out-expo);
+  will-change: transform;
+}
+
+.parallax-near { transform: translate3d(calc(var(--px) * 20px), calc(var(--py) * 15px), 0); }
+.parallax-mid { transform: translate3d(calc(var(--px) * 11px), calc(var(--py) * 8px), 0); }
+.parallax-far { transform: translate3d(calc(var(--px) * 5px), calc(var(--py) * 4px), 0); }
+
+/* Scroll cue travelling down the rule */
+@keyframes scrollTravel {
+  0% { transform: translateY(-100%); opacity: 0; }
+  35% { opacity: 1; }
+  100% { transform: translateY(220%); opacity: 0; }
+}
+
+.animate-scroll-travel {
+  animation: scrollTravel 2.8s var(--ease-out-expo) infinite;
+}
+
+/* Live status dot */
+@keyframes signalPulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(143, 179, 163, 0.45); }
+  70% { opacity: 0.85; box-shadow: 0 0 0 5px rgba(143, 179, 163, 0); }
+}
+
+.animate-signal {
+  animation: signalPulse 2.6s ease-out infinite;
+}
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: soft-light;
+}
+
+/* Film grain — desaturated, breaks the digital flatness */
+.bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-}
 
+  .parallax {
+    transform: none !important;
+  }
+}

@@ -1,82 +1,124 @@
 import { motion } from 'framer-motion'
-import Button from '../ui/Button'
-import ShineText from '../ui/ShineText'
+import RoleReel from './RoleReel'
+import Button, { ArrowRight } from '../ui/Button'
+import { SITE } from '../../config/site'
 
-const reveal = {
-  hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
-}
+const cubicEase = [0.16, 1, 0.3, 1]
 
+// One stack, one staggered cascade — nothing mounts all at once.
 const stack = {
   hidden: {},
-  show: { transition: { delayChildren: 0.25, staggerChildren: 0.1 } },
+  show: { transition: { delayChildren: 0.12, staggerChildren: 0.1 } },
 }
 
-const ArrowIcon = (
-  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M7 17L17 7M17 7H8M17 7V16" />
-  </svg>
-)
+// Entries resolve out of a blur rather than simply sliding, which reads as
+// depth of field settling instead of a panel moving.
+const rise = {
+  hidden: { opacity: 0, y: 26, filter: 'blur(10px)' },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 1.1, ease: cubicEase },
+  },
+}
 
-const ROLE_LINES = [
-  'BACKEND ENGINEER',
-  'BUILDING SCALABLE SYSTEMS',
-  'THAT SOLVE REAL PROBLEMS.',
-]
+const nameVariant = {
+  hidden: { opacity: 0, y: 40, filter: 'blur(14px)' },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 1.35, ease: cubicEase },
+  },
+}
 
-export default function HeroContent() {
+function StatusBadge() {
+  return (
+    <span className="inline-flex items-center gap-2.5 border border-white/[0.13] bg-white/[0.03] px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md">
+      <span
+        aria-hidden="true"
+        className={`h-1.5 w-1.5 rounded-full ${
+          SITE.available ? 'animate-signal bg-signal' : 'bg-faint'
+        }`}
+      />
+      <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
+        {SITE.available ? SITE.availableLabel : 'Not currently available'}
+      </span>
+    </span>
+  )
+}
+
+export default function HeroContent({ ready = true }) {
   return (
     <motion.div
       variants={stack}
       initial="hidden"
-      animate="show"
-      className="relative z-10 flex min-h-screen flex-col justify-center px-6 pt-16 pb-12 sm:px-10 lg:pl-[20vw] lg:px-0 lg:pt-0"
+      animate={ready ? 'show' : 'hidden'}
+      className="flex max-w-[46rem] flex-col"
     >
       {/* Greeting */}
       <motion.p
-        variants={reveal}
-        className="mb-3 text-[0.66rem] font-medium uppercase tracking-[0.3em] text-[#a0a0a5] sm:text-[0.7rem]"
+        variants={rise}
+        className="mb-5 font-mono text-[0.68rem] uppercase tracking-[0.26em] text-muted sm:text-[0.72rem]"
       >
-        HELLO, I&apos;M
+        {SITE.greeting}
       </motion.p>
 
-      {/* Main Name */}
+      {/* Name. The size is capped by viewport height as well as width so the
+          hero still resolves in one screen on a short laptop viewport. */}
       <motion.h1
-        variants={reveal}
-        className="font-display text-[clamp(3.2rem,6.4vw,7.6rem)] font-normal uppercase leading-[0.88] text-[#eeeeec] [text-shadow:0_0_40px_rgba(255,255,255,0.14)]"
+        variants={nameVariant}
+        id="hero-heading"
+        className="font-display text-[clamp(3.4rem,min(10.5vw,17vh),9.5rem)] font-normal uppercase leading-[0.86] text-[#eeeeec] [text-shadow:0_0_44px_rgba(255,255,255,0.13)] [text-wrap:balance]"
       >
-        <span className="tracking-[0.11em]">SUNIL</span>
-        <br />
-        <span className="tracking-[0.11em]">AMARTHYA</span>
-        <span className="animate-blink-period inline-block tracking-normal">.</span>
+        <span className="block tracking-[0.11em]">{SITE.firstName}</span>
+        <span className="block tracking-[0.11em]">
+          {SITE.lastName}
+          <span
+            aria-hidden="true"
+            className="animate-blink-period ml-[0.08em] inline-block h-[0.1em] w-[0.1em] rounded-full bg-signal align-baseline shadow-[0_0_14px_rgba(143,179,163,0.55)]"
+          />
+        </span>
       </motion.h1>
 
-      {/* Subtle Horizontal Divider */}
+      {/* Role reel. Separated by space rather than a rule — the reel is the
+          punctuation between the name and the sentence. */}
       <motion.div
-        variants={reveal}
-        className="my-6 h-[1px] w-[40px] bg-white/20"
-      />
-
-      {/* Role Lines with Vertical Light Sweep */}
-      <motion.div
-        variants={reveal}
-        className="flex flex-col gap-2 text-[0.68rem] font-light uppercase leading-relaxed tracking-[0.24em] sm:text-[0.74rem]"
+        variants={rise}
+        className="mt-9 mb-6 font-mono text-[0.72rem] uppercase tracking-[0.26em] sm:text-[0.78rem]"
       >
-        {ROLE_LINES.map((line, i) => (
-          <ShineText key={line} delay={i * 0.4}>
-            {line}
-          </ShineText>
-        ))}
+        <RoleReel roles={SITE.roles} />
       </motion.div>
 
-      {/* Button */}
-      <motion.div variants={reveal} className="mt-8">
-        <Button icon={ArrowIcon}>
-          EXPLORE MY WORK
+      {/* Supporting sentence — sentence case, measured, readable */}
+      <motion.p
+        variants={rise}
+        className="mb-9 max-w-[46ch] text-[0.95rem] font-normal leading-[1.75] text-[#a8a8ad] [text-wrap:pretty] sm:text-[1rem]"
+      >
+        {SITE.summary}
+      </motion.p>
+
+      {/* Actions — one solid, one quiet text link. Both go somewhere real. */}
+      <motion.div variants={rise} className="flex flex-wrap items-center gap-x-8 gap-y-4">
+        <Button href={`mailto:${SITE.email}`} variant="solid" icon={<ArrowRight />}>
+          Get in touch
         </Button>
+        <Button href={SITE.github} target="_blank" rel="noreferrer" variant="quiet">
+          View GitHub
+        </Button>
+      </motion.div>
+
+      {/* Status + place */}
+      <motion.div
+        variants={rise}
+        className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-3"
+      >
+        <StatusBadge />
+        <span className="tabular font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
+          {SITE.location} · {SITE.timezone}
+        </span>
       </motion.div>
     </motion.div>
   )
 }
-
-

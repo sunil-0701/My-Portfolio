@@ -1,58 +1,64 @@
 import { motion } from 'framer-motion'
 import portrait from '../../assets/profile-portrait.jpg'
+import { SITE } from '../../config/site'
 
-export default function HeroPortrait() {
+// Fades on all four edges so the photo dissolves into the background instead of
+// being hard-cropped at the viewport edge.
+const MASK =
+  'radial-gradient(ellipse 62% 74% at 52% 42%, #000 26%, rgba(0,0,0,0.72) 54%, transparent 80%)'
+
+export default function HeroPortrait({ ready = true }) {
   return (
     <motion.div
-      className="absolute bottom-0 right-0 z-0 h-full w-[55%] lg:w-[50%] xl:w-[48%]"
-      initial={{ opacity: 0, scale: 1.03 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1.2, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+      className="pointer-events-none absolute inset-y-0 right-0 z-[var(--z-behind)] w-[88%] sm:w-[66%] md:w-[58%] lg:w-[52%] xl:w-[50%]"
+      initial={{ opacity: 0, scale: 1.07 }}
+      animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.07 }}
+      transition={{ duration: 2.2, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Outer silhouette atmospheric white aura glow behind the portrait */}
+      {/* Atmospheric aura behind the silhouette, breathing slowly */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-[52%] top-[40%] h-[75%] w-[75%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-55 mix-blend-screen blur-[70px]"
+        className="animate-aura-breathe absolute left-[52%] top-[40%] h-[75%] w-[75%] -translate-x-1/2 -translate-y-1/2 rounded-full mix-blend-screen blur-[70px]"
         style={{
-          background: 'radial-gradient(circle, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.1) 45%, transparent 75%)',
+          background:
+            'radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.09) 45%, transparent 75%)',
         }}
       />
 
-      {/* Main Portrait Image with radial mask to dissolve dark-gray photo background into #070708 */}
-      <div className="relative h-full w-full">
+      <div className="parallax parallax-mid relative h-full w-full">
         <img
           src={portrait}
-          alt="Sunil Amarthya"
-          className="h-full w-full object-cover object-[48%_20%] filter brightness-[1.02] contrast-[1.06]"
-          style={{
-            maskImage:
-              'radial-gradient(ellipse 68% 85% at 55% 45%, black 35%, transparent 72%)',
-            WebkitMaskImage:
-              'radial-gradient(ellipse 68% 85% at 55% 45%, black 35%, transparent 72%)',
-          }}
+          alt={`${SITE.name}, photographed in profile`}
+          fetchPriority="high"
+          decoding="async"
+          className="h-full w-full object-cover object-[48%_20%] opacity-30 brightness-[1.02] contrast-[1.06] sm:opacity-45 lg:opacity-100"
+          style={{ maskImage: MASK, WebkitMaskImage: MASK }}
         />
       </div>
 
-      {/* Soft rim illumination overlay around silhouette head */}
+      {/* Soft rim light on the head. Deliberately NOT mix-blend-screen: the
+          animated wrapper isolates the blend group, which made the layer's own
+          box edge show up as a vertical seam down the middle of the hero. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 mix-blend-screen"
+        className="absolute inset-0"
         style={{
           background:
-            'radial-gradient(circle at 58% 30%, rgba(255,255,255,0.15), transparent 42%)',
+            'radial-gradient(circle at 58% 30%, rgba(255,255,255,0.13), transparent 42%)',
         }}
       />
 
-      {/* Dark floor fade */}
+      {/* Right-edge scrim — kills the vertical hard cut at the viewport boundary */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[28%]"
+        className="absolute inset-y-0 right-0 w-[18%]"
         style={{
-          background: 'linear-gradient(to top, #070708 0%, rgba(7,7,8,0.85) 60%, transparent 100%)',
+          background: 'linear-gradient(to left, #020304 0%, rgba(2,3,4,0.55) 45%, transparent 100%)',
         }}
       />
+
+      {/* The floor fade lives in Landing, spanning the whole section. Boxed to
+          this container it read as a rectangular shadow under the photo. */}
     </motion.div>
   )
 }
-
-
