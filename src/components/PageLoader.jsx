@@ -1,12 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import { SITE } from '../config/site'
 
 const DURATION = 2600
-
-const prefersReducedMotion = () =>
-  typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 // Corner ticks — the technical-drawing register the rest of the page uses
 function CornerTicks() {
@@ -22,7 +18,10 @@ function CornerTicks() {
 }
 
 export default function PageLoader({ onDone }) {
-  const [percent, setPercent] = useState(() => (prefersReducedMotion() ? 100 : 0))
+  const reduceMotion = useReducedMotion()
+  const countRef = useRef(null)
+  const progressRef = useRef(null)
+  const pointRef = useRef(null)
 
   // Keep the callback in a ref so the timeline effect runs exactly once,
   // even though the parent passes a fresh arrow on every render.
@@ -33,7 +32,7 @@ export default function PageLoader({ onDone }) {
 
   useEffect(() => {
     // Anyone who asked for reduced motion gets the page, not the show.
-    if (prefersReducedMotion()) {
+    if (reduceMotion) {
       const id = setTimeout(() => onDoneRef.current(), 120)
       return () => clearTimeout(id)
     }
@@ -41,24 +40,46 @@ export default function PageLoader({ onDone }) {
     const start = performance.now()
     let frame
     let timeout
+    let failsafe
+    let completed = false
+    let lastPercent = -1
+
+    // Only the count's text node changes, not the whole React subtree. The
+    // progress rail uses transforms without chasing a new CSS transition.
+    const update = (progress) => {
+      const percent = Math.round(progress * 100)
+      if (percent !== lastPercent) {
+        countRef.current.textContent = String(percent).padStart(3, '0')
+        lastPercent = percent
+      }
+      progressRef.current.style.transform = `scaleX(${progress})`
+      pointRef.current.style.transform = `translateX(${(progress - 1) * 100}%)`
+    }
+
+    const finish = () => {
+      if (completed) return
+      completed = true
+      cancelAnimationFrame(frame)
+      clearTimeout(timeout)
+      clearTimeout(failsafe)
+      update(1)
+      onDoneRef.current()
+    }
 
     // rAF is paused while the tab is backgrounded. Without a wall-clock
     // fallback the intro would never hand over, and the page would sit
     // behind a frozen loader.
-    const failsafe = setTimeout(() => {
-      setPercent(100)
-      onDoneRef.current()
-    }, DURATION + 900)
+    failsafe = setTimeout(finish, DURATION + 900)
 
     const tick = (now) => {
       const raw = Math.min(1, (now - start) / DURATION)
       const eased = 1 - Math.pow(1 - raw, 2.8)
-      setPercent(Math.min(100, Math.round(eased * 100)))
+      update(eased)
 
       if (raw < 1) {
         frame = requestAnimationFrame(tick)
       } else {
-        timeout = setTimeout(() => onDoneRef.current(), 220)
+        timeout = setTimeout(finish, 220)
       }
     }
     frame = requestAnimationFrame(tick)
@@ -68,7 +89,7 @@ export default function PageLoader({ onDone }) {
       clearTimeout(timeout)
       clearTimeout(failsafe)
     }
-  }, [])
+  }, [reduceMotion])
 
   return (
     <motion.div
@@ -80,7 +101,7 @@ export default function PageLoader({ onDone }) {
       // Lifts like a curtain instead of dissolving, so the hero underneath is
       // revealed rather than cross-faded into.
       exit={{ y: '-100%' }}
-      transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
+      transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.76, 0, 0.24, 1] }}
     >
       <div
         aria-hidden="true"
@@ -90,8 +111,6 @@ export default function PageLoader({ onDone }) {
             'radial-gradient(ellipse 70vw 60vh at 28% 55%, rgba(255,255,255,0.06), transparent 72%)',
         }}
       />
-      <div className="bg-grain pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-soft-light" />
-
       <CornerTicks />
 
       {/* Left-aligned on the hero's own gutter, so when the curtain lifts the
@@ -103,7 +122,7 @@ export default function PageLoader({ onDone }) {
           className="mb-8 text-paper"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: reduceMotion ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="flex items-center gap-3">
             <svg width="17" height="27" viewBox="0 0 40 60" fill="none" stroke="currentColor" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round">
@@ -120,13 +139,14 @@ export default function PageLoader({ onDone }) {
 
         {/* The count is the hero of this screen */}
         <motion.div
+          aria-hidden="true"
           className="flex items-baseline gap-4"
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: reduceMotion ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="tabular font-display text-[clamp(4.5rem,14vw,11rem)] leading-[0.8] tracking-[0.04em] text-paper">
-            {String(percent).padStart(3, '0')}
+          <span ref={countRef} className="tabular font-display text-[clamp(4.5rem,14vw,11rem)] leading-[0.8] tracking-[0.04em] text-paper">
+            {reduceMotion ? '100' : '000'}
           </span>
           <span className="font-mono text-[0.8rem] text-faint">%</span>
         </motion.div>
@@ -135,11 +155,11 @@ export default function PageLoader({ onDone }) {
           className="mt-7 flex items-center gap-3"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: reduceMotion ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
           <span
             aria-hidden="true"
-            className="animate-signal h-1.5 w-1.5 rounded-full bg-signal"
+            className="h-1.5 w-1.5 rounded-full bg-signal"
           />
           <span className="text-[0.66rem] uppercase tracking-[0.3em] text-muted">
             Initializing system
@@ -152,7 +172,7 @@ export default function PageLoader({ onDone }) {
         className="absolute inset-x-0 bottom-0 flex items-end justify-between px-6 pb-8 sm:px-10 lg:px-16 xl:px-20"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.35 }}
+        transition={{ duration: reduceMotion ? 0 : 0.5 }}
       >
         <span className="font-display text-[1.1rem] tracking-[0.16em] text-paper/70">
           SA<span className="text-signal">.</span>
@@ -163,15 +183,16 @@ export default function PageLoader({ onDone }) {
       </motion.div>
 
       {/* Full-bleed rail pinned to the very edge of the screen */}
-      <div className="absolute inset-x-0 bottom-0 h-px bg-white/[0.08]">
+      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-white/[0.08]">
         <div
-          className="absolute inset-0 origin-left bg-paper transition-transform duration-100 ease-out"
-          style={{ transform: `scaleX(${percent / 100})` }}
+          ref={progressRef}
+          className="absolute inset-0 origin-left bg-paper"
+          style={{ transform: reduceMotion ? 'scaleX(1)' : 'scaleX(0)' }}
         />
         <div
-          aria-hidden="true"
-          className="absolute inset-0 transition-transform duration-100 ease-out"
-          style={{ transform: `translateX(${percent - 100}%)` }}
+          ref={pointRef}
+          className="absolute inset-0"
+          style={{ transform: reduceMotion ? 'translateX(0%)' : 'translateX(-100%)' }}
         >
           <span className="absolute right-0 top-1/2 h-1.5 w-1.5 -translate-y-1/2 translate-x-1/2 rounded-full bg-signal shadow-[0_0_14px_4px_rgba(143,179,163,0.5)]" />
         </div>

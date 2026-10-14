@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, MotionConfig } from 'framer-motion'
 import PageLoader from './components/PageLoader'
 import NavBar from './components/layout/NavBar'
 import Landing from './sections/Landing'
@@ -12,13 +12,10 @@ function App() {
   const ready = !loading
 
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-
-      {/* Fixed so the grain never repaints with scrolling content */}
-      <div aria-hidden="true" className="grain-overlay bg-grain" />
 
       <AnimatePresence>
         {loading && <PageLoader onDone={() => setLoading(false)} />}
@@ -29,7 +26,7 @@ function App() {
       <main id="main" tabIndex={-1}>
         <Landing ready={ready} />
       </main>
-    </>
+    </MotionConfig>
   )
 }
 

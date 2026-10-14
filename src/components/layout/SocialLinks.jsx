@@ -44,7 +44,7 @@ export default function SocialLinks({ orientation = 'vertical', className = '' }
             {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
             aria-label={label}
             title={label}
-            className="flex h-9 w-9 items-center justify-center rounded-[10px] border border-white/[0.12] bg-white/[0.02] text-muted backdrop-blur-md transition-[color,border-color,background-color,transform] duration-300 ease-out hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/[0.05] hover:text-paper active:translate-y-0 active:scale-95"
+            className="flex h-9 w-9 items-center justify-center rounded-[10px] border border-white/[0.12] bg-white/[0.02] text-muted transition-[color,border-color,background-color,transform] duration-150 ease-out hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/[0.05] hover:text-paper active:translate-y-0 active:scale-95"
           >
             <svg
               width="15"

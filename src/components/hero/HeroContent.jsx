@@ -8,38 +8,36 @@ const cubicEase = [0.16, 1, 0.3, 1]
 // One stack, one staggered cascade — nothing mounts all at once.
 const stack = {
   hidden: {},
-  show: { transition: { delayChildren: 0.12, staggerChildren: 0.1 } },
+  show: { transition: { delayChildren: 0.08, staggerChildren: 0.06 } },
 }
 
-// Entries resolve out of a blur rather than simply sliding, which reads as
-// depth of field settling instead of a panel moving.
+// Keep the staggered reveal, but only animate opacity and transform. Blurring
+// the large heading on every entrance frame made the reveal much more costly.
 const rise = {
-  hidden: { opacity: 0, y: 26, filter: 'blur(10px)' },
+  hidden: { opacity: 0, y: 16 },
   show: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 1.1, ease: cubicEase },
+    transition: { duration: 0.55, ease: cubicEase },
   },
 }
 
 const nameVariant = {
-  hidden: { opacity: 0, y: 40, filter: 'blur(14px)' },
+  hidden: { opacity: 0, y: 24 },
   show: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 1.35, ease: cubicEase },
+    transition: { duration: 0.7, ease: cubicEase },
   },
 }
 
 function StatusBadge() {
   return (
-    <span className="inline-flex items-center gap-2.5 border border-white/[0.13] bg-white/[0.03] px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md">
+    <span className="inline-flex items-center gap-2.5 border border-white/[0.13] bg-white/[0.03] px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
       <span
         aria-hidden="true"
         className={`h-1.5 w-1.5 rounded-full ${
-          SITE.available ? 'animate-signal bg-signal' : 'bg-faint'
+          SITE.available ? 'bg-signal' : 'bg-faint'
         }`}
       />
       <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
@@ -77,7 +75,7 @@ export default function HeroContent({ ready = true }) {
           {SITE.lastName}
           <span
             aria-hidden="true"
-            className="animate-blink-period ml-[0.08em] inline-block h-[0.1em] w-[0.1em] rounded-full bg-signal align-baseline shadow-[0_0_14px_rgba(143,179,163,0.55)]"
+            className="ml-[0.08em] inline-block h-[0.1em] w-[0.1em] rounded-full bg-signal align-baseline shadow-[0_0_14px_rgba(143,179,163,0.55)]"
           />
         </span>
       </motion.h1>
@@ -88,7 +86,7 @@ export default function HeroContent({ ready = true }) {
         variants={rise}
         className="mt-9 mb-6 font-mono text-[0.72rem] uppercase tracking-[0.26em] sm:text-[0.78rem]"
       >
-        <RoleReel roles={SITE.roles} />
+        <RoleReel roles={SITE.roles} ready={ready} />
       </motion.div>
 
       {/* Supporting sentence — sentence case, measured, readable */}

@@ -24,7 +24,7 @@ export default function Button({
   return (
     <Tag
       href={href}
-      className={`group relative inline-flex items-center gap-4 ${padding} font-sans text-[0.7rem] font-medium uppercase tracking-[0.2em] transition-[background-color,border-color,color,transform,box-shadow] duration-300 ease-[var(--ease-spring)] will-change-transform active:translate-y-0 active:scale-[0.98] ${VARIANTS[variant]} ${className}`}
+      className={`group relative inline-flex items-center gap-4 ${padding} font-sans text-[0.7rem] font-medium uppercase tracking-[0.2em] transition-[background-color,border-color,color,transform,box-shadow] duration-150 ease-out active:translate-y-0 active:scale-[0.98] ${VARIANTS[variant]} ${className}`}
       {...props}
     >
       <span className="relative">

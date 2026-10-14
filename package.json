@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
+    "test:motion": "node scripts/check-motion.js",
     "preview": "vite preview",
     "og": "node scripts/generate-og.js"
   },

@@ -10,12 +10,12 @@ function Wordmark({ onClick }) {
       href="#home"
       onClick={onClick}
       aria-label={`${SITE.name} — back to top`}
-      className="group inline-flex items-baseline gap-[0.1em] font-display text-[1.35rem] tracking-[0.16em] text-paper transition-opacity duration-300 hover:opacity-70"
+      className="group inline-flex items-baseline gap-[0.1em] font-display text-[1.35rem] tracking-[0.16em] text-paper transition-opacity duration-150 hover:opacity-70"
     >
       SA
       <span
         aria-hidden="true"
-        className="animate-blink-period inline-block h-[0.16em] w-[0.16em] translate-y-[-0.02em] rounded-full bg-signal"
+        className="inline-block h-[0.16em] w-[0.16em] translate-y-[-0.02em] rounded-full bg-signal"
       />
     </a>
   )
@@ -61,14 +61,6 @@ function NavItem({ section, isActive, onNavigate }) {
 
 export default function NavBar({ activeLink = 'HOME', ready = true }) {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   // Lock the page behind the mobile sheet, and close it on Escape.
   useEffect(() => {
@@ -88,12 +80,10 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
   return (
     <>
       <motion.header
-        className={`glass-bar fixed inset-x-0 top-0 z-[var(--z-nav)] transition-[background-color,box-shadow] duration-500 ${
-          scrolled ? 'shadow-[inset_0_1px_0_rgba(255,255,255,0.14),inset_0_-1px_0_rgba(2,3,4,0.6),0_20px_50px_-20px_rgba(2,3,4,0.95)]' : ''
-        }`}
+        className="glass-bar fixed inset-x-0 top-0 z-[var(--z-nav)]"
         initial={{ opacity: 0, y: -26 }}
         animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: -26 }}
-        transition={{ duration: 1.1, delay: 0.25, ease: easeOutExpo }}
+        transition={{ duration: 0.5, delay: 0.1, ease: easeOutExpo }}
       >
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-6 sm:px-10 lg:px-16 xl:px-20">
           <Wordmark onClick={() => setMenuOpen(false)} />
@@ -130,28 +120,24 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
         </div>
       </motion.header>
 
-      {/* The sheet is a SIBLING of the header on purpose. Nested inside it, the
-          header's transform/backdrop-filter becomes the containing block for
-          position: fixed and the overlay collapses to the height of the bar.
-          It also sits below the bar in z order so the wordmark and the close
-          control stay visible and clickable on top of it. */}
+      {/* Keep the sheet outside the animated header's containing block. */}
       <AnimatePresence>
         {menuOpen && (
           <motion.nav
             id="mobile-menu"
             aria-label="Primary mobile"
-            className="fixed inset-0 z-[var(--z-sheet)] flex flex-col gap-1 overflow-y-auto bg-ink/[0.97] px-6 pt-28 pb-12 backdrop-blur-2xl md:hidden"
+            className="fixed inset-0 z-[var(--z-sheet)] flex flex-col gap-1 overflow-y-auto bg-ink px-6 pt-28 pb-12 md:hidden"
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.35, ease: easeOutExpo }}
+            transition={{ duration: 0.2, ease: easeOutExpo }}
           >
             {SECTIONS.map((section, i) => (
               <motion.div
                 key={section.id}
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.05 + i * 0.05, ease: easeOutExpo }}
+                transition={{ duration: 0.25, delay: i * 0.025, ease: easeOutExpo }}
                 className="border-b border-white/[0.07] py-5"
               >
                 <div className="text-[1.05rem]">

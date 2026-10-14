@@ -12,12 +12,12 @@ const WINDOW_EM = 1.55
 // animation-complete callback that the next tick can interrupt. Here there is
 // nothing to wrap: only one word is mounted at rest, motion is always upward,
 // and the loop point is indistinguishable from any other change.
-export default function RoleReel({ roles, className = '' }) {
+export default function RoleReel({ roles, ready = true, className = '' }) {
   const [index, setIndex] = useState(0)
   const reduceMotion = useReducedMotion()
 
   useEffect(() => {
-    if (reduceMotion || roles.length < 2) return
+    if (!ready || reduceMotion || roles.length < 2) return
 
     // Exit animations are rAF-driven and freeze while the tab is hidden, but a
     // plain interval keeps firing there. Left running, every tick mounts a word
@@ -46,11 +46,9 @@ export default function RoleReel({ roles, className = '' }) {
       stop()
       document.removeEventListener('visibilitychange', onVisibilityChange)
     }
-  }, [roles.length, reduceMotion])
+  }, [roles.length, ready, reduceMotion])
 
-  // Framer's spring is JS-driven, so the reduced-motion CSS override never
-  // reaches it. Anyone who asked for less motion gets the roles as a plain
-  // static line instead of a rotation.
+  // Anyone who asked for less motion gets a plain static line.
   if (reduceMotion) {
     return (
       <span className={`inline-block text-paper ${className}`}>
@@ -71,36 +69,26 @@ export default function RoleReel({ roles, className = '' }) {
 
       <span
         className="relative block overflow-hidden"
-        style={{
-          height: `${WINDOW_EM}em`,
-          maskImage:
-            'linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%)',
-          WebkitMaskImage:
-            'linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%)',
-        }}
+        style={{ height: `${WINDOW_EM}em` }}
       >
         <AnimatePresence initial={false}>
           <motion.span
             key={role}
             aria-hidden="true"
             className="absolute inset-0 flex items-center whitespace-nowrap text-paper"
-            style={{ textShadow: '0 0 24px rgba(143,179,163,0.5)' }}
-            initial={{ y: '105%', opacity: 0, filter: 'blur(4px)' }}
-            animate={{ y: '0%', opacity: 1, filter: 'blur(0px)' }}
-            exit={{ y: '-105%', opacity: 0, filter: 'blur(4px)' }}
-            transition={{ type: 'spring', stiffness: 200, damping: 24, mass: 0.8 }}
+            initial={{ y: '105%', opacity: 0 }}
+            animate={{ y: '0%', opacity: 1 }}
+            exit={{ y: '-105%', opacity: 0 }}
+            transition={{ type: 'tween', duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
           >
-            {/* Light sweeps across the word as it settles */}
-            <span data-text={role} className="reel-sweep relative">
-              {role}
-            </span>
+            {role}
           </motion.span>
         </AnimatePresence>
       </span>
 
-      {/* The rotation is decorative; assistive tech gets the plain current role */}
-      <span className="sr-only" aria-live="polite">
-        {role}
+      {/* Decorative rotation must not interrupt screen readers every cycle. */}
+      <span className="sr-only">
+        {roles.join(' · ')}
       </span>
     </span>
   )

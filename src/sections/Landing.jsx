@@ -38,7 +38,7 @@ export default function Landing({ ready = true }) {
           className="hero-rail flex items-end justify-between gap-6"
           initial={{ opacity: 0, y: 16 }}
           animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-          transition={{ duration: 1, delay: 0.85, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.5, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
         >
           <ScrollIndicator />
           <SocialLinks orientation="horizontal" />

@@ -11,27 +11,27 @@ export default function HeroPortrait({ ready = true }) {
   return (
     <motion.div
       className="pointer-events-none absolute inset-y-0 right-0 z-[var(--z-behind)] w-[88%] sm:w-[66%] md:w-[58%] lg:w-[52%] xl:w-[50%]"
-      initial={{ opacity: 0, scale: 1.07 }}
-      animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.07 }}
-      transition={{ duration: 2.2, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: ready ? 1 : 0 }}
+      transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Atmospheric aura behind the silhouette, breathing slowly */}
+      {/* A naturally soft gradient replaces the animated, blurred aura. */}
       <div
         aria-hidden="true"
-        className="animate-aura-breathe absolute left-[52%] top-[40%] h-[75%] w-[75%] -translate-x-1/2 -translate-y-1/2 rounded-full mix-blend-screen blur-[70px]"
+        className="absolute left-[52%] top-[40%] h-[75%] w-[75%] -translate-x-1/2 -translate-y-1/2"
         style={{
           background:
-            'radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.09) 45%, transparent 75%)',
+            'radial-gradient(ellipse, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 45%, transparent 75%)',
         }}
       />
 
-      <div className="parallax parallax-mid relative h-full w-full">
+      <div className="relative h-full w-full">
         <img
           src={portrait}
           alt={`${SITE.name}, photographed in profile`}
           fetchPriority="high"
           decoding="async"
-          className="h-full w-full object-cover object-[48%_20%] opacity-30 brightness-[1.02] contrast-[1.06] sm:opacity-45 lg:opacity-100"
+          className="h-full w-full object-cover object-[48%_20%] opacity-30 sm:opacity-45 lg:opacity-100"
           style={{ maskImage: MASK, WebkitMaskImage: MASK }}
         />
       </div>
