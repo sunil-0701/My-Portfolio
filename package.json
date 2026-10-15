@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "oxlint",
     "test:motion": "node scripts/check-motion.js",
+    "test:navigation": "node scripts/check-navigation.js",
     "preview": "vite preview",
     "og": "node scripts/generate-og.js"
   },

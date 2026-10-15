@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { SECTIONS, SITE } from '../../config/site'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { SECTIONS } from '../../config/site'
+import MobileMenu from './MobileMenu'
 
 const easeOutExpo = [0.16, 1, 0.3, 1]
 
@@ -45,19 +46,6 @@ function NavItem({ section, isActive, onNavigate }) {
 export default function NavBar({ activeLink = 'HOME', ready = true }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
-  // Lock the page behind the mobile sheet, and close it on Escape.
-  useEffect(() => {
-    if (!menuOpen) return
-    const previous = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    const onKey = (e) => e.key === 'Escape' && setMenuOpen(false)
-    window.addEventListener('keydown', onKey)
-    return () => {
-      document.body.style.overflow = previous
-      window.removeEventListener('keydown', onKey)
-    }
-  }, [menuOpen])
-
   const isActive = (section) => section.label === activeLink.toUpperCase()
 
   return (
@@ -82,6 +70,7 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
             onClick={() => setMenuOpen((open) => !open)}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
+            aria-haspopup="dialog"
             className="flex h-9 w-9 items-center justify-center transition-transform duration-200 active:scale-95 md:hidden"
           >
             <span className="sr-only">{menuOpen ? 'Close menu' : 'Open menu'}</span>
@@ -101,45 +90,22 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
         </div>
       </motion.header>
 
-      {/* Keep the sheet outside the animated header's containing block. */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.nav
-            id="mobile-menu"
-            aria-label="Primary mobile"
-            className="fixed inset-0 z-[var(--z-sheet)] flex flex-col gap-1 overflow-y-auto bg-ink px-6 pt-28 pb-12 md:hidden"
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.2, ease: easeOutExpo }}
-          >
-            {SECTIONS.map((section, i) => (
-              <motion.div
-                key={section.id}
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.25, delay: i * 0.025, ease: easeOutExpo }}
-                className="border-b border-white/[0.07] py-5"
-              >
-                <div className="text-[1.05rem]">
-                  <NavItem
-                    section={section}
-                    isActive={isActive(section)}
-                    onNavigate={() => setMenuOpen(false)}
-                  />
-                </div>
-              </motion.div>
-            ))}
-
-            <a
-              href={`mailto:${SITE.email}`}
-              className="mt-8 font-mono text-[0.72rem] tracking-[0.08em] text-muted transition-colors duration-300 hover:text-paper"
-            >
-              {SITE.email}
-            </a>
-          </motion.nav>
-        )}
-      </AnimatePresence>
+      {/* Native modal behavior traps focus and makes the background inert. */}
+      {menuOpen && (
+        <MobileMenu onClose={() => setMenuOpen(false)}>
+          {SECTIONS.map((section) => (
+            <div key={section.id} className="border-b border-white/[0.07] py-5">
+              <div className="text-[1.05rem]">
+                <NavItem
+                  section={section}
+                  isActive={isActive(section)}
+                  onNavigate={() => setMenuOpen(false)}
+                />
+              </div>
+            </div>
+          ))}
+        </MobileMenu>
+      )}
     </>
   )
 }
