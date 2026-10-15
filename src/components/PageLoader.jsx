@@ -113,6 +113,14 @@ export default function PageLoader({ onDone }) {
       />
       <CornerTicks />
 
+      <button
+        type="button"
+        onClick={onDone}
+        className="absolute top-6 right-6 z-10 min-h-11 px-3 text-[0.7rem] uppercase tracking-[0.15em] text-muted hover:text-paper sm:top-8 sm:right-10"
+      >
+        Skip intro
+      </button>
+
       {/* Left-aligned on the hero's own gutter, so when the curtain lifts the
           eye is already parked where the name lands. */}
       <div className="relative mx-auto flex h-full max-w-[1440px] flex-col justify-center px-6 sm:px-10 lg:px-16 xl:px-20">

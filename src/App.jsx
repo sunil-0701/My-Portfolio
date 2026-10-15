@@ -3,9 +3,15 @@ import { AnimatePresence, MotionConfig } from 'framer-motion'
 import PageLoader from './components/PageLoader'
 import NavBar from './components/layout/NavBar'
 import Landing from './sections/Landing'
+import { rememberIntro, shouldShowIntro } from './utils/intro'
 
 function App() {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(shouldShowIntro)
+
+  const finishIntro = () => {
+    rememberIntro()
+    setLoading(false)
+  }
 
   // The hero holds its entry until the curtain lifts. Without this the whole
   // cascade plays out behind the loader and the page just appears, finished.
@@ -13,19 +19,21 @@ function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-
       <AnimatePresence>
-        {loading && <PageLoader onDone={() => setLoading(false)} />}
+        {loading && <PageLoader onDone={finishIntro} />}
       </AnimatePresence>
 
-      <NavBar activeLink="HOME" ready={ready} />
+      <div inert={loading}>
+        <a className="skip-link" href="#main">
+          Skip to content
+        </a>
 
-      <main id="main" tabIndex={-1}>
-        <Landing ready={ready} />
-      </main>
+        <NavBar activeLink="HOME" ready={ready} />
+
+        <main id="main" tabIndex={-1}>
+          <Landing ready={ready} />
+        </main>
+      </div>
     </MotionConfig>
   )
 }
