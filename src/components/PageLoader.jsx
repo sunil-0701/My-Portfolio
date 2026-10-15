@@ -167,16 +167,13 @@ export default function PageLoader({ onDone }) {
         </motion.div>
       </div>
 
-      {/* Identity + place, held in the corners */}
+      {/* Timezone, held in the corner */}
       <motion.div
-        className="absolute inset-x-0 bottom-0 flex items-end justify-between px-6 pb-8 sm:px-10 lg:px-16 xl:px-20"
+        className="absolute inset-x-0 bottom-0 flex items-end justify-end px-6 pb-8 sm:px-10 lg:px-16 xl:px-20"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: reduceMotion ? 0 : 0.5 }}
       >
-        <span className="font-display text-[1.1rem] tracking-[0.16em] text-paper/70">
-          SA<span className="text-signal">.</span>
-        </span>
         <span className="tabular text-[0.6rem] uppercase tracking-[0.2em] text-faint">
           {SITE.timezone}
         </span>

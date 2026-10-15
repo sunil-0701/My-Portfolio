@@ -26,7 +26,8 @@ try {
   await page.waitForFunction(() => !document.querySelector('[role="status"]'), {
     timeout: 15000,
   })
-  await new Promise((r) => setTimeout(r, 1800))
+  // Let the entrance settle, but capture before the first role rotation.
+  await new Promise((r) => setTimeout(r, 1000))
 
   await page.screenshot({ path: OUT })
   console.log(`og image written to ${OUT}`)

@@ -4,23 +4,6 @@ import { SECTIONS, SITE } from '../../config/site'
 
 const easeOutExpo = [0.16, 1, 0.3, 1]
 
-function Wordmark({ onClick }) {
-  return (
-    <a
-      href="#home"
-      onClick={onClick}
-      aria-label={`${SITE.name} — back to top`}
-      className="group inline-flex items-baseline gap-[0.1em] font-display text-[1.35rem] tracking-[0.16em] text-paper transition-opacity duration-150 hover:opacity-70"
-    >
-      SA
-      <span
-        aria-hidden="true"
-        className="inline-block h-[0.16em] w-[0.16em] translate-y-[-0.02em] rounded-full bg-signal"
-      />
-    </a>
-  )
-}
-
 function NavItem({ section, isActive, onNavigate }) {
   const base =
     'group relative inline-flex items-center py-1 font-sans text-[0.7rem] font-medium tracking-[0.22em] transition-colors duration-300 sm:text-[0.72rem]'
@@ -85,9 +68,7 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
         animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: -26 }}
         transition={{ duration: 0.5, delay: 0.1, ease: easeOutExpo }}
       >
-        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-6 sm:px-10 lg:px-16 xl:px-20">
-          <Wordmark onClick={() => setMenuOpen(false)} />
-
+        <div className="mx-auto flex min-h-20 max-w-[1440px] items-center justify-end px-6 py-6 sm:px-10 lg:px-16 xl:px-20">
           {/* Desktop navigation */}
           <nav aria-label="Primary" className="hidden items-center gap-8 md:flex lg:gap-11">
             {SECTIONS.map((section) => (
