@@ -2,8 +2,7 @@ import { motion } from 'framer-motion'
 import HeroBackground from '../components/hero/HeroBackground'
 import HeroPortrait from '../components/hero/HeroPortrait'
 import HeroContent from '../components/hero/HeroContent'
-import ScrollIndicator from '../components/hero/ScrollIndicator'
-import SocialLinks from '../components/layout/SocialLinks'
+import { SITE } from '../config/site'
 
 export default function Landing({ ready = true }) {
   return (
@@ -42,13 +41,15 @@ export default function Landing({ ready = true }) {
 
         {/* Baseline rail — fills the frame instead of leaving a dead band */}
         <motion.div
-          className="hero-rail flex items-end justify-between gap-6"
+          className="hero-rail flex flex-wrap items-center justify-between gap-4 font-mono text-[0.6rem] uppercase tracking-[0.13em] text-muted sm:text-[0.65rem]"
           initial={{ opacity: 0, y: 16 }}
           animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
           transition={{ duration: 0.5, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
         >
-          <ScrollIndicator />
-          <SocialLinks orientation="horizontal" />
+          <span>// Design &gt; Code &gt; Build &gt; Repeat</span>
+          <span aria-hidden="true" className="hidden h-px flex-1 bg-paper/25 sm:block" />
+          <a href={SITE.github} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center hover:text-paper">GitHub ↗</a>
+          <span>© {new Date().getFullYear()}</span>
         </motion.div>
       </div>
     </section>
