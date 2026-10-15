@@ -1,25 +1,27 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { SECTIONS } from '../../config/site'
+import { SECTIONS, SITE } from '../../config/site'
 import MobileMenu from './MobileMenu'
 
 const easeOutExpo = [0.16, 1, 0.3, 1]
 
-function NavItem({ section, isActive, onNavigate }) {
-  const base =
-    'group relative inline-flex items-center py-1 font-sans text-[0.7rem] font-medium tracking-[0.22em] transition-colors duration-300 sm:text-[0.72rem]'
+function NavItem({ section, isActive, onNavigate, number }) {
+  const base = 'group relative inline-flex min-h-11 min-w-11 items-center font-mono text-[0.72rem] tracking-[0.12em] transition-colors duration-150'
+  const content = number ? (
+    <>
+      <span aria-hidden="true" className={`px-0.5 ${isActive ? 'bg-paper text-ink' : ''}`}>{number}</span>
+      <span className="sr-only">{section.label}</span>
+    </>
+  ) : section.label
 
   if (!section.ready) {
     return (
       <span
         aria-disabled="true"
-        title="Section in progress"
+        title={`${section.label} — section in progress`}
         className={`${base} cursor-default text-faint`}
       >
-        {section.label}
-        <span className="ml-2 font-mono text-[0.55rem] tracking-[0.1em] text-faint/0 transition-colors duration-300 group-hover:text-faint">
-          soon
-        </span>
+        {content}
       </span>
     )
   }
@@ -29,16 +31,10 @@ function NavItem({ section, isActive, onNavigate }) {
       href={`#${section.id}`}
       onClick={onNavigate}
       aria-current={isActive ? 'page' : undefined}
+      title={section.label}
       className={`${base} ${isActive ? 'text-paper' : 'text-muted hover:text-paper'}`}
     >
-      {section.label}
-      {/* Active + hover rule, animated with transform only */}
-      <span
-        aria-hidden="true"
-        className={`absolute -bottom-0.5 left-0 h-px w-full origin-left bg-paper transition-transform duration-300 ease-out ${
-          isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-        }`}
-      />
+      {content}
     </a>
   )
 }
@@ -56,13 +52,19 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
         animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: -26 }}
         transition={{ duration: 0.5, delay: 0.1, ease: easeOutExpo }}
       >
-        <div className="mx-auto flex min-h-20 max-w-[1440px] items-center justify-end px-6 py-6 sm:px-10 lg:px-16 xl:px-20">
-          {/* Desktop navigation */}
-          <nav aria-label="Primary" className="hidden items-center gap-8 md:flex lg:gap-11">
-            {SECTIONS.map((section) => (
-              <NavItem key={section.id} section={section} isActive={isActive(section)} />
-            ))}
-          </nav>
+        <div className="mx-auto flex max-w-[1800px] items-start justify-between gap-4 px-6 py-6 sm:px-10 lg:px-20 lg:py-8">
+          <div>
+            <a href="#home" aria-label={`${SITE.name} — home`} className="inline-flex min-h-11 items-center font-display text-2xl font-bold tracking-tight">
+              {SITE.monogram}
+            </a>
+            <p className="mt-1 hidden border-b border-paper/20 pb-3 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-faint sm:block lg:min-w-72">
+              {SITE.location} <span className="ml-4">{SITE.timezone}</span>
+            </p>
+          </div>
+          <p className="mt-3 hidden items-center gap-3 text-[0.65rem] uppercase tracking-[0.08em] text-paper sm:flex">
+            <span aria-hidden="true" className={`h-2 w-2 rounded-full ${SITE.available ? 'bg-signal' : 'bg-faint'}`} />
+            {SITE.available ? 'Online // Available for opportunities' : 'Currently unavailable'}
+          </p>
 
           {/* Mobile trigger — replaces the row that used to overflow the viewport */}
           <button
@@ -71,7 +73,7 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             aria-haspopup="dialog"
-            className="flex h-9 w-9 items-center justify-center transition-transform duration-200 active:scale-95 md:hidden"
+            className="flex h-11 w-11 items-center justify-center transition-transform duration-200 active:scale-95 md:hidden"
           >
             <span className="sr-only">{menuOpen ? 'Close menu' : 'Open menu'}</span>
             <span aria-hidden="true" className="relative block h-3 w-6">
@@ -89,6 +91,20 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
           </button>
         </div>
       </motion.header>
+
+      <nav
+        aria-label="Primary"
+        className="fixed top-[27%] left-6 z-[var(--z-nav)] hidden flex-col gap-5 border-l border-paper/20 pl-4 md:flex lg:left-[4.4%] lg:gap-7"
+      >
+        {SECTIONS.map((section, index) => (
+          <NavItem
+            key={section.id}
+            section={section}
+            number={String(index + 1).padStart(2, '0')}
+            isActive={isActive(section)}
+          />
+        ))}
+      </nav>
 
       {/* Native modal behavior traps focus and makes the background inert. */}
       {menuOpen && (

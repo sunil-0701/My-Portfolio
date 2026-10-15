@@ -2,6 +2,7 @@
 // Edit here; every component reads from this file.
 export const SITE = {
   name: 'Sunil Amarthya',
+  monogram: 'SA.',
   firstName: 'SUNIL',
   lastName: 'AMARTHYA',
   // Cycled by the hero role reel, in order.
@@ -28,6 +29,5 @@ export const SECTIONS = [
   { id: 'home', label: 'HOME', ready: true },
   { id: 'work', label: 'WORK', ready: false },
   { id: 'about', label: 'ABOUT', ready: false },
-  { id: 'experience', label: 'EXPERIENCE', ready: false },
   { id: 'contact', label: 'CONTACT', ready: false },
 ]
