@@ -5,12 +5,12 @@ import { SITE } from '../../config/site'
 // Fades on all four edges so the photo dissolves into the background instead of
 // being hard-cropped at the viewport edge.
 const MASK =
-  'radial-gradient(ellipse 62% 74% at 52% 42%, #000 26%, rgba(0,0,0,0.72) 54%, transparent 80%)'
+  'radial-gradient(ellipse 60% 78% at 52% 54%, #000 36%, rgba(0,0,0,0.8) 58%, transparent 83%)'
 
 export default function HeroPortrait({ ready = true }) {
   return (
     <motion.div
-      className="pointer-events-none absolute inset-y-0 right-0 z-[var(--z-behind)] w-[88%] sm:w-[66%] md:w-[58%] lg:w-[52%] xl:w-[50%]"
+      className="pointer-events-none absolute inset-y-0 right-0 z-[var(--z-behind)] w-full md:right-[7%] md:w-[51%]"
       initial={{ opacity: 0 }}
       animate={{ opacity: ready ? 1 : 0 }}
       transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -28,10 +28,12 @@ export default function HeroPortrait({ ready = true }) {
       <div className="relative h-full w-full">
         <img
           src={portrait}
+          width="1100"
+          height="979"
           alt={`${SITE.name}, photographed in profile`}
           fetchPriority="high"
           decoding="async"
-          className="h-full w-full object-cover object-[48%_20%] opacity-30 sm:opacity-45 lg:opacity-100"
+          className="h-full w-full object-cover object-[52%_20%] opacity-15 md:opacity-85 lg:opacity-100"
           style={{ maskImage: MASK, WebkitMaskImage: MASK }}
         />
       </div>
@@ -53,7 +55,7 @@ export default function HeroPortrait({ ready = true }) {
         aria-hidden="true"
         className="absolute inset-y-0 right-0 w-[18%]"
         style={{
-          background: 'linear-gradient(to left, #020304 0%, rgba(2,3,4,0.55) 45%, transparent 100%)',
+          background: 'linear-gradient(to left, #0b0c0a 0%, rgba(11,12,10,0.55) 45%, transparent 100%)',
         }}
       />
 

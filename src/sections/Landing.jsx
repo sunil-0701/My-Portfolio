@@ -15,6 +15,13 @@ export default function Landing({ ready = true }) {
       <HeroBackground />
       <HeroPortrait ready={ready} />
 
+      <div aria-hidden="true" className="pointer-events-none absolute top-[20%] right-[4.5%] bottom-[18%] hidden w-[10%] border-r border-paper/20 lg:block">
+        <span className="absolute top-0 left-0 h-12 w-px bg-paper/30" />
+        <p className="absolute top-[24%] left-4 font-mono text-[0.65rem] leading-6 tracking-[0.15em] text-faint">IDEAS<br />SYSTEMS<br />CODE<br />IMPACT</p>
+        <span className="absolute top-[60%] right-0 h-px w-24 bg-paper/35" />
+        <span className="absolute top-[60%] -right-1 h-2 w-2 -translate-y-1/2 border border-paper" />
+      </div>
+
       {/* Floor fade. Full-bleed and elliptical on purpose: boxed to the
           portrait it read as a rectangular shadow slab under the photo. */}
       <div
@@ -22,7 +29,7 @@ export default function Landing({ ready = true }) {
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[var(--z-behind)] h-[42%]"
         style={{
           background:
-            'radial-gradient(ellipse 120% 100% at 62% 118%, #020304 30%, rgba(2,3,4,0.72) 58%, transparent 82%)',
+            'radial-gradient(ellipse 120% 100% at 62% 125%, #0b0c0a 25%, rgba(11,12,10,0.6) 55%, transparent 82%)',
         }}
       />
 
