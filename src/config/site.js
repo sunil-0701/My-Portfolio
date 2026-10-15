@@ -5,8 +5,7 @@ export const SITE = {
   monogram: 'SA.',
   firstName: 'SUNIL',
   lastName: 'AMARTHYA',
-  // Cycled by the hero role reel, in order.
-  roles: ['SOFTWARE ENGINEER', 'STUDENT', 'INTERN'],
+  expertise: ['BACKEND ENGINEER', 'JAVA', 'SPRING BOOT'],
   greeting: "Hello world, I'm",
   summary:
     'I build the APIs, data models, and infrastructure that sit behind the product — the part users never see and always feel.',

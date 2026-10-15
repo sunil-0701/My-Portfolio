@@ -95,8 +95,58 @@ html, body {
 }
 
 .hero-shell {
-  padding-top: 8rem;
+  padding-top: 10rem;
   padding-bottom: 2.5rem;
+}
+
+.hero-name {
+  font-size: clamp(2rem, 5.1vw, 5.75rem);
+  line-height: 1.12;
+  letter-spacing: 0.015em;
+  text-shadow: 0 0 18px rgb(231 229 217 / 0.2);
+}
+
+.terminal-button::before,
+.terminal-button::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  pointer-events: none;
+}
+
+.terminal-button::before {
+  top: 2px;
+  left: 2px;
+  border-top: 1px solid var(--color-paper);
+  border-left: 1px solid var(--color-paper);
+}
+
+.terminal-button::after {
+  right: 2px;
+  bottom: 2px;
+  border-right: 1px solid var(--color-paper);
+  border-bottom: 1px solid var(--color-paper);
+}
+
+@media (min-width: 768px) {
+  .hero-shell {
+    padding-left: 11.6%;
+  }
+
+  .hero-copy {
+    width: 57%;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-shell {
+    padding-top: 8rem;
+  }
+
+  .hero-name {
+    font-size: clamp(1.75rem, 7.5vw, 3.5rem);
+  }
 }
 
 .hero-rail {
@@ -105,7 +155,7 @@ html, body {
 
 @media (max-height: 900px) {
   .hero-shell {
-    padding-top: 6.25rem;
+    padding-top: 8.5rem;
     padding-bottom: 1.5rem;
   }
   .hero-rail {
@@ -115,7 +165,7 @@ html, body {
 
 @media (max-height: 780px) {
   .hero-shell {
-    padding-top: 5.25rem;
+    padding-top: 7.5rem;
     padding-bottom: 1rem;
   }
   .hero-rail {

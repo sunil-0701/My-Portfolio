@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import RoleReel from './RoleReel'
 import Button, { ArrowRight } from '../ui/Button'
 import { SITE } from '../../config/site'
 
@@ -31,35 +30,20 @@ const nameVariant = {
   },
 }
 
-function StatusBadge() {
-  return (
-    <span className="inline-flex items-center gap-2.5 border border-white/[0.13] bg-white/[0.03] px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-      <span
-        aria-hidden="true"
-        className={`h-1.5 w-1.5 rounded-full ${
-          SITE.available ? 'bg-signal' : 'bg-faint'
-        }`}
-      />
-      <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
-        {SITE.available ? SITE.availableLabel : 'Not currently available'}
-      </span>
-    </span>
-  )
-}
-
 export default function HeroContent({ ready = true }) {
   return (
     <motion.div
       variants={stack}
       initial="hidden"
       animate={ready ? 'show' : 'hidden'}
-      className="flex max-w-[46rem] flex-col"
+      className="hero-copy flex w-full min-w-0 max-w-[44rem] flex-col"
     >
       {/* Greeting */}
       <motion.p
         variants={rise}
-        className="mb-5 font-mono text-[0.68rem] uppercase tracking-[0.26em] text-muted sm:text-[0.72rem]"
+        className="mb-4 font-mono text-[0.72rem] uppercase tracking-[0.08em] text-paper sm:text-[0.85rem]"
       >
+        <span aria-hidden="true" className="mr-3">&gt;</span>
         {SITE.greeting}
       </motion.p>
 
@@ -68,54 +52,48 @@ export default function HeroContent({ ready = true }) {
       <motion.h1
         variants={nameVariant}
         id="hero-heading"
-        className="font-display text-[clamp(3.4rem,min(10.5vw,17vh),9.5rem)] font-normal uppercase leading-[0.86] text-[#eeeeec] [text-shadow:0_0_44px_rgba(255,255,255,0.13)] [text-wrap:balance]"
+        className="hero-name font-display font-bold uppercase text-paper"
       >
-        <span className="block tracking-[0.11em]">{SITE.firstName}</span>
-        <span className="block tracking-[0.11em]">
+        <span className="block">{SITE.firstName}</span>
+        <span className="block whitespace-nowrap">
           {SITE.lastName}
           <span
             aria-hidden="true"
-            className="ml-[0.08em] inline-block h-[0.1em] w-[0.1em] rounded-full bg-signal align-baseline shadow-[0_0_14px_rgba(143,179,163,0.55)]"
-          />
+            className="ml-[0.12em]"
+          >_</span>
         </span>
       </motion.h1>
 
-      {/* Role reel. Separated by space rather than a rule — the reel is the
-          punctuation between the name and the sentence. */}
+      {/* Static expertise matches the reference and never rotates out of view. */}
       <motion.div
         variants={rise}
-        className="mt-9 mb-6 font-mono text-[0.72rem] uppercase tracking-[0.26em] sm:text-[0.78rem]"
+        className="mt-6 mb-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[0.65rem] uppercase tracking-[0.06em] sm:text-[0.8rem]"
       >
-        <RoleReel roles={SITE.roles} ready={ready} />
+        <span aria-hidden="true" className="text-faint">[</span>
+        {SITE.expertise.map((item, index) => (
+          <span key={item} className="inline-flex items-center gap-3">
+            {index > 0 && <span aria-hidden="true" className="text-faint">|</span>}
+            {item}
+          </span>
+        ))}
+        <span aria-hidden="true" className="text-faint">]</span>
       </motion.div>
 
       {/* Supporting sentence — sentence case, measured, readable */}
       <motion.p
         variants={rise}
-        className="mb-9 max-w-[46ch] text-[0.95rem] font-normal leading-[1.75] text-[#a8a8ad] [text-wrap:pretty] sm:text-[1rem]"
+        className="mb-9 max-w-[50ch] text-[0.85rem] font-normal leading-[1.8] tracking-[0.025em] text-paper/90 [text-wrap:pretty] sm:text-[0.9rem] xl:mb-10 xl:text-[0.95rem]"
       >
         {SITE.summary}
       </motion.p>
 
-      {/* Actions — one solid, one quiet text link. Both go somewhere real. */}
-      <motion.div variants={rise} className="flex flex-wrap items-center gap-x-8 gap-y-4">
-        <Button href={`mailto:${SITE.email}`} variant="solid" icon={<ArrowRight />}>
+      <motion.div variants={rise} className="flex flex-wrap items-center gap-4 lg:gap-6">
+        <Button href={SITE.github} target="_blank" rel="noreferrer" variant="outline" icon={<ArrowRight />}>
+          View work
+        </Button>
+        <Button href={`mailto:${SITE.email}`} variant="outline" icon={<ArrowRight />}>
           Get in touch
         </Button>
-        <Button href={SITE.github} target="_blank" rel="noreferrer" variant="quiet">
-          View GitHub
-        </Button>
-      </motion.div>
-
-      {/* Status + place */}
-      <motion.div
-        variants={rise}
-        className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-3"
-      >
-        <StatusBadge />
-        <span className="tabular font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted">
-          {SITE.location} · {SITE.timezone}
-        </span>
       </motion.div>
     </motion.div>
   )

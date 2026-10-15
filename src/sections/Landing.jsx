@@ -28,7 +28,7 @@ export default function Landing({ ready = true }) {
 
       {/* Constrained container so the layout stops stretching on wide screens.
           Bottom padding runs heavier than top — optical, not mathematical. */}
-      <div className="hero-shell relative z-[var(--z-content)] mx-auto flex min-h-dvh max-w-[1440px] flex-col px-6 sm:px-10 lg:px-16 xl:px-20">
+      <div className="hero-shell relative z-[var(--z-content)] mx-auto flex min-h-dvh max-w-[1800px] flex-col px-6 sm:px-10 lg:pr-20">
         <div className="flex flex-1 items-center">
           <HeroContent ready={ready} />
         </div>

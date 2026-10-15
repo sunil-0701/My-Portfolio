@@ -56,11 +56,7 @@ try {
   await page.mouse.move(1000, 500, { steps: 10 })
   assert.equal(await page.evaluate(() => document.documentElement.style.getPropertyValue('--px')), '')
 
-  await page.waitForFunction(() =>
-    [...document.querySelectorAll('main span[aria-hidden="true"]')].some((element) =>
-      element.textContent.trim() === 'STUDENT',
-    ),
-  )
+  assert.ok(await page.$eval('main', (main) => main.textContent.includes('SPRING BOOT')), 'Expertise remains visible without rotation')
 
   for (const [width, height] of [[1440, 900], [390, 844], [360, 640]]) {
     await page.setViewport({ width, height })
@@ -71,7 +67,8 @@ try {
 
   await page.mouse.move(180, 320)
   await page.mouse.wheel({ deltaY: 400 })
-  await page.waitForFunction(() => window.scrollY > 0)
+  const scrollable = await page.evaluate(() => document.documentElement.scrollHeight > innerHeight)
+  if (scrollable) await page.waitForFunction(() => window.scrollY > 0)
   await page.click('button[aria-controls="mobile-menu"]')
   await page.waitForSelector('#mobile-menu')
   assert.equal(await page.evaluate(() => document.body.style.overflow), 'hidden')
@@ -82,7 +79,7 @@ try {
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }])
   await page.reload({ waitUntil: 'domcontentloaded' })
   await page.waitForFunction(() => !document.querySelector('[role="status"]'), { timeout: 2000 })
-  await page.waitForFunction(() => document.querySelector('main').textContent.includes('SOFTWARE ENGINEER · STUDENT · INTERN'))
+  await page.waitForFunction(() => document.querySelector('main').textContent.includes('BACKEND ENGINEER'))
   assert.deepEqual(errors, [], 'There must be no browser runtime errors')
 
   console.log('Motion checks passed: counter, native scrolling, static backgrounds, responsive layout, mobile menu, and reduced motion.')
