@@ -96,7 +96,41 @@ html, body {
 
 .hero-shell {
   padding-top: 10rem;
-  padding-bottom: 2.5rem;
+  padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
+}
+
+.site-header {
+  padding-top: max(1.5rem, env(safe-area-inset-top));
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
+}
+
+.mobile-menu {
+  padding-top: max(1.5rem, env(safe-area-inset-top));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
+  padding-bottom: max(3rem, env(safe-area-inset-bottom));
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+}
+
+@media (min-width: 640px) {
+  .hero-shell, .site-header {
+    padding-left: max(2.5rem, env(safe-area-inset-left));
+    padding-right: max(2.5rem, env(safe-area-inset-right));
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-header {
+    padding-top: max(2rem, env(safe-area-inset-top));
+    padding-left: max(5rem, env(safe-area-inset-left));
+    padding-right: max(5rem, env(safe-area-inset-right));
+  }
+
+  .hero-shell {
+    padding-right: max(5rem, env(safe-area-inset-right));
+  }
 }
 
 .hero-name {
@@ -148,7 +182,7 @@ html, body {
 
 @media (min-width: 768px) {
   .hero-shell {
-    padding-left: 11.6%;
+    padding-left: max(11.6%, env(safe-area-inset-left));
   }
 
   .hero-copy {
@@ -173,7 +207,7 @@ html, body {
 @media (max-height: 900px) {
   .hero-shell {
     padding-top: 8.5rem;
-    padding-bottom: 1.5rem;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   }
   .hero-rail {
     padding-top: 1.25rem;
@@ -183,7 +217,7 @@ html, body {
 @media (max-height: 780px) {
   .hero-shell {
     padding-top: 7.5rem;
-    padding-bottom: 1rem;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
   .hero-rail {
     padding-top: 0.75rem;

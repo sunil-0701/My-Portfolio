@@ -48,7 +48,7 @@ export default function MobileMenu({ children, onClose }) {
           first.focus()
         }
       }}
-      className="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none overflow-y-auto border-0 bg-ink px-6 pt-6 pb-12 text-paper backdrop:bg-ink"
+      className="mobile-menu fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none overflow-y-auto border-0 bg-ink px-6 pt-6 pb-12 text-paper backdrop:bg-ink"
     >
       <div className="flex justify-end">
         <button

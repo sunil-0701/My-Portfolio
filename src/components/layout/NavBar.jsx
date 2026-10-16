@@ -52,7 +52,7 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
         animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: -26 }}
         transition={{ duration: 0.5, delay: 0.1, ease: easeOutExpo }}
       >
-        <div className="mx-auto flex max-w-[1800px] items-start justify-between gap-4 px-6 py-6 sm:px-10 lg:px-20 lg:py-8">
+        <div className="site-header mx-auto flex max-w-[1800px] items-start justify-between gap-4 px-6 py-6 sm:px-10 lg:px-20 lg:py-8">
           <div>
             <p className="mt-1 hidden border-b border-paper/20 pb-3 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-faint sm:block lg:min-w-72">
               {SITE.location} <span className="ml-4">{SITE.timezone}</span>
