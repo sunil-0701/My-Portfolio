@@ -31,8 +31,10 @@ scripts, use `npm.cmd` instead of `npm`.
 - Identity, expertise, social links, and section availability: `src/config/site.js`.
 - Hero composition: `src/sections/Landing.jsx` and `src/components/hero/`.
 - Theme tokens, typography, and responsive rules: `src/index.css`.
-- Sharing metadata: `index.html`. Run `npm run og` with the dev server running to
-  refresh `public/og.png`.
+- Sharing metadata: `index.html`. Run `npm run og` to refresh the 1200 × 630
+  `public/og.png`. The generator starts and closes its own server, waits for fonts
+  and the portrait, and captures the period in its visible state. Set `OG_URL`
+  only when you want to capture an already running site instead.
 
 The intro can be skipped and is remembered for the current tab session. Reduced
 motion preferences are respected. Mobile navigation traps focus, closes on Escape,
