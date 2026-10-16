@@ -99,7 +99,7 @@ try {
   assert.equal(await page.evaluate(() => document.getAnimations().filter((animation) => animation.effect.getTiming().iterations === Infinity).length), 0, 'Reduced motion must disable blinking')
   assert.deepEqual(errors, [], 'There must be no browser runtime errors')
 
-  console.log('Motion checks passed: counter, native scrolling, static backgrounds, responsive layout, mobile menu, and reduced motion.')
+  console.log('Motion checks passed: blinking period, counter, native scrolling, static backgrounds, responsive layout, mobile menu, and reduced motion.')
 } finally {
   if (browser) await browser.close()
   await server.close()

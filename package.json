@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "oxlint",
+    "lint": "oxlint --deny-warnings",
+    "check": "npm run lint && npm run build && npm test",
+    "test": "npm run test:buttons && npm run test:motion && npm run test:navigation && npm run test:intro && npm run test:layout && npm run test:fallback",
     "test:motion": "node scripts/check-motion.js",
     "test:navigation": "node scripts/check-navigation.js",
     "test:intro": "node scripts/check-intro.js",

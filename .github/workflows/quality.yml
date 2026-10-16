@@ -1,0 +1,30 @@
+name: Portfolio quality
+
+on:
+  push:
+    branches: [main, landingPage]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Cache browser downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/puppeteer
+          key: ${{ runner.os }}-puppeteer-${{ hashFiles('package-lock.json') }}
+      - run: npm ci
+      - name: Install Chrome and system dependencies
+        run: npx puppeteer browsers install chrome --install-deps
+      - name: Lint, build, and run regression checks
+        run: npm run check
