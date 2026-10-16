@@ -2,7 +2,6 @@
 // Edit here; every component reads from this file.
 export const SITE = {
   name: 'Sunil Amarthya',
-  monogram: 'SA.',
   firstName: 'SUNIL',
   lastName: 'AMARTHYA',
   expertise: ['BACKEND ENGINEER', 'JAVA', 'SPRING BOOT'],
@@ -13,9 +12,6 @@ export const SITE = {
   // TODO: confirm these two before shipping.
   location: 'Bengaluru, IN',
   timezone: 'UTC+5:30',
-
-  available: true,
-  availableLabel: 'Open to backend roles',
 
   email: 'sunil.amarthya.d@gmail.com',
   github: 'https://github.com/sunilamarthya',

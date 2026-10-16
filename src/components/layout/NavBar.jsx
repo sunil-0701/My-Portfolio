@@ -54,17 +54,10 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
       >
         <div className="mx-auto flex max-w-[1800px] items-start justify-between gap-4 px-6 py-6 sm:px-10 lg:px-20 lg:py-8">
           <div>
-            <a href="#home" aria-label={`${SITE.name} — home`} className="inline-flex min-h-11 items-center font-display text-2xl font-bold tracking-tight">
-              {SITE.monogram}
-            </a>
             <p className="mt-1 hidden border-b border-paper/20 pb-3 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-faint sm:block lg:min-w-72">
               {SITE.location} <span className="ml-4">{SITE.timezone}</span>
             </p>
           </div>
-          <p className="mt-3 hidden items-center gap-3 text-[0.65rem] uppercase tracking-[0.08em] text-paper sm:flex">
-            <span aria-hidden="true" className={`h-2 w-2 rounded-full ${SITE.available ? 'bg-signal' : 'bg-faint'}`} />
-            {SITE.available ? 'Online // Available for opportunities' : 'Currently unavailable'}
-          </p>
 
           {/* Mobile trigger — replaces the row that used to overflow the viewport */}
           <button
