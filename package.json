@@ -12,6 +12,7 @@
     "test:intro": "node scripts/check-intro.js",
     "test:layout": "node scripts/check-layout.js",
     "test:buttons": "node scripts/check-buttons.js",
+    "test:fallback": "node scripts/check-fallback.js",
     "preview": "vite preview",
     "og": "node scripts/generate-og.js"
   },
