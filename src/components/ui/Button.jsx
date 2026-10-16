@@ -16,24 +16,40 @@ export default function Button({
   icon,
   children,
   className = '',
+  disabled = false,
+  target,
+  rel,
+  type = 'button',
+  onClick,
   ...props
 }) {
   const Tag = href ? 'a' : 'button'
-  const padding = variant === 'quiet' ? 'py-3' : 'px-6 py-5'
+  const resolvedVariant = Object.hasOwn(VARIANTS, variant) ? variant : 'solid'
+  const padding = resolvedVariant === 'quiet' ? 'py-3' : 'px-6 py-5'
+  const safeRel = target === '_blank'
+    ? [...new Set(`${rel ?? ''} noopener noreferrer`.trim().split(/\s+/))].join(' ')
+    : rel
 
   return (
     <Tag
-      href={href}
-      type={href ? undefined : 'button'}
-      className={`group relative inline-flex min-h-11 items-center justify-between gap-8 ${padding} font-sans text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-[background-color,border-color,color,transform,box-shadow] duration-150 ease-out active:translate-y-0 active:scale-[0.98] ${VARIANTS[variant]} ${className}`}
       {...props}
+      href={disabled ? undefined : href}
+      type={href ? undefined : type}
+      target={href ? target : undefined}
+      rel={href ? safeRel : undefined}
+      disabled={href ? undefined : disabled}
+      role={href && disabled ? 'link' : props.role}
+      aria-disabled={disabled || undefined}
+      tabIndex={href && disabled ? -1 : props.tabIndex}
+      onClick={disabled ? (event) => event.preventDefault() : onClick}
+      className={`group relative inline-flex min-h-11 items-center justify-between gap-8 ${padding} font-sans text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-[background-color,border-color,color,transform,box-shadow] duration-150 ease-out active:translate-y-0 active:scale-[0.98] ${VARIANTS[resolvedVariant]} ${disabled ? 'pointer-events-none cursor-not-allowed opacity-50' : ''} ${className}`}
     >
       <span className="relative">
         {children}
-        {variant === 'quiet' && (
+        {resolvedVariant === 'quiet' && (
           <span
             aria-hidden="true"
-            className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-current transition-transform duration-300 ease-[var(--ease-spring)] group-hover:scale-x-100"
+            className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-current transition-transform duration-150 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100"
           />
         )}
       </span>
