@@ -106,6 +106,23 @@ html, body {
   text-shadow: 0 0 18px rgb(231 229 217 / 0.2);
 }
 
+.name-period {
+  display: inline-block;
+  margin-left: 0.04em;
+}
+
+@keyframes name-period-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Only this tiny decorative glyph blinks; reduced-motion users see a solid dot. */
+@media (prefers-reduced-motion: no-preference) {
+  .name-period[data-blinking="true"] {
+    animation: name-period-blink 1.2s steps(1, end) infinite;
+  }
+}
+
 .terminal-button::before,
 .terminal-button::after {
   content: '';

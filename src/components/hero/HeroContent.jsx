@@ -47,8 +47,7 @@ export default function HeroContent({ ready = true }) {
         {SITE.greeting}
       </motion.p>
 
-      {/* Name. The size is capped by viewport height as well as width so the
-          hero still resolves in one screen on a short laptop viewport. */}
+      {/* The punctuation reserves its own space, so blinking cannot shift the name. */}
       <motion.h1
         variants={nameVariant}
         id="hero-heading"
@@ -59,8 +58,9 @@ export default function HeroContent({ ready = true }) {
           {SITE.lastName}
           <span
             aria-hidden="true"
-            className="ml-[0.12em]"
-          >_</span>
+            className="name-period"
+            data-blinking={ready}
+          >.</span>
         </span>
       </motion.h1>
 

@@ -43,14 +43,29 @@ try {
       const style = getComputedStyle(element)
       return style.filter !== 'none' || style.backdropFilter !== 'none'
     }).length,
-    infiniteAnimations: document.getAnimations().filter((animation) =>
-      animation.effect.getTiming().iterations === Infinity,
+    unexpectedLoops: document.getAnimations().filter((animation) =>
+      animation.effect.getTiming().iterations === Infinity &&
+      !animation.effect.target.matches('.name-period'),
     ).length,
     nativeScroll: getComputedStyle(document.documentElement).scrollBehavior === 'auto',
   }))
   assert.equal(effects.expensiveSurfaces, 0, 'Do not reintroduce filter/backdrop surfaces')
-  assert.equal(effects.infiniteAnimations, 0, 'Ambient animations must not keep running')
+  assert.equal(effects.unexpectedLoops, 0, 'Only the requested name punctuation may loop')
   assert.ok(effects.nativeScroll, 'Keep native scrolling')
+
+  const period = await page.$eval('.name-period', (element) => {
+    const animation = element.getAnimations()[0]
+    animation.pause()
+    animation.currentTime = 100
+    const visible = getComputedStyle(element).opacity
+    const width = element.getBoundingClientRect().width
+    animation.currentTime = 700
+    const hidden = getComputedStyle(element).opacity
+    const stableWidth = element.getBoundingClientRect().width === width
+    animation.play()
+    return { text: element.textContent, decorative: element.getAttribute('aria-hidden'), visible, hidden, stableWidth }
+  })
+  assert.deepEqual(period, { text: '.', decorative: 'true', visible: '1', hidden: '0', stableWidth: true })
 
   await page.mouse.move(0, 0)
   await page.mouse.move(1000, 500, { steps: 10 })
@@ -80,6 +95,8 @@ try {
   await page.reload({ waitUntil: 'domcontentloaded' })
   await page.waitForFunction(() => !document.querySelector('[role="status"]'), { timeout: 2000 })
   await page.waitForFunction(() => document.querySelector('main').textContent.includes('BACKEND ENGINEER'))
+  assert.equal(await page.$eval('.name-period', (element) => getComputedStyle(element).opacity), '1')
+  assert.equal(await page.evaluate(() => document.getAnimations().filter((animation) => animation.effect.getTiming().iterations === Infinity).length), 0, 'Reduced motion must disable blinking')
   assert.deepEqual(errors, [], 'There must be no browser runtime errors')
 
   console.log('Motion checks passed: counter, native scrolling, static backgrounds, responsive layout, mobile menu, and reduced motion.')
