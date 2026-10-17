@@ -2,8 +2,6 @@ import assert from 'node:assert/strict'
 import puppeteer from 'puppeteer'
 import { createServer } from 'vite'
 
-// Exercise the real browser, including the intro, rather than only checking
-// whether animation-related class names have disappeared from the source.
 const server = await createServer({ server: { host: '127.0.0.1', port: 0 } })
 let browser
 

@@ -32,7 +32,6 @@ export default function MobileMenu({ children, onClose }) {
       id="mobile-menu"
       aria-label="Navigation menu"
       onClose={(event) => {
-        // StrictMode may queue a close event before reopening the dialog.
         if (!event.currentTarget.open) onClose()
       }}
       onKeyDown={(event) => {

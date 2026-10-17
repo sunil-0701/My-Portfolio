@@ -21,8 +21,6 @@ export default function Landing({ ready = true }) {
         <span className="absolute top-[60%] -right-1 h-2 w-2 -translate-y-1/2 border border-paper" />
       </div>
 
-      {/* Floor fade. Full-bleed and elliptical on purpose: boxed to the
-          portrait it read as a rectangular shadow slab under the photo. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[var(--z-behind)] h-[42%]"
@@ -32,14 +30,11 @@ export default function Landing({ ready = true }) {
         }}
       />
 
-      {/* Constrained container so the layout stops stretching on wide screens.
-          Bottom padding runs heavier than top — optical, not mathematical. */}
       <div className="hero-shell relative z-[var(--z-content)] mx-auto flex min-h-dvh max-w-[1800px] flex-col px-6 sm:px-10 lg:pr-20">
         <div className="flex flex-1 items-center">
           <HeroContent ready={ready} />
         </div>
 
-        {/* Baseline rail — fills the frame instead of leaving a dead band */}
         <motion.div
           className="hero-rail flex flex-wrap items-center justify-between gap-4 font-mono text-[0.6rem] uppercase tracking-[0.13em] text-muted sm:text-[0.65rem]"
           initial={{ opacity: 0, y: 16 }}

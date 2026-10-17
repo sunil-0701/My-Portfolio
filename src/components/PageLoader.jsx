@@ -4,7 +4,6 @@ import { SITE } from '../config/site'
 
 const DURATION = 2600
 
-// Corner ticks — the technical-drawing register the rest of the page uses
 function CornerTicks() {
   const base = 'absolute h-3 w-3 border-paper/20'
   return (
@@ -23,15 +22,12 @@ export default function PageLoader({ onDone }) {
   const progressRef = useRef(null)
   const pointRef = useRef(null)
 
-  // Keep the callback in a ref so the timeline effect runs exactly once,
-  // even though the parent passes a fresh arrow on every render.
   const onDoneRef = useRef(onDone)
   useEffect(() => {
     onDoneRef.current = onDone
   }, [onDone])
 
   useEffect(() => {
-    // Anyone who asked for reduced motion gets the page, not the show.
     if (reduceMotion) {
       const id = setTimeout(() => onDoneRef.current(), 120)
       return () => clearTimeout(id)
@@ -44,8 +40,6 @@ export default function PageLoader({ onDone }) {
     let completed = false
     let lastPercent = -1
 
-    // Only the count's text node changes, not the whole React subtree. The
-    // progress rail uses transforms without chasing a new CSS transition.
     const update = (progress) => {
       const percent = Math.round(progress * 100)
       if (percent !== lastPercent) {
@@ -66,9 +60,6 @@ export default function PageLoader({ onDone }) {
       onDoneRef.current()
     }
 
-    // rAF is paused while the tab is backgrounded. Without a wall-clock
-    // fallback the intro would never hand over, and the page would sit
-    // behind a frozen loader.
     failsafe = setTimeout(finish, DURATION + 900)
 
     const tick = (now) => {
@@ -98,8 +89,6 @@ export default function PageLoader({ onDone }) {
       aria-label="Loading"
       className="fixed inset-0 z-[var(--z-loader)] overflow-hidden bg-ink-2 font-mono text-paper"
       initial={{ y: 0 }}
-      // Lifts like a curtain instead of dissolving, so the hero underneath is
-      // revealed rather than cross-faded into.
       exit={{ y: '-100%' }}
       transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.76, 0, 0.24, 1] }}
     >
@@ -121,10 +110,7 @@ export default function PageLoader({ onDone }) {
         Skip intro
       </button>
 
-      {/* Left-aligned on the hero's own gutter, so when the curtain lifts the
-          eye is already parked where the name lands. */}
       <div className="relative mx-auto flex h-full max-w-[1440px] flex-col justify-center px-6 sm:px-10 lg:px-16 xl:px-20">
-        {/* Bracket mark */}
         <motion.div
           aria-hidden="true"
           className="mb-8 text-paper"
@@ -145,7 +131,6 @@ export default function PageLoader({ onDone }) {
           </div>
         </motion.div>
 
-        {/* The count is the hero of this screen */}
         <motion.div
           aria-hidden="true"
           className="flex items-baseline gap-4"
@@ -175,7 +160,6 @@ export default function PageLoader({ onDone }) {
         </motion.div>
       </div>
 
-      {/* Timezone, held in the corner */}
       <motion.div
         className="absolute inset-x-0 bottom-0 flex items-end justify-end px-6 pb-8 sm:px-10 lg:px-16 xl:px-20"
         initial={{ opacity: 0 }}
@@ -187,7 +171,6 @@ export default function PageLoader({ onDone }) {
         </span>
       </motion.div>
 
-      {/* Full-bleed rail pinned to the very edge of the screen */}
       <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-white/[0.08]">
         <div
           ref={progressRef}

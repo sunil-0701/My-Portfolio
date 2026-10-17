@@ -4,14 +4,11 @@ import { SITE } from '../../config/site'
 
 const cubicEase = [0.16, 1, 0.3, 1]
 
-// One stack, one staggered cascade — nothing mounts all at once.
 const stack = {
   hidden: {},
   show: { transition: { delayChildren: 0.08, staggerChildren: 0.06 } },
 }
 
-// Keep the staggered reveal, but only animate opacity and transform. Blurring
-// the large heading on every entrance frame made the reveal much more costly.
 const rise = {
   hidden: { opacity: 0, y: 16 },
   show: {
@@ -38,7 +35,6 @@ export default function HeroContent({ ready = true }) {
       animate={ready ? 'show' : 'hidden'}
       className="hero-copy flex w-full min-w-0 max-w-[44rem] flex-col"
     >
-      {/* Greeting */}
       <motion.p
         variants={rise}
         className="mb-4 font-mono text-[0.72rem] uppercase tracking-[0.08em] text-paper sm:text-[0.85rem]"
@@ -47,7 +43,6 @@ export default function HeroContent({ ready = true }) {
         {SITE.greeting}
       </motion.p>
 
-      {/* The punctuation reserves its own space, so blinking cannot shift the name. */}
       <motion.h1
         variants={nameVariant}
         id="hero-heading"
@@ -64,7 +59,6 @@ export default function HeroContent({ ready = true }) {
         </span>
       </motion.h1>
 
-      {/* Static expertise matches the reference and never rotates out of view. */}
       <motion.div
         variants={rise}
         className="mt-6 mb-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[0.65rem] uppercase tracking-[0.06em] sm:text-[0.8rem]"
@@ -79,7 +73,6 @@ export default function HeroContent({ ready = true }) {
         <span aria-hidden="true" className="text-faint">]</span>
       </motion.div>
 
-      {/* Supporting sentence — sentence case, measured, readable */}
       <motion.p
         variants={rise}
         className="mb-9 max-w-[50ch] text-[0.85rem] font-normal leading-[1.8] tracking-[0.025em] text-paper/90 [text-wrap:pretty] sm:text-[0.9rem] xl:mb-10 xl:text-[0.95rem]"

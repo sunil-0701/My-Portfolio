@@ -1,11 +1,8 @@
 const VARIANTS = {
-  // Solid — the one primary action on the page
   solid:
     'border border-paper bg-paper text-ink hover:bg-white hover:border-white hover:-translate-y-0.5 shadow-[0_18px_40px_-24px_rgba(143,179,163,0.55)] hover:shadow-[0_26px_54px_-24px_rgba(143,179,163,0.75)]',
-  // Outline — secondary weight
   outline:
     'terminal-button border border-paper/50 bg-transparent text-paper hover:border-paper hover:bg-paper/[0.06] hover:-translate-y-0.5',
-  // Quiet — a text link with a rule that draws in on hover, not a third button
   quiet:
     'border border-transparent bg-transparent px-0 text-muted hover:text-paper',
 }

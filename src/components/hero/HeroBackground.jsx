@@ -1,5 +1,3 @@
-// A static print-like texture keeps the reference's atmosphere without adding
-// pointer listeners, animated noise, filters, or full-screen compositing work.
 export default function HeroBackground() {
   return (
     <div

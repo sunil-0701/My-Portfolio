@@ -23,7 +23,6 @@
   color-scheme: dark;
 }
 
-/* Let the browser handle scrolling natively, including its scrollbar. */
 html {
   scroll-behavior: auto;
 }
@@ -72,13 +71,10 @@ html, body {
   transform: translateY(0);
 }
 
-/* Keep the dark glass-like appearance without sampling and blurring the page
-   behind a fixed element on every scroll frame. */
 .glass-bar {
   background: linear-gradient(to bottom, var(--color-ink) 60%, transparent);
 }
 
-/* Static scanlines and a tiny tiled grain asset: no animated noise or filters. */
 .technical-surface {
   background-image:
     url('/grain.svg'),
@@ -150,7 +146,6 @@ html, body {
   50% { opacity: 0; }
 }
 
-/* Only this tiny decorative glyph blinks; reduced-motion users see a solid dot. */
 @media (prefers-reduced-motion: no-preference) {
   .name-period[data-blinking="true"] {
     animation: name-period-blink 1.2s steps(1, end) infinite;

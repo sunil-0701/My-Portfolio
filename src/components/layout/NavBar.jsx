@@ -59,7 +59,6 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
             </p>
           </div>
 
-          {/* Mobile trigger — replaces the row that used to overflow the viewport */}
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
@@ -99,7 +98,6 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
         ))}
       </nav>
 
-      {/* Native modal behavior traps focus and makes the background inert. */}
       {menuOpen && (
         <MobileMenu onClose={() => setMenuOpen(false)}>
           {SECTIONS.map((section) => (

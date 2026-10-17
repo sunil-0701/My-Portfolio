@@ -13,8 +13,6 @@ function App() {
     setLoading(false)
   }
 
-  // The hero holds its entry until the curtain lifts. Without this the whole
-  // cascade plays out behind the loader and the page just appears, finished.
   const ready = !loading
 
   return (
