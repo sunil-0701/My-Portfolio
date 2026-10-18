@@ -256,3 +256,52 @@ html, body {
     transition-duration: 0.001ms !important;
   }
 }
+
+@media print {
+  html, body, #home {
+    background: white !important;
+    color: black !important;
+  }
+
+  header, nav, dialog, .skip-link, .blink-toggle,
+  .technical-surface, #home img, [aria-label="Loading"],
+  #home > [aria-hidden="true"] {
+    display: none !important;
+  }
+
+  .hero-shell {
+    min-height: 0;
+    padding: 1rem;
+  }
+
+  .hero-copy {
+    width: 100%;
+    max-width: none;
+  }
+
+  #home, #home * {
+    opacity: 1 !important;
+    transform: none !important;
+    color: black !important;
+    text-shadow: none !important;
+    animation: none !important;
+  }
+
+  .hero-name {
+    font-size: 32pt;
+  }
+
+  .terminal-button {
+    border-color: black;
+  }
+
+  .hero-copy a::after {
+    content: ' (' attr(href) ')';
+    position: static;
+    width: auto;
+    height: auto;
+    border: 0;
+    font-size: 8pt;
+    overflow-wrap: anywhere;
+  }
+}
