@@ -141,12 +141,19 @@ html, body {
   margin-left: 0.04em;
 }
 
+.blink-toggle {
+  display: none;
+}
+
 @keyframes name-period-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .blink-toggle {
+    display: inline-flex;
+  }
   .name-period[data-blinking="true"] {
     animation: name-period-blink 1.2s steps(1, end) infinite;
   }

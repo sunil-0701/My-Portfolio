@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Button, { ArrowRight } from '../ui/Button'
 import { SITE } from '../../config/site'
@@ -28,6 +29,7 @@ const nameVariant = {
 }
 
 export default function HeroContent({ ready = true }) {
+  const [blinkPaused, setBlinkPaused] = useState(false)
   return (
     <motion.div
       variants={stack}
@@ -55,7 +57,8 @@ export default function HeroContent({ ready = true }) {
           <span
             aria-hidden="true"
             className="name-period"
-            data-blinking={ready}
+            id="name-period"
+            data-blinking={ready && !blinkPaused}
           >.</span>
         </span>
       </motion.h1>
@@ -90,6 +93,15 @@ export default function HeroContent({ ready = true }) {
         <Button href={`mailto:${SITE.email}`} variant="outline" icon={<ArrowRight />}>
           Get in touch
         </Button>
+        <button
+          type="button"
+          className="blink-toggle min-h-11 items-center px-2 text-[0.65rem] text-muted underline decoration-paper/30 underline-offset-4 hover:text-paper"
+          aria-controls="name-period"
+          aria-pressed={blinkPaused}
+          onClick={() => setBlinkPaused((paused) => !paused)}
+        >
+          Pause blinking dot
+        </button>
       </motion.div>
     </motion.div>
   )
