@@ -63,6 +63,7 @@ export default function MobileMenu({ children, onClose }) {
         {children}
         <a
           href={`mailto:${SITE.email}`}
+          onClick={() => dialogRef.current.close()}
           className="mt-8 break-all py-3 font-mono text-[0.72rem] tracking-[0.08em] text-muted hover:text-paper"
         >
           {SITE.email}

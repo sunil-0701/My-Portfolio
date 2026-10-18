@@ -27,6 +27,14 @@ await withBrowser(async ({ page, url }) => {
   assert.equal(await page.evaluate(() => document.body.style.overflow), '')
 
   await page.click(trigger)
+  await page.$eval('#mobile-menu a[href^="mailto:"]', (link) => {
+    link.addEventListener('click', (event) => event.preventDefault(), { once: true })
+    link.click()
+  })
+  await page.waitForFunction(() => !document.querySelector('#mobile-menu'))
+  assert.equal(await page.evaluate(() => document.body.style.overflow), '', 'Email contact must release the scroll lock')
+
+  await page.click(trigger)
   await page.setViewport({ width: 1024, height: 768 })
   await page.waitForFunction(() => !document.querySelector('#mobile-menu'))
   assert.equal(await page.evaluate(() => document.body.style.overflow), '')
