@@ -46,6 +46,7 @@ export default function HeroContent({ ready = true }) {
       <motion.h1
         variants={nameVariant}
         id="hero-heading"
+        aria-label={SITE.name}
         className="hero-name font-display font-bold uppercase text-paper"
       >
         <span className="block">{SITE.firstName}</span>
@@ -61,11 +62,13 @@ export default function HeroContent({ ready = true }) {
 
       <motion.div
         variants={rise}
+        role="list"
+        aria-label="Engineering specialties"
         className="mt-6 mb-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[0.65rem] uppercase tracking-[0.06em] sm:text-[0.8rem]"
       >
         <span aria-hidden="true" className="text-faint">[</span>
         {SITE.expertise.map((item, index) => (
-          <span key={item} className="inline-flex items-center gap-3">
+          <span key={item} role="listitem" className="inline-flex items-center gap-3">
             {index > 0 && <span aria-hidden="true" className="text-faint">|</span>}
             {item}
           </span>
