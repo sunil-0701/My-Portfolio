@@ -206,6 +206,29 @@ html, body {
   padding-top: 2.5rem;
 }
 
+@media (forced-colors: active) {
+  .technical-surface, .technical-surface::after {
+    background: none;
+    border: 0;
+  }
+
+  .hero-name {
+    text-shadow: none;
+  }
+
+  .terminal-button {
+    border: 1px solid ButtonText;
+  }
+
+  :where(a, button, [tabindex]):focus-visible {
+    outline: 2px solid Highlight;
+  }
+
+  .name-period[data-blinking="true"] {
+    animation: none;
+  }
+}
+
 @media (max-height: 900px) {
   .hero-shell {
     padding-top: 8.5rem;
