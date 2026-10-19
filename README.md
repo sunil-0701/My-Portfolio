@@ -18,14 +18,16 @@ npm run dev
 npm run check
 ```
 
-This runs strict linting (including warnings), a production build, and all six
+This runs strict linting (including warnings), a production build, and all nine
 test suites. Use `npm test` for tests only, or run an individual suite with
 `npm run test:motion`, `test:navigation`, `test:intro`, `test:layout`,
-`test:buttons`, or `test:fallback`.
+`test:buttons`, `test:fallback`, `test:contact`, `test:media`, or `test:production`.
 
 The tests cover the blinking name period, reduced motion, intro persistence,
 mobile focus handling, nine viewport sizes, unavailable web fonts, button
-semantics, and the no-JavaScript fallback. GitHub Actions runs the same checks on
+semantics, clipboard failures, print/PDF output, high contrast, and the
+no-JavaScript fallback. Production checks serve the actual build at both `/` and
+`/My-Portfolio/` and verify assets and interactive navigation. GitHub Actions runs the same checks on
 pull requests and pushes to `main` and `landingPage`.
 
 Browser checks use Puppeteer's Chrome installation. If it is missing, run
@@ -57,8 +59,13 @@ motion preferences are respected. Mobile navigation traps focus, closes on Escap
 restores focus, and releases its scroll lock when switching to desktop.
 
 The decorative period after the name blinks every 1.2 seconds without shifting
-the heading. It stays solid when the visitor requests reduced motion. With
+the heading. Its pause control remembers the choice across visits when browser
+storage is available. It stays solid when the visitor requests reduced motion. With
 JavaScript disabled, visitors still see the summary and working contact links.
+
+The email-copy control announces success or shows the address if clipboard access
+is denied. Profile links announce when they open a new tab. Print output hides
+interactive controls and includes readable contact destinations.
 
 Work, About, and Contact navigation entries remain explicitly unavailable until
 their sections are built. View work opens the real GitHub profile; Get in touch
