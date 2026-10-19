@@ -55,6 +55,7 @@ export default function Button({
           {icon}
         </span>
       )}
+      {href && target === '_blank' && <span className="sr-only"> (opens in a new tab)</span>}
     </Tag>
   )
 }

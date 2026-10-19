@@ -11,6 +11,7 @@ try {
   assert.match(render({ type: 'submit' }), /type="submit"/, 'Explicit form submission still works')
   const external = render({ href: 'https://example.com', target: '_blank', rel: 'nofollow' })
   assert.match(external, /rel="nofollow noopener noreferrer"/)
+  assert.match(external, /opens in a new tab/)
   assert.doesNotMatch(external, /type="button"/)
   const disabledLink = render({ href: 'https://example.com', disabled: true })
   assert.match(disabledLink, /role="link"/)

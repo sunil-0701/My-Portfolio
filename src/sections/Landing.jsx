@@ -43,7 +43,12 @@ export default function Landing({ ready = true }) {
         >
           <span>// Design &gt; Code &gt; Build &gt; Repeat</span>
           <span aria-hidden="true" className="hidden h-px flex-1 bg-paper/25 sm:block" />
-          <a href={SITE.github} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center hover:text-paper">GitHub ↗</a>
+          <a href={SITE.github} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center hover:text-paper">
+            GitHub <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span>
+          </a>
+          <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center hover:text-paper">
+            LinkedIn <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span>
+          </a>
           <span>© {new Date().getFullYear()}</span>
         </motion.div>
       </div>

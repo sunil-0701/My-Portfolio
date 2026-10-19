@@ -21,5 +21,7 @@ await withBrowser(async ({ page, url }) => {
   await page.waitForFunction(() => document.querySelector('[data-copy-feedback]').textContent.startsWith('Copy unavailable.'))
   assert.ok((await page.$eval('[data-copy-feedback]', (element) => element.textContent)).includes(SITE.email))
   assert.equal(await page.$eval('.copy-email button', (button) => button.disabled), false)
+  const profiles = await page.$$eval('.hero-rail a', (links) => links.map((link) => ({ href: link.href, announced: link.textContent.includes('opens in a new tab') })))
+  assert.deepEqual(profiles, [{ href: SITE.github, announced: true }, { href: SITE.linkedin, announced: true }])
   console.log('Contact checks passed: clipboard success, permission denial, readable fallback, and retry.')
 })
