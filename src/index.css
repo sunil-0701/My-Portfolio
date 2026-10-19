@@ -207,6 +207,9 @@ html, body {
 }
 
 @media (forced-colors: active) {
+  .blink-toggle {
+    display: none;
+  }
   .technical-surface, .technical-surface::after {
     background: none;
     border: 0;
@@ -263,7 +266,7 @@ html, body {
     color: black !important;
   }
 
-  header, nav, dialog, .skip-link, .blink-toggle,
+  header, nav, dialog, .skip-link, .blink-toggle, .copy-email,
   .technical-surface, #home img, [aria-label="Loading"],
   #home > [aria-hidden="true"] {
     display: none !important;
@@ -295,13 +298,35 @@ html, body {
     border-color: black;
   }
 
+  .hero-copy a {
+    display: block;
+    min-height: 0;
+    padding: 0.5rem 0;
+    border: 0;
+    letter-spacing: normal;
+    text-transform: none;
+    overflow-wrap: anywhere;
+  }
+
+  .hero-copy a::before,
+  .hero-copy a > [aria-hidden="true"] {
+    display: none;
+  }
+
   .hero-copy a::after {
     content: ' (' attr(href) ')';
     position: static;
     width: auto;
     height: auto;
     border: 0;
+    display: block;
     font-size: 8pt;
+    overflow-wrap: anywhere;
+  }
+
+  .hero-rail a::after {
+    content: ' (' attr(href) ')';
+    text-transform: none;
     overflow-wrap: anywhere;
   }
 }
