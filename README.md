@@ -32,6 +32,14 @@ Browser checks use Puppeteer's Chrome installation. If it is missing, run
 `npx puppeteer browsers install chrome`. On Windows with restricted PowerShell
 scripts, use `npm.cmd` instead of `npm`.
 
+## Deployment
+
+Run `npm run build` and publish `dist/`. Bundled assets, icons, grain texture,
+and preview-image references use relative paths, so the same build can be served
+at a domain root or in a subfolder such as `/My-Portfolio/`. Serve subfolder
+entry points with a trailing slash. This is an anchor-based single page and does
+not require client-side route rewrites.
+
 ## Editing content
 
 - Identity, expertise, social links, and section availability: `src/config/site.js`.
