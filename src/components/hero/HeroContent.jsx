@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Button, { ArrowRight } from '../ui/Button'
+import CopyEmail from '../ui/CopyEmail'
 import { SITE } from '../../config/site'
 import { readBlinkPaused, saveBlinkPaused } from '../../utils/preferences'
 
@@ -108,6 +109,9 @@ export default function HeroContent({ ready = true }) {
         >
           Pause blinking dot
         </button>
+      </motion.div>
+      <motion.div variants={rise}>
+        <CopyEmail />
       </motion.div>
     </motion.div>
   )
