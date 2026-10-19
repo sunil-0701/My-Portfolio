@@ -68,6 +68,9 @@ try {
   assert.equal(await page.$eval('.blink-toggle', (button) => button.getAttribute('aria-pressed')), 'true')
   assert.equal(await page.$eval('.name-period', (element) => getComputedStyle(element).opacity), '1')
   assert.equal(await page.$eval('.name-period', (element) => element.getAnimations().length), 0)
+  await page.reload({ waitUntil: 'domcontentloaded' })
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('h1')).opacity === '1')
+  assert.equal(await page.$eval('.blink-toggle', (button) => button.getAttribute('aria-pressed')), 'true', 'Remember the pause preference after reload')
   await page.click('.blink-toggle')
   assert.equal(await page.$eval('.name-period', (element) => element.getAnimations().length), 1)
 

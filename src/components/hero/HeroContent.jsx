@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Button, { ArrowRight } from '../ui/Button'
 import { SITE } from '../../config/site'
+import { readBlinkPaused, saveBlinkPaused } from '../../utils/preferences'
 
 const cubicEase = [0.16, 1, 0.3, 1]
 
@@ -29,7 +30,12 @@ const nameVariant = {
 }
 
 export default function HeroContent({ ready = true }) {
-  const [blinkPaused, setBlinkPaused] = useState(false)
+  const [blinkPaused, setBlinkPaused] = useState(readBlinkPaused)
+  const toggleBlink = () => {
+    const paused = !blinkPaused
+    saveBlinkPaused(paused)
+    setBlinkPaused(paused)
+  }
   return (
     <motion.div
       variants={stack}
@@ -98,7 +104,7 @@ export default function HeroContent({ ready = true }) {
           className="blink-toggle min-h-11 items-center px-2 text-[0.65rem] text-muted underline decoration-paper/30 underline-offset-4 hover:text-paper"
           aria-controls="name-period"
           aria-pressed={blinkPaused}
-          onClick={() => setBlinkPaused((paused) => !paused)}
+          onClick={toggleBlink}
         >
           Pause blinking dot
         </button>
