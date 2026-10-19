@@ -5,8 +5,10 @@ await withBrowser(async ({ page, browser, url }) => {
   await page.goto(url, { waitUntil: 'domcontentloaded' })
   await page.waitForSelector('[aria-label="Loading"]')
   assert.ok(await page.$eval('main', (main) => main.closest('[inert]') !== null))
-  await page.click('[aria-label="Loading"] button')
+  await page.focus('[aria-label="Loading"] button')
+  await page.keyboard.press('Enter')
   await waitForReady(page)
+  await page.waitForFunction(() => document.activeElement.id === 'main')
   assert.equal(await page.$('main[inert]'), null)
   assert.equal(await page.evaluate(() => sessionStorage.getItem('portfolio:intro-seen')), 'true')
 

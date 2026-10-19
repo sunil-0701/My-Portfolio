@@ -104,7 +104,7 @@ export default function PageLoader({ onDone }) {
 
       <button
         type="button"
-        onClick={onDone}
+        onClick={() => onDone({ focusContent: true })}
         className="absolute top-6 right-6 z-10 min-h-11 px-3 text-[0.7rem] uppercase tracking-[0.15em] text-muted hover:text-paper sm:top-8 sm:right-10"
       >
         Skip intro

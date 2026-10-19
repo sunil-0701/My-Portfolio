@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { AnimatePresence, MotionConfig } from 'framer-motion'
 import PageLoader from './components/PageLoader'
 import NavBar from './components/layout/NavBar'
@@ -7,8 +7,10 @@ import { rememberIntro, shouldShowIntro } from './utils/intro'
 
 function App() {
   const [loading, setLoading] = useState(shouldShowIntro)
+  const focusAfterIntro = useRef(false)
 
-  const finishIntro = () => {
+  const finishIntro = ({ focusContent = false } = {}) => {
+    focusAfterIntro.current = focusContent
     rememberIntro()
     setLoading(false)
   }
@@ -17,7 +19,12 @@ function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <AnimatePresence>
+      <AnimatePresence onExitComplete={() => {
+        if (focusAfterIntro.current) {
+          document.getElementById('main')?.focus({ preventScroll: true })
+          focusAfterIntro.current = false
+        }
+      }}>
         {loading && <PageLoader onDone={finishIntro} />}
       </AnimatePresence>
 
