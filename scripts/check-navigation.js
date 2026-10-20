@@ -41,5 +41,9 @@ await withBrowser(async ({ page, url }) => {
   await page.setViewport({ width: 1024, height: 768 })
   await page.waitForFunction(() => !document.querySelector('#mobile-menu'))
   assert.equal(await page.evaluate(() => document.body.style.overflow), '')
+  const desktopHome = 'nav[aria-label="Primary"] a[href="#home"]'
+  await page.focus(desktopHome)
+  assert.equal(await page.$eval(desktopHome, (link) => link.getAttribute('aria-current')), 'location')
+  assert.equal(await page.$eval(`${desktopHome} span[aria-hidden="true"]:last-child`, (label) => getComputedStyle(label).opacity), '1')
   console.log('Navigation checks passed: focus trap, Escape, focus restoration, link close, and resize cleanup.')
 })
