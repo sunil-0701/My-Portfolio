@@ -1,28 +1,33 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { SITE } from '../../config/site'
 
 export default function CopyEmail() {
   const [status, setStatus] = useState('')
   const [busy, setBusy] = useState(false)
+  const pending = useRef(false)
 
   const copy = async () => {
+    if (pending.current) return
+    pending.current = true
     setBusy(true)
+    setStatus('')
     try {
       await navigator.clipboard.writeText(SITE.email)
       setStatus('Email copied')
     } catch {
       setStatus(`Copy unavailable. Email: ${SITE.email}`)
     } finally {
+      pending.current = false
       setBusy(false)
     }
   }
 
   return (
     <div className="copy-email mt-4 text-[0.65rem] text-muted">
-      <button type="button" onClick={copy} disabled={busy} className="min-h-11 px-2 underline underline-offset-4 hover:text-paper disabled:opacity-50">
+      <button type="button" onClick={copy} aria-busy={busy} aria-disabled={busy} aria-describedby="copy-email-feedback" className="min-h-11 px-2 underline underline-offset-4 hover:text-paper aria-disabled:opacity-50">
         {busy ? 'Copying…' : 'Copy email address'}
       </button>
-      <p aria-live="polite" aria-atomic="true" className="break-words" data-copy-feedback>{status}</p>
+      <p id="copy-email-feedback" aria-live="polite" aria-atomic="true" className="break-words" data-copy-feedback>{status}</p>
     </div>
   )
 }
