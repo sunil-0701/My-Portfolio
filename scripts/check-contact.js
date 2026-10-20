@@ -39,7 +39,7 @@ await withBrowser(async ({ page, url }) => {
   assert.deepEqual(profiles, [{ href: SITE.github, announced: true }, { href: SITE.linkedin, announced: true }])
   await page.setRequestInterception(true)
   page.on('request', (request) => {
-    if (request.url().includes('profile-portrait')) request.abort()
+    if (request.resourceType() === 'image' && request.url().includes('profile-portrait')) request.abort()
     else request.continue()
   })
   await page.setCacheEnabled(false)

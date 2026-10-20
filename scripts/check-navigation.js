@@ -43,6 +43,10 @@ await withBrowser(async ({ page, url }) => {
   assert.equal(await page.evaluate(() => document.body.style.overflow), '')
   const desktopHome = 'nav[aria-label="Primary"] a[href="#home"]'
   await page.focus(desktopHome)
+  await page.keyboard.press('Tab')
+  await page.keyboard.down('Shift')
+  await page.keyboard.press('Tab')
+  await page.keyboard.up('Shift')
   assert.equal(await page.$eval(desktopHome, (link) => link.getAttribute('aria-current')), 'location')
   assert.equal(await page.$eval(`${desktopHome} span[aria-hidden="true"]:last-child`, (label) => getComputedStyle(label).opacity), '1')
   console.log('Navigation checks passed: focus trap, Escape, focus restoration, link close, and resize cleanup.')

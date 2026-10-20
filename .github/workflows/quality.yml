@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: portfolio-quality-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -28,3 +32,10 @@ jobs:
         run: npx puppeteer browsers install chrome --install-deps
       - name: Lint, build, and run regression checks
         run: npm run check
+      - name: Retain the validated production build
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-dist-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
