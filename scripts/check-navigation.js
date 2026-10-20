@@ -7,8 +7,11 @@ await withBrowser(async ({ page, url }) => {
   await page.goto(url, { waitUntil: 'domcontentloaded' })
   await waitForReady(page)
   const trigger = 'button[aria-controls="mobile-menu"]'
+  const headingLeft = await page.$eval('h1', (heading) => heading.getBoundingClientRect().left)
   await page.click(trigger)
   await page.waitForSelector('#mobile-menu[open]')
+  assert.equal(await page.$eval('h1', (heading) => heading.getBoundingClientRect().left), headingLeft, 'Opening navigation must not shift the page')
+  assert.equal(await page.$eval('#mobile-menu', (menu) => getComputedStyle(menu).overscrollBehavior), 'contain')
   assert.equal(await page.evaluate(() => document.activeElement.textContent.trim()), 'Close menu')
   await page.keyboard.down('Shift')
   await page.keyboard.press('Tab')
