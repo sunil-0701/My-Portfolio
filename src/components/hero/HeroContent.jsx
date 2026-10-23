@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import Button, { ArrowRight } from '../ui/Button'
 import CopyEmail from '../ui/CopyEmail'
+import usePageVisible from '../../hooks/usePageVisible'
 import { SITE } from '../../config/site'
 import { readBlinkPaused, saveBlinkPaused, watchBlinkPaused } from '../../utils/preferences'
 
@@ -31,6 +32,7 @@ const nameVariant = {
 }
 
 export default function HeroContent({ ready = true }) {
+  const pageVisible = usePageVisible()
   const [blinkPaused, setBlinkPaused] = useState(readBlinkPaused)
   useEffect(() => watchBlinkPaused(setBlinkPaused), [])
   const toggleBlink = () => {
@@ -66,7 +68,7 @@ export default function HeroContent({ ready = true }) {
             aria-hidden="true"
             className="name-period"
             id="name-period"
-            data-blinking={ready && !blinkPaused}
+            data-blinking={ready && pageVisible && !blinkPaused}
           >.</span>
         </span>
       </motion.h1>
