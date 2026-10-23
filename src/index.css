@@ -55,8 +55,8 @@ html, body {
 
 .skip-link {
   position: fixed;
-  top: 0.75rem;
-  left: 0.75rem;
+  top: max(0.75rem, env(safe-area-inset-top));
+  left: max(0.75rem, env(safe-area-inset-left));
   z-index: var(--z-loader);
   transform: translateY(-200%);
   background: var(--color-ink-3);
@@ -70,6 +70,17 @@ html, body {
 
 .skip-link:focus-visible {
   transform: translateY(0);
+}
+
+#main, main section[id] {
+  scroll-margin-block-start: 6rem;
+}
+
+@media (max-width: 479px) {
+  .skip-link {
+    max-width: calc(100vw - 3rem);
+    box-sizing: border-box;
+  }
 }
 
 .glass-bar {
