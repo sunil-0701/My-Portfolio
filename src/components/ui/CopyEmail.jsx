@@ -3,6 +3,7 @@ import { SITE } from '../../config/site'
 
 export default function CopyEmail() {
   const [status, setStatus] = useState('')
+  const [failed, setFailed] = useState(false)
   const [busy, setBusy] = useState(false)
   const pending = useRef(false)
 
@@ -11,10 +12,12 @@ export default function CopyEmail() {
     pending.current = true
     setBusy(true)
     setStatus('')
+    setFailed(false)
     try {
       await navigator.clipboard.writeText(SITE.email)
       setStatus('Email copied')
     } catch {
+      setFailed(true)
       setStatus(`Copy unavailable. Email: ${SITE.email}`)
     } finally {
       pending.current = false
@@ -27,7 +30,10 @@ export default function CopyEmail() {
       <button type="button" onClick={copy} aria-busy={busy} aria-disabled={busy} aria-describedby="copy-email-feedback" className="min-h-11 px-2 underline underline-offset-4 hover:text-paper aria-disabled:opacity-50">
         {busy ? 'Copying…' : 'Copy email address'}
       </button>
-      <p id="copy-email-feedback" aria-live="polite" aria-atomic="true" className="break-words" data-copy-feedback>{status}</p>
+      <p id="copy-email-feedback" aria-live="polite" aria-atomic="true" className="break-words" data-copy-feedback>
+        {status}
+        {failed && <>{' '}<a href={`mailto:${SITE.email}`} className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-paper">Open email application</a></>}
+      </p>
     </div>
   )
 }
