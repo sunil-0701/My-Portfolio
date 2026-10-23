@@ -13,13 +13,20 @@ export default function CopyEmail() {
     setBusy(true)
     setStatus('')
     setFailed(false)
+    let timeout
     try {
-      await navigator.clipboard.writeText(SITE.email)
+      await Promise.race([
+        navigator.clipboard.writeText(SITE.email),
+        new Promise((_, reject) => {
+          timeout = window.setTimeout(() => reject(new Error('Clipboard permission timed out')), 8000)
+        }),
+      ])
       setStatus('Email copied')
     } catch {
       setFailed(true)
       setStatus(`Copy unavailable. Email: ${SITE.email}`)
     } finally {
+      window.clearTimeout(timeout)
       pending.current = false
       setBusy(false)
     }
