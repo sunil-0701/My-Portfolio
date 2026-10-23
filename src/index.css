@@ -102,6 +102,25 @@ html, body {
   pointer-events: none;
 }
 
+@media (prefers-reduced-transparency: reduce) {
+  .technical-surface {
+    background-image: none;
+    background-color: var(--color-ink);
+  }
+
+  .technical-surface::after {
+    display: none;
+  }
+
+  .glass-bar {
+    background: var(--color-ink);
+  }
+
+  .hero-name {
+    text-shadow: none;
+  }
+}
+
 .hero-shell {
   padding-top: 10rem;
   padding-bottom: max(2.5rem, env(safe-area-inset-bottom));

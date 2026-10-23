@@ -68,6 +68,11 @@ The email-copy control announces success or shows the address if clipboard acces
 is denied. Profile links announce when they open a new tab. Print output hides
 interactive controls and includes readable contact destinations.
 
+Blink preferences synchronize across open tabs, and background tabs stop the
+decorative blink. Reduced-transparency preferences remove the texture and header
+fade. Clipboard requests time out after eight seconds and offer a direct email
+link on failure. Mobile navigation also closes on browser Back/Forward navigation.
+
 Work, About, and Contact navigation entries remain explicitly unavailable until
 their sections are built. View work opens the real GitHub profile; Get in touch
 opens an email draft. No backend or admin dashboard is implemented yet.
