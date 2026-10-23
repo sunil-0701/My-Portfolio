@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import Button, { ArrowRight } from '../ui/Button'
 import CopyEmail from '../ui/CopyEmail'
 import { SITE } from '../../config/site'
-import { readBlinkPaused, saveBlinkPaused } from '../../utils/preferences'
+import { readBlinkPaused, saveBlinkPaused, watchBlinkPaused } from '../../utils/preferences'
 
 const cubicEase = [0.16, 1, 0.3, 1]
 
@@ -32,6 +32,7 @@ const nameVariant = {
 
 export default function HeroContent({ ready = true }) {
   const [blinkPaused, setBlinkPaused] = useState(readBlinkPaused)
+  useEffect(() => watchBlinkPaused(setBlinkPaused), [])
   const toggleBlink = () => {
     const paused = !blinkPaused
     saveBlinkPaused(paused)

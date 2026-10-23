@@ -15,3 +15,11 @@ export function saveBlinkPaused(paused) {
     // The control still works when browser storage is unavailable.
   }
 }
+
+export function watchBlinkPaused(onChange) {
+  const onStorage = (event) => {
+    if (event.key === BLINK_KEY || event.key === null) onChange(readBlinkPaused())
+  }
+  window.addEventListener('storage', onStorage)
+  return () => window.removeEventListener('storage', onStorage)
+}
