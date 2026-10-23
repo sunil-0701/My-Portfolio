@@ -27,8 +27,9 @@ The tests cover the blinking name period, reduced motion, intro persistence,
 mobile focus handling, nine viewport sizes, unavailable web fonts, button
 semantics, clipboard failures, print/PDF output, high contrast, and the
 no-JavaScript fallback. Production checks serve the actual build at both `/` and
-`/My-Portfolio/` and verify assets and interactive navigation. GitHub Actions runs the same checks on
-pull requests and pushes to `main` and `landingPage`.
+`/My-Portfolio/` and verify assets and interactive navigation. GitHub Actions is
+manual-only: pushes and pull requests do not start checks. Use the Actions tab's
+Run workflow button only if you explicitly want a run.
 
 Browser checks use Puppeteer's Chrome installation. If it is missing, run
 `npx puppeteer browsers install chrome`. On Windows with restricted PowerShell
