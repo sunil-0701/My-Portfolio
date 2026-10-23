@@ -1,9 +1,7 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Button, { ArrowRight } from '../ui/Button'
 import CopyEmail from '../ui/CopyEmail'
 import { SITE } from '../../config/site'
-import { readBlinkPaused, saveBlinkPaused } from '../../utils/preferences'
 
 const cubicEase = [0.16, 1, 0.3, 1]
 
@@ -31,12 +29,6 @@ const nameVariant = {
 }
 
 export default function HeroContent({ ready = true }) {
-  const [blinkPaused, setBlinkPaused] = useState(readBlinkPaused)
-  const toggleBlink = () => {
-    const paused = !blinkPaused
-    saveBlinkPaused(paused)
-    setBlinkPaused(paused)
-  }
   return (
     <motion.div
       variants={stack}
@@ -65,7 +57,7 @@ export default function HeroContent({ ready = true }) {
             aria-hidden="true"
             className="name-period"
             id="name-period"
-            data-blinking={ready && !blinkPaused}
+            data-blinking={ready}
           >.</span>
         </span>
       </motion.h1>
@@ -100,15 +92,6 @@ export default function HeroContent({ ready = true }) {
         <Button href={`mailto:${SITE.email}`} variant="outline" icon={<ArrowRight />}>
           Get in touch
         </Button>
-        <button
-          type="button"
-          className="blink-toggle min-h-11 items-center px-2 text-[0.65rem] text-muted underline decoration-paper/30 underline-offset-4 hover:text-paper"
-          aria-controls="name-period"
-          aria-pressed={blinkPaused}
-          onClick={toggleBlink}
-        >
-          Pause blinking dot
-        </button>
       </motion.div>
       <motion.div variants={rise}>
         <CopyEmail />

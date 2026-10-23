@@ -9,7 +9,7 @@ await withBrowser(async ({ page, url }) => {
   const printed = await page.evaluate(() => ({
     ink: getComputedStyle(document.querySelector('h1')).color,
     paper: getComputedStyle(document.body).backgroundColor,
-    hiddenControls: ['header', '.blink-toggle', '.copy-email', 'nav'].every((selector) => getComputedStyle(document.querySelector(selector)).display === 'none'),
+    hiddenControls: ['header', '.copy-email', 'nav'].every((selector) => getComputedStyle(document.querySelector(selector)).display === 'none'),
     destinations: [...document.querySelectorAll('.hero-copy a')].every((link) => getComputedStyle(link, '::after').content.includes(link.getAttribute('href'))),
     noOverflow: document.documentElement.scrollWidth <= innerWidth,
     headingVisible: getComputedStyle(document.querySelector('h1')).opacity === '1',
@@ -23,7 +23,6 @@ await withBrowser(async ({ page, url }) => {
   await client.send('Emulation.setEmulatedMedia', { features: [{ name: 'forced-colors', value: 'active' }] })
   assert.ok(await page.evaluate(() => matchMedia('(forced-colors: active)').matches))
   assert.equal(await page.$eval('h1', (heading) => getComputedStyle(heading).textShadow), 'none')
-  assert.equal(await page.$eval('.blink-toggle', (control) => getComputedStyle(control).display), 'none')
   assert.equal(await page.$eval('.name-period', (period) => period.getAnimations().length), 0)
   console.log('Media checks passed: printable links, ink-friendly A4 PDF, hidden controls, and static high-contrast presentation.')
 })

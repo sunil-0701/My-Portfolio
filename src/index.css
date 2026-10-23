@@ -141,19 +141,12 @@ html, body {
   margin-left: 0.04em;
 }
 
-.blink-toggle {
-  display: none;
-}
-
 @keyframes name-period-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .blink-toggle {
-    display: inline-flex;
-  }
   .name-period[data-blinking="true"] {
     animation: name-period-blink 1.2s steps(1, end) infinite;
   }
@@ -207,9 +200,6 @@ html, body {
 }
 
 @media (forced-colors: active) {
-  .blink-toggle {
-    display: none;
-  }
   .technical-surface, .technical-surface::after {
     background: none;
     border: 0;
@@ -266,7 +256,7 @@ html, body {
     color: black !important;
   }
 
-  header, nav, dialog, .skip-link, .blink-toggle, .copy-email,
+  header, nav, dialog, .skip-link, .copy-email,
   .technical-surface, #home img, [aria-label="Loading"],
   #home > [aria-hidden="true"] {
     display: none !important;

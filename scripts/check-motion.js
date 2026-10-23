@@ -64,15 +64,7 @@ try {
     return { text: element.textContent, decorative: element.getAttribute('aria-hidden'), visible, hidden, stableWidth }
   })
   assert.deepEqual(period, { text: '.', decorative: 'true', visible: '1', hidden: '0', stableWidth: true })
-  await page.click('.blink-toggle')
-  assert.equal(await page.$eval('.blink-toggle', (button) => button.getAttribute('aria-pressed')), 'true')
-  assert.equal(await page.$eval('.name-period', (element) => getComputedStyle(element).opacity), '1')
-  assert.equal(await page.$eval('.name-period', (element) => element.getAnimations().length), 0)
-  await page.reload({ waitUntil: 'domcontentloaded' })
-  await page.waitForFunction(() => getComputedStyle(document.querySelector('h1')).opacity === '1')
-  assert.equal(await page.$eval('.blink-toggle', (button) => button.getAttribute('aria-pressed')), 'true', 'Remember the pause preference after reload')
-  await page.click('.blink-toggle')
-  assert.equal(await page.$eval('.name-period', (element) => element.getAnimations().length), 1)
+  assert.equal(await page.$('.blink-toggle'), null, 'The blinking-dot pause button must be removed')
 
   await page.mouse.move(0, 0)
   await page.mouse.move(1000, 500, { steps: 10 })
