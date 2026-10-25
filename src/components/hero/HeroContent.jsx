@@ -49,6 +49,7 @@ export default function HeroContent({ ready = true }) {
       <motion.h1
         variants={nameVariant}
         id="hero-heading"
+        tabIndex={-1}
         aria-label={SITE.name}
         className="hero-name font-display font-bold uppercase text-paper"
       >
