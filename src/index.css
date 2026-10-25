@@ -25,6 +25,7 @@
 
 html {
   scroll-behavior: auto;
+  scrollbar-gutter: stable;
 }
 
 html, body {
@@ -54,8 +55,8 @@ html, body {
 
 .skip-link {
   position: fixed;
-  top: 0.75rem;
-  left: 0.75rem;
+  top: max(0.75rem, env(safe-area-inset-top));
+  left: max(0.75rem, env(safe-area-inset-left));
   z-index: var(--z-loader);
   transform: translateY(-200%);
   background: var(--color-ink-3);
@@ -69,6 +70,17 @@ html, body {
 
 .skip-link:focus-visible {
   transform: translateY(0);
+}
+
+#main, main section[id] {
+  scroll-margin-block-start: 6rem;
+}
+
+@media (max-width: 479px) {
+  .skip-link {
+    max-width: calc(100vw - 3rem);
+    box-sizing: border-box;
+  }
 }
 
 .glass-bar {
@@ -90,6 +102,25 @@ html, body {
   pointer-events: none;
 }
 
+@media (prefers-reduced-transparency: reduce) {
+  .technical-surface {
+    background-image: none;
+    background-color: var(--color-ink);
+  }
+
+  .technical-surface::after {
+    display: none;
+  }
+
+  .glass-bar {
+    background: var(--color-ink);
+  }
+
+  .hero-name {
+    text-shadow: none;
+  }
+}
+
 .hero-shell {
   padding-top: 10rem;
   padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
@@ -104,6 +135,7 @@ html, body {
 }
 
 .mobile-menu {
+  overscroll-behavior: contain;
   padding-top: max(1.5rem, env(safe-area-inset-top));
   padding-right: max(1.5rem, env(safe-area-inset-right));
   padding-bottom: max(3rem, env(safe-area-inset-bottom));

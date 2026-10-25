@@ -12,14 +12,19 @@ export default function MobileMenu({ children, onClose }) {
     const closeOnDesktop = () => {
       if (desktop.matches) dialog.close()
     }
+    const closeOnNavigation = () => dialog.close()
 
     dialog.showModal()
     document.body.style.overflow = 'hidden'
     closeOnDesktop()
     desktop.addEventListener('change', closeOnDesktop)
+    window.addEventListener('hashchange', closeOnNavigation)
+    window.addEventListener('popstate', closeOnNavigation)
 
     return () => {
       desktop.removeEventListener('change', closeOnDesktop)
+      window.removeEventListener('hashchange', closeOnNavigation)
+      window.removeEventListener('popstate', closeOnNavigation)
       dialog.close()
       document.body.style.overflow = previousOverflow
       if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus()

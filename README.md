@@ -27,8 +27,9 @@ The tests cover the blinking name period, reduced motion, intro persistence,
 mobile focus handling, nine viewport sizes, unavailable web fonts, button
 semantics, clipboard failures, print/PDF output, high contrast, and the
 no-JavaScript fallback. Production checks serve the actual build at both `/` and
-`/My-Portfolio/` and verify assets and interactive navigation. GitHub Actions runs the same checks on
-pull requests and pushes to `main` and `landingPage`.
+`/My-Portfolio/` and verify assets and interactive navigation. GitHub Actions is
+manual-only: pushes and pull requests do not start checks. Use the Actions tab's
+Run workflow button only if you explicitly want a run.
 
 Browser checks use Puppeteer's Chrome installation. If it is missing, run
 `npx puppeteer browsers install chrome`. On Windows with restricted PowerShell
@@ -66,6 +67,11 @@ JavaScript disabled, visitors still see the summary and working contact links.
 The email-copy control announces success or shows the address if clipboard access
 is denied. Profile links announce when they open a new tab. Print output hides
 interactive controls and includes readable contact destinations.
+
+Blink preferences synchronize across open tabs, and background tabs stop the
+decorative blink. Reduced-transparency preferences remove the texture and header
+fade. Clipboard requests time out after eight seconds and offer a direct email
+link on failure. Mobile navigation also closes on browser Back/Forward navigation.
 
 Work, About, and Contact navigation entries remain explicitly unavailable until
 their sections are built. View work opens the real GitHub profile; Get in touch

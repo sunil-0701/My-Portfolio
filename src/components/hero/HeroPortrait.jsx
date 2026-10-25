@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import portrait from '../../assets/profile-portrait.jpg'
 import { SITE } from '../../config/site'
@@ -6,6 +7,7 @@ const MASK =
   'radial-gradient(ellipse 60% 78% at 52% 54%, #000 36%, rgba(0,0,0,0.8) 58%, transparent 83%)'
 
 export default function HeroPortrait({ ready = true }) {
+  const [failed, setFailed] = useState(false)
   return (
     <motion.div
       className="pointer-events-none absolute inset-y-0 right-0 z-[var(--z-behind)] w-full md:right-[7%] md:w-[51%]"
@@ -23,16 +25,21 @@ export default function HeroPortrait({ ready = true }) {
       />
 
       <div className="relative h-full w-full">
-        <img
+        {failed ? (
+          <div role="img" aria-label={`${SITE.name} — portrait unavailable`} className="portrait-fallback flex h-full items-center justify-center font-display text-6xl text-faint/40">
+            {SITE.firstName[0]}{SITE.lastName[0]}
+          </div>
+        ) : <img
           src={portrait}
           width="1100"
           height="979"
           alt={`${SITE.name}, photographed in profile`}
           fetchPriority="high"
           decoding="async"
+          onError={() => setFailed(true)}
           className="h-full w-full object-cover object-[52%_20%] opacity-15 md:opacity-85 lg:opacity-100"
           style={{ maskImage: MASK, WebkitMaskImage: MASK }}
-        />
+        />}
       </div>
 
       <div

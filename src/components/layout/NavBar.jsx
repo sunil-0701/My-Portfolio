@@ -11,6 +11,9 @@ function NavItem({ section, isActive, onNavigate, number }) {
     <>
       <span aria-hidden="true" className={`px-0.5 ${isActive ? 'bg-paper text-ink' : ''}`}>{number}</span>
       <span className="sr-only">{section.label}</span>
+      <span aria-hidden="true" className="pointer-events-none absolute top-1/2 left-10 -translate-y-1/2 whitespace-nowrap border border-paper/20 bg-ink px-2 py-1 text-[0.6rem] text-paper opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100">
+        {section.label}{!section.ready && ' — soon'}
+      </span>
     </>
   ) : section.label
 
@@ -30,7 +33,7 @@ function NavItem({ section, isActive, onNavigate, number }) {
     <a
       href={`#${section.id}`}
       onClick={onNavigate}
-      aria-current={isActive ? 'page' : undefined}
+      aria-current={isActive ? 'location' : undefined}
       title={section.label}
       className={`${base} ${isActive ? 'text-paper' : 'text-muted hover:text-paper'}`}
     >
