@@ -49,5 +49,7 @@ await withBrowser(async ({ page, url }) => {
   await page.keyboard.up('Shift')
   assert.equal(await page.$eval(desktopHome, (link) => link.getAttribute('aria-current')), 'location')
   assert.equal(await page.$eval(`${desktopHome} span[aria-hidden="true"]:last-child`, (label) => getComputedStyle(label).opacity), '1')
+  await page.keyboard.press('Escape')
+  assert.equal(await page.$eval(`${desktopHome} span[aria-hidden="true"]:last-child`, (label) => getComputedStyle(label).display), 'none')
   console.log('Navigation checks passed: focus trap, Escape, focus restoration, link close, and resize cleanup.')
 })

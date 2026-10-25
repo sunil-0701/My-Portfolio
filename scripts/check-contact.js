@@ -35,8 +35,13 @@ await withBrowser(async ({ page, url }) => {
   await page.waitForFunction(() => document.querySelector('[data-copy-feedback]').textContent.startsWith('Copy unavailable.'))
   assert.ok((await page.$eval('[data-copy-feedback]', (element) => element.textContent)).includes(SITE.email))
   assert.equal(await page.$eval('.copy-email button', (button) => button.disabled), false)
-  const profiles = await page.$$eval('.hero-rail a', (links) => links.map((link) => ({ href: link.href, announced: link.textContent.includes('opens in a new tab') })))
+  const profiles = await page.$$eval('.hero-rail a[target="_blank"]', (links) => links.map((link) => ({ href: link.href, announced: link.textContent.includes('opens in a new tab') })))
   assert.deepEqual(profiles, [{ href: SITE.github, announced: true }, { href: SITE.linkedin, announced: true }])
+  const savedContact = await page.$eval('.save-contact', (link) => ({ filename: link.download, content: decodeURIComponent(link.getAttribute('href').split(',').slice(1).join(',')) }))
+  assert.equal(savedContact.filename, 'sunil-amarthya.vcf')
+  assert.ok(savedContact.content.includes(`EMAIL;TYPE=INTERNET:${SITE.email}`))
+  await page.click('.back-to-top')
+  assert.equal(await page.evaluate(() => document.activeElement.id), 'hero-heading')
   await page.setRequestInterception(true)
   let failPortrait = true
   page.on('request', (request) => {

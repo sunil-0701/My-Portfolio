@@ -9,8 +9,8 @@ await withBrowser(async ({ page, url }) => {
   const printed = await page.evaluate(() => ({
     ink: getComputedStyle(document.querySelector('h1')).color,
     paper: getComputedStyle(document.body).backgroundColor,
-    hiddenControls: ['header', '.copy-email', 'nav'].every((selector) => getComputedStyle(document.querySelector(selector)).display === 'none'),
-    destinations: [...document.querySelectorAll('.hero-copy a')].every((link) => getComputedStyle(link, '::after').content.includes(link.getAttribute('href'))),
+    hiddenControls: ['header', '.copy-email', '.save-contact', '.back-to-top', 'nav'].every((selector) => getComputedStyle(document.querySelector(selector)).display === 'none'),
+    destinations: [...document.querySelectorAll('.hero-copy a')].filter((link) => link.getClientRects().length > 0).every((link) => getComputedStyle(link, '::after').content.includes(link.getAttribute('href'))),
     noOverflow: document.documentElement.scrollWidth <= innerWidth,
     headingVisible: getComputedStyle(document.querySelector('h1')).opacity === '1',
   }))
