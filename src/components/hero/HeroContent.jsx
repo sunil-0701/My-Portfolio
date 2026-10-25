@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import Button, { ArrowRight } from '../ui/Button'
 import CopyEmail from '../ui/CopyEmail'
+import ConnectionNotice from '../ConnectionNotice'
 import usePageVisible from '../../hooks/usePageVisible'
 import { SITE } from '../../config/site'
 
@@ -96,6 +97,7 @@ export default function HeroContent({ ready = true }) {
           Get in touch
         </Button>
       </motion.div>
+      <ConnectionNotice />
       <motion.div variants={rise}>
         <CopyEmail />
       </motion.div>

@@ -288,7 +288,7 @@ html, body {
     color: black !important;
   }
 
-  header, nav, dialog, .skip-link, .copy-email, .back-to-top,
+  header, nav, dialog, .skip-link, .copy-email, .back-to-top, .connection-notice,
   .technical-surface, #home img, [aria-label="Loading"],
   #home > [aria-hidden="true"] {
     display: none !important;
