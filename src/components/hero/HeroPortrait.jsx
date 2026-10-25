@@ -26,8 +26,9 @@ export default function HeroPortrait({ ready = true }) {
 
       <div className="relative h-full w-full">
         {failed ? (
-          <div role="img" aria-label={`${SITE.name} — portrait unavailable`} className="portrait-fallback flex h-full items-center justify-center font-display text-6xl text-faint/40">
-            {SITE.firstName[0]}{SITE.lastName[0]}
+          <div className="portrait-fallback flex h-full flex-col items-center justify-center gap-4">
+            <span role="img" aria-label={`${SITE.name} — portrait unavailable`} data-portrait-initials className="font-display text-6xl text-faint/40">{SITE.firstName[0]}{SITE.lastName[0]}</span>
+            <button type="button" onClick={() => setFailed(false)} className="pointer-events-auto relative z-10 min-h-11 border border-paper/30 px-4 font-mono text-xs text-muted hover:text-paper">Retry portrait</button>
           </div>
         ) : <img
           src={portrait}

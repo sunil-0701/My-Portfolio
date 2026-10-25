@@ -38,14 +38,20 @@ await withBrowser(async ({ page, url }) => {
   const profiles = await page.$$eval('.hero-rail a', (links) => links.map((link) => ({ href: link.href, announced: link.textContent.includes('opens in a new tab') })))
   assert.deepEqual(profiles, [{ href: SITE.github, announced: true }, { href: SITE.linkedin, announced: true }])
   await page.setRequestInterception(true)
+  let failPortrait = true
   page.on('request', (request) => {
-    if (request.resourceType() === 'image' && request.url().includes('profile-portrait')) request.abort()
+    if (failPortrait && request.resourceType() === 'image' && request.url().includes('profile-portrait')) request.abort()
     else request.continue()
   })
   await page.setCacheEnabled(false)
   await page.reload({ waitUntil: 'domcontentloaded' })
   await page.waitForSelector('.portrait-fallback')
-  assert.equal(await page.$eval('.portrait-fallback', (fallback) => fallback.textContent.trim()), 'SA')
+  assert.equal(await page.$eval('[data-portrait-initials]', (fallback) => fallback.textContent.trim()), 'SA')
+  failPortrait = false
+  await page.$eval('.portrait-fallback button', (button) => button.click())
+  await page.waitForSelector('img')
+  await page.$eval('img', (image) => image.decode())
+  assert.equal(await page.$('.portrait-fallback'), null)
   assert.equal(await page.$('.hero-copy a[href^="mailto:"]') !== null, true)
   console.log('Contact checks passed: clipboard success, permission denial, readable fallback, and retry.')
 })
