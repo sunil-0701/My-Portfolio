@@ -50,6 +50,13 @@
         .no-script h1 { font-size: clamp(1.8rem, 6vw, 3rem); line-height: 1.2; }
         .no-script a { display: inline-block; padding: .75rem 0; color: #a6dfc1; overflow-wrap: anywhere; }
         .no-script a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+        .no-script nav { margin-top: 1.5rem; }
+        @media print {
+          body { background: white !important; }
+          .no-script { margin: 0; color: black; }
+          .no-script a { color: black; }
+          .no-script a::after { content: ' (' attr(href) ')'; overflow-wrap: anywhere; }
+        }
         body { margin: 0; background: #0b0c0a; }
       </style>
       <main class="no-script">
@@ -57,10 +64,13 @@
         <h1>Sunil Amarthya.</h1>
         <p>I build the APIs, data models, and infrastructure that sit behind the product — the part users never see and always feel.</p>
         <p>The interactive portfolio needs JavaScript, but you can still view my work or get in touch:</p>
-        <ul>
-          <li><a href="https://github.com/sunilamarthya">View work on GitHub</a></li>
-          <li><a href="mailto:sunil.amarthya.d@gmail.com">sunil.amarthya.d@gmail.com</a></li>
-        </ul>
+        <nav aria-label="Contact and professional profiles">
+          <ul>
+            <li><a href="https://github.com/sunilamarthya">View work on GitHub</a></li>
+            <li><a href="https://linkedin.com/in/sunilamarthya">Connect on LinkedIn</a></li>
+            <li><a href="mailto:sunil.amarthya.d@gmail.com">sunil.amarthya.d@gmail.com</a></li>
+          </ul>
+        </nav>
       </main>
     </noscript>
     <div id="root"></div>
