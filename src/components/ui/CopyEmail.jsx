@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import { SITE } from '../../config/site'
 
 export default function CopyEmail() {
+  const feedbackId = useId()
   const [status, setStatus] = useState('')
   const [failed, setFailed] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -34,10 +35,10 @@ export default function CopyEmail() {
 
   return (
     <div className="copy-email mt-4 text-[0.65rem] text-muted">
-      <button type="button" onClick={copy} aria-busy={busy} aria-disabled={busy} aria-describedby="copy-email-feedback" className="min-h-11 px-2 underline underline-offset-4 hover:text-paper aria-disabled:opacity-50">
+      <button type="button" onClick={copy} aria-busy={busy} aria-disabled={busy} aria-describedby={feedbackId} className="min-h-11 px-2 underline underline-offset-4 hover:text-paper aria-disabled:opacity-50">
         {busy ? 'Copying…' : 'Copy email address'}
       </button>
-      <p id="copy-email-feedback" aria-live="polite" aria-atomic="true" className="break-words" data-copy-feedback>
+      <p id={feedbackId} aria-live="polite" aria-atomic="true" className="break-words" data-copy-feedback>
         {status}
         {failed && <>{' '}<a href={`mailto:${SITE.email}`} className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-paper">Open email application</a></>}
       </p>
