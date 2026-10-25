@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { SITE } from '../../config/site'
 
 export default function CopyEmail() {
@@ -7,6 +7,16 @@ export default function CopyEmail() {
   const [failed, setFailed] = useState(false)
   const [busy, setBusy] = useState(false)
   const pending = useRef(false)
+  const mounted = useRef(true)
+  const timeoutRef = useRef()
+
+  useEffect(() => {
+    mounted.current = true
+    return () => {
+      mounted.current = false
+      window.clearTimeout(timeoutRef.current)
+    }
+  }, [])
 
   const copy = async () => {
     if (pending.current) return
@@ -14,22 +24,23 @@ export default function CopyEmail() {
     setBusy(true)
     setStatus('')
     setFailed(false)
-    let timeout
     try {
       await Promise.race([
         navigator.clipboard.writeText(SITE.email),
         new Promise((_, reject) => {
-          timeout = window.setTimeout(() => reject(new Error('Clipboard permission timed out')), 8000)
+          timeoutRef.current = window.setTimeout(() => reject(new Error('Clipboard permission timed out')), 8000)
         }),
       ])
-      setStatus('Email copied')
+      if (mounted.current) setStatus('Email copied')
     } catch {
-      setFailed(true)
-      setStatus(`Copy unavailable. Email: ${SITE.email}`)
+      if (mounted.current) {
+        setFailed(true)
+        setStatus(`Copy unavailable. Email: ${SITE.email}`)
+      }
     } finally {
-      window.clearTimeout(timeout)
+      window.clearTimeout(timeoutRef.current)
       pending.current = false
-      setBusy(false)
+      if (mounted.current) setBusy(false)
     }
   }
 
