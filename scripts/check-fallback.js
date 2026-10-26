@@ -9,7 +9,8 @@ await withBrowser(async ({ page, url }) => {
   assert.equal(await page.$eval('.no-script h1', (heading) => heading.textContent), `${SITE.name}.`)
   assert.ok((await page.$eval('.no-script', (main) => main.textContent)).includes(SITE.summary))
   assert.equal(await page.$eval('.no-script a[href^="mailto:"]', (link) => link.getAttribute('href')), `mailto:${SITE.email}`)
-  assert.equal(await page.$eval('.no-script a[href^="https:"]', (link) => link.href), SITE.github)
+  assert.equal(await page.$eval(`.no-script a[href="${SITE.github}"]`, (link) => link.href), SITE.github)
+  for (const id of ['work', 'about', 'contact']) assert.ok(await page.$(`.no-script #${id}`), `Fallback must include ${id}`)
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Fallback must fit a narrow screen')
 
   await page.setJavaScriptEnabled(true)

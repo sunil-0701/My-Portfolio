@@ -63,14 +63,29 @@
         <p>Backend engineer // Bengaluru, IN</p>
         <h1>Sunil Amarthya.</h1>
         <p>I build the APIs, data models, and infrastructure that sit behind the product — the part users never see and always feel.</p>
-        <p>The interactive portfolio needs JavaScript, but you can still view my work or get in touch:</p>
-        <nav aria-label="Contact and professional profiles">
-          <ul>
-            <li><a href="https://github.com/sunilamarthya">View work on GitHub</a></li>
-            <li><a href="https://linkedin.com/in/sunilamarthya">Connect on LinkedIn</a></li>
-            <li><a href="mailto:sunil.amarthya.d@gmail.com">sunil.amarthya.d@gmail.com</a></li>
-          </ul>
-        </nav>
+        <nav aria-label="Portfolio sections"><a href="#work">Work</a> · <a href="#about">About</a> · <a href="#contact">Contact</a></nav>
+        <section id="work" aria-labelledby="fallback-work-heading">
+          <h2 id="fallback-work-heading">Work</h2>
+          <h3>This portfolio</h3>
+          <p>A responsive portfolio built with React, Vite, Tailwind CSS, and Framer Motion.</p>
+          <a href="https://github.com/sunil-0701/My-Portfolio">View portfolio source</a>
+        </section>
+        <section id="about" aria-labelledby="fallback-about-heading">
+          <h2 id="fallback-about-heading">About</h2>
+          <p>My focus is backend engineering: the APIs, data models, and infrastructure behind a product. Java and Spring Boot are part of that focus.</p>
+          <p>Based in Bengaluru, IN · UTC+5:30</p>
+        </section>
+        <section id="contact" aria-labelledby="fallback-contact-heading">
+          <h2 id="fallback-contact-heading">Contact</h2>
+          <p>The interactive controls need JavaScript, but these profile and email links work without it:</p>
+          <nav aria-label="Contact and professional profiles">
+            <ul>
+              <li><a href="https://github.com/sunilamarthya">View work on GitHub</a></li>
+              <li><a href="https://linkedin.com/in/sunilamarthya">Connect on LinkedIn</a></li>
+              <li><a href="mailto:sunil.amarthya.d@gmail.com">sunil.amarthya.d@gmail.com</a></li>
+            </ul>
+          </nav>
+        </section>
       </main>
     </noscript>
     <div id="root"></div>
