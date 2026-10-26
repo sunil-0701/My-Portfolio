@@ -6,6 +6,7 @@ export const SITE = {
   greeting: "Hello world, I'm",
   summary:
     'I build the APIs, data models, and infrastructure that sit behind the product — the part users never see and always feel.',
+  about: 'My focus is backend engineering: the APIs, data models, and infrastructure behind a product. Java and Spring Boot are part of that focus.',
 
   location: 'Bengaluru, IN',
   timezone: 'UTC+5:30',
@@ -18,7 +19,7 @@ export const SITE = {
 export const SECTIONS = [
   { id: 'home', label: 'HOME', ready: true },
   { id: 'work', label: 'WORK', ready: true },
-  { id: 'about', label: 'ABOUT', ready: false },
+  { id: 'about', label: 'ABOUT', ready: true },
   { id: 'contact', label: 'CONTACT', ready: false },
 ]
 
