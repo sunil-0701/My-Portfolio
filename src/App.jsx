@@ -5,6 +5,7 @@ import NavBar from './components/layout/NavBar'
 import Landing from './sections/Landing'
 import Work from './sections/Work'
 import About from './sections/About'
+import Contact from './sections/Contact'
 import { rememberIntro, shouldShowIntro } from './utils/intro'
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
           <Landing ready={ready} />
           <Work />
           <About />
+          <Contact />
         </main>
       </div>
     </MotionConfig>

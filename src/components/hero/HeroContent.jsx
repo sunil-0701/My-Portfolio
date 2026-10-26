@@ -1,7 +1,5 @@
 import { motion } from 'framer-motion'
 import Button, { ArrowRight } from '../ui/Button'
-import CopyEmail from '../ui/CopyEmail'
-import SaveContact from '../ui/SaveContact'
 import ConnectionNotice from '../ConnectionNotice'
 import usePageVisible from '../../hooks/usePageVisible'
 import { SITE } from '../../config/site'
@@ -94,15 +92,11 @@ export default function HeroContent({ ready = true }) {
         <Button href="#work" variant="outline" icon={<ArrowRight />}>
           View work
         </Button>
-        <Button href={`mailto:${SITE.email}`} variant="outline" icon={<ArrowRight />}>
+        <Button href="#contact" variant="outline" icon={<ArrowRight />}>
           Get in touch
         </Button>
       </motion.div>
       <ConnectionNotice />
-      <motion.div variants={rise} className="flex flex-wrap items-start gap-x-4">
-        <CopyEmail />
-        <div className="mt-4"><SaveContact /></div>
-      </motion.div>
     </motion.div>
   )
 }

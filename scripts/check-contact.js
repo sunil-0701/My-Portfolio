@@ -57,6 +57,6 @@ await withBrowser(async ({ page, url }) => {
   await page.waitForSelector('img')
   await page.$eval('img', (image) => image.decode())
   assert.equal(await page.$('.portrait-fallback'), null)
-  assert.equal(await page.$('.hero-copy a[href^="mailto:"]') !== null, true)
+  assert.equal(await page.$('#contact a[href^="mailto:"]') !== null, true)
   console.log('Contact checks passed: clipboard success, permission denial, readable fallback, and retry.')
 })

@@ -20,7 +20,7 @@ export const SECTIONS = [
   { id: 'home', label: 'HOME', ready: true },
   { id: 'work', label: 'WORK', ready: true },
   { id: 'about', label: 'ABOUT', ready: true },
-  { id: 'contact', label: 'CONTACT', ready: false },
+  { id: 'contact', label: 'CONTACT', ready: true },
 ]
 
 export const PROJECTS = [
