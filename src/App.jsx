@@ -9,6 +9,7 @@ import Contact from './sections/Contact'
 import { rememberIntro, shouldShowIntro } from './utils/intro'
 import { SECTIONS } from './config/site'
 import useActiveSection from './hooks/useActiveSection'
+import useAnchorNavigation from './hooks/useAnchorNavigation'
 
 const SECTION_IDS = SECTIONS.filter((section) => section.ready).map((section) => section.id)
 
@@ -24,6 +25,7 @@ function App() {
   }
 
   const ready = !loading
+  useAnchorNavigation(ready)
 
   return (
     <MotionConfig reducedMotion="user">
