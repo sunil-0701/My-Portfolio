@@ -232,16 +232,41 @@ html, body {
 }
 
 .content-section {
-  padding: 5rem max(1.5rem, env(safe-area-inset-right)) 5rem max(1.5rem, env(safe-area-inset-left));
+  padding-block: 5rem;
 }
 
 .section-inner {
   min-width: 0;
+  padding-inline: max(1.5rem, env(safe-area-inset-left)) max(1.5rem, env(safe-area-inset-right));
+}
+
+.section-heading {
+  max-width: 24ch;
+  text-wrap: balance;
+}
+
+.content-section :where(p, dd, a, h3) {
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 640px) {
+  .section-inner {
+    padding-inline: max(2.5rem, env(safe-area-inset-left)) max(2.5rem, env(safe-area-inset-right));
+  }
 }
 
 @media (min-width: 768px) {
   .content-section {
-    padding: 6rem 5% 6rem 11.6%;
+    padding-block: 6rem;
+  }
+  .section-inner {
+    padding-inline-start: max(11.6%, env(safe-area-inset-left));
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-inner {
+    padding-inline-end: max(5rem, env(safe-area-inset-right));
   }
 }
 
@@ -297,6 +322,45 @@ html, body {
 }
 
 @media print {
+  #home {
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .portrait-fallback {
+    display: none;
+  }
+
+  .content-section {
+    padding-block: 1.5rem;
+    break-inside: auto;
+  }
+
+  .section-inner {
+    max-width: none;
+    padding: 0 1rem;
+  }
+
+  .content-section, .content-section * {
+    color: black !important;
+    background: white !important;
+    border-color: #888 !important;
+  }
+
+  .content-section :where(h2, h3) {
+    break-after: avoid;
+  }
+
+  .project-card {
+    break-inside: avoid;
+  }
+
+  .content-section a[href^="https:"]::after {
+    content: ' (' attr(href) ')';
+    font-size: 8pt;
+    overflow-wrap: anywhere;
+  }
+
   html, body, #home {
     background: white !important;
     color: black !important;
