@@ -15,6 +15,7 @@ await withBrowser(async ({ page, url }) => {
     headingVisible: getComputedStyle(document.querySelector('h1')).opacity === '1',
   }))
   assert.deepEqual(printed, { ink: 'rgb(0, 0, 0)', paper: 'rgb(255, 255, 255)', hiddenControls: true, destinations: true, noOverflow: true, headingVisible: true })
+  assert.ok(await page.$$eval('.content-section h2', (headings) => headings.length === 3 && headings.every((heading) => getComputedStyle(heading).color === 'rgb(0, 0, 0)')))
   const pdf = await page.pdf({ format: 'A4', printBackground: false })
   assert.equal(Buffer.from(pdf).subarray(0, 4).toString(), '%PDF')
 
