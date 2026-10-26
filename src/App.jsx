@@ -7,8 +7,13 @@ import Work from './sections/Work'
 import About from './sections/About'
 import Contact from './sections/Contact'
 import { rememberIntro, shouldShowIntro } from './utils/intro'
+import { SECTIONS } from './config/site'
+import useActiveSection from './hooks/useActiveSection'
+
+const SECTION_IDS = SECTIONS.filter((section) => section.ready).map((section) => section.id)
 
 function App() {
+  const activeSection = useActiveSection(SECTION_IDS)
   const [loading, setLoading] = useState(shouldShowIntro)
   const focusAfterIntro = useRef(false)
 
@@ -36,7 +41,7 @@ function App() {
           Skip to content
         </a>
 
-        <NavBar activeLink="HOME" ready={ready} />
+        <NavBar activeLink={activeSection} ready={ready} />
 
         <main id="main" tabIndex={-1}>
           <Landing ready={ready} />
