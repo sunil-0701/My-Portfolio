@@ -1,7 +1,9 @@
 # Sunil Amarthya — Portfolio
 
 A responsive React portfolio with a monochrome terminal-inspired landing page,
-static grain texture, technical portrait framing, and keyboard-accessible navigation.
+source-linked Work section, engineering-focused About section, and a dedicated
+Contact section. It includes static grain texture, technical portrait framing,
+and keyboard-accessible section navigation.
 
 ## Development
 
@@ -18,11 +20,12 @@ npm run dev
 npm run check
 ```
 
-This runs strict linting (including warnings), a production build, and all ten
-test suites. Use `npm test` for tests only, or run an individual suite with
+This runs strict linting (including warnings), a production build, and all eleven
+test suites. Use `npm test` for the suites (the production suite rebuilds `dist/`),
+or run an individual suite with
 `npm run test:motion`, `test:navigation`, `test:intro`, `test:layout`,
 `test:buttons`, `test:fallback`, `test:contact`, `test:media`, `test:production`,
-or `test:contact-card`.
+`test:contact-card`, or `test:sections`.
 
 The tests cover the blinking name period, reduced motion, intro persistence,
 mobile focus handling, nine viewport sizes, unavailable web fonts, button
@@ -50,6 +53,13 @@ not require client-side route rewrites.
   Keep the static no-JavaScript content in `index.html` in sync when changing
   identity or contact information; the fallback test checks this consistency.
 - Hero composition: `src/sections/Landing.jsx` and `src/components/hero/`.
+- Work cards: the `PROJECTS` array in `src/config/site.js`. Each card needs a
+  unique `id`, `title`, `type`, `description`, a `technologies` array, and an HTTPS
+  `source` URL. Only the real portfolio project is included by default.
+- About text: `SITE.about`. Keep claims factual; no employer, education, or
+  experience history is assumed by the page.
+- Section layout: `src/components/layout/ContentSection.jsx`; content lives in
+  `src/sections/Work.jsx`, `About.jsx`, and `Contact.jsx`.
 - Theme tokens, typography, and responsive rules: `src/index.css`.
 - Sharing metadata: `index.html`. Run `npm run og` to refresh the 1200 × 630
   `public/og.png`. The generator starts and closes its own server, waits for fonts
@@ -92,6 +102,21 @@ fallback. Rendering recovery can be exercised in development with a deliberately
 throwing child component. Do not trigger Actions or local suites unless wanted;
 pushes alone leave the manual-only workflow idle.
 
-Work, About, and Contact navigation entries remain explicitly unavailable until
-their sections are built. View work opens the real GitHub profile; Get in touch
-opens an email draft. No backend or admin dashboard is implemented yet.
+### Section review checklist
+
+- View work and Get in touch should reach `#work` and `#contact` respectively.
+- The numbered rail should follow the visible section as the page scrolls.
+- Open `#about` directly, then use Back/Forward and check heading focus.
+- On mobile, selecting a section should close the menu and release its scroll lock.
+- Copy email, Save contact, and the full email address now live in Contact.
+- Review all sections at narrow widths, with unavailable web fonts, and in print.
+- With JavaScript disabled, Work, About, and Contact should still be readable.
+
+All navigation remains normal `<a href>` linking. Ctrl/Cmd-click, copy-link,
+browser history, and the browser's native hover-destination preview are retained.
+Source/profile links open new tabs and announce that behavior; section links stay
+in the current page. No backend or admin dashboard is implemented yet.
+
+To add a future section, render it with a stable `id` and labelled, focusable
+heading before marking its `SECTIONS` entry as ready. The navigation tracker
+reads those ready entries; keep their order identical to the rendered sections.
