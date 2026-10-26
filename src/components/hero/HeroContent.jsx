@@ -91,7 +91,7 @@ export default function HeroContent({ ready = true }) {
       </motion.p>
 
       <motion.div variants={rise} className="flex flex-wrap items-center gap-4 lg:gap-6">
-        <Button href={SITE.github} target="_blank" rel="noreferrer" variant="outline" icon={<ArrowRight />}>
+        <Button href="#work" variant="outline" icon={<ArrowRight />}>
           View work
         </Button>
         <Button href={`mailto:${SITE.email}`} variant="outline" icon={<ArrowRight />}>

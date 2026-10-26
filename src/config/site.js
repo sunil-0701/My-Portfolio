@@ -17,7 +17,18 @@ export const SITE = {
 
 export const SECTIONS = [
   { id: 'home', label: 'HOME', ready: true },
-  { id: 'work', label: 'WORK', ready: false },
+  { id: 'work', label: 'WORK', ready: true },
   { id: 'about', label: 'ABOUT', ready: false },
   { id: 'contact', label: 'CONTACT', ready: false },
+]
+
+export const PROJECTS = [
+  {
+    id: 'portfolio',
+    title: 'This portfolio',
+    type: 'Personal project',
+    description: 'A responsive portfolio with a terminal-inspired visual system, keyboard navigation, reduced-motion support, and downloadable contact details.',
+    technologies: ['React', 'Vite', 'Tailwind CSS', 'Framer Motion'],
+    source: 'https://github.com/sunil-0701/My-Portfolio',
+  },
 ]

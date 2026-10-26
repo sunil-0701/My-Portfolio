@@ -231,6 +231,20 @@ html, body {
   padding-top: 2.5rem;
 }
 
+.content-section {
+  padding: 5rem max(1.5rem, env(safe-area-inset-right)) 5rem max(1.5rem, env(safe-area-inset-left));
+}
+
+.section-inner {
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .content-section {
+    padding: 6rem 5% 6rem 11.6%;
+  }
+}
+
 @media (forced-colors: active) {
   .technical-surface, .technical-surface::after {
     background: none;

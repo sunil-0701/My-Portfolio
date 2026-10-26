@@ -3,6 +3,7 @@ import { AnimatePresence, MotionConfig } from 'framer-motion'
 import PageLoader from './components/PageLoader'
 import NavBar from './components/layout/NavBar'
 import Landing from './sections/Landing'
+import Work from './sections/Work'
 import { rememberIntro, shouldShowIntro } from './utils/intro'
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
 
         <main id="main" tabIndex={-1}>
           <Landing ready={ready} />
+          <Work />
         </main>
       </div>
     </MotionConfig>
