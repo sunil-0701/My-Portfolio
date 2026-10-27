@@ -45,7 +45,7 @@ function App() {
 
         <NavBar activeLink={activeSection} ready={ready} />
 
-        <main id="main" tabIndex={-1}>
+        <main id="main" tabIndex={0}>
           <Landing ready={ready} />
           <Work />
           <About />
