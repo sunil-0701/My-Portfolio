@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useInView } from 'framer-motion'
+import usePageVisible from '../../hooks/usePageVisible'
 
 const WIDTH = 480
 const HEIGHT = 132
@@ -75,7 +76,9 @@ export default function DinoGame({ active = true, onClose }) {
   const gameRef = useRef(newRun())
   const bestRef = useRef(best)
   const inView = useInView(containerRef)
-  const paused = phase === 'paused' || (phase === 'running' && (!active || !inView))
+  const pageVisible = usePageVisible()
+  const gameActive = active && pageVisible
+  const paused = phase === 'paused' || (phase === 'running' && (!gameActive || !inView))
 
   useEffect(() => { canvasRef.current?.focus({ preventScroll: true }) }, [])
 
@@ -91,7 +94,7 @@ export default function DinoGame({ active = true, onClose }) {
     const color = getComputedStyle(canvas).color
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
     draw(context, gameRef.current, color, reducedMotion)
-    if (phase !== 'running' || !active || !inView) return
+    if (phase !== 'running' || !gameActive || !inView) return
     let frame
     let previous = performance.now()
 
@@ -134,10 +137,10 @@ export default function DinoGame({ active = true, onClose }) {
 
     frame = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frame)
-  }, [active, inView, phase])
+  }, [gameActive, inView, phase])
 
   const jump = () => {
-    if (!active || !inView || phase === 'paused') return
+    if (!gameActive || !inView || phase === 'paused') return
     if (phase === 'ready' || phase === 'over') {
       gameRef.current = newRun()
       scoreRef.current.textContent = digits(0)
