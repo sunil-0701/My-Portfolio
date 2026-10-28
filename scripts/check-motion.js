@@ -58,12 +58,12 @@ try {
     }).length,
     unexpectedLoops: document.getAnimations().filter((animation) =>
       animation.effect.getTiming().iterations === Infinity &&
-      !animation.effect.target.matches('.name-period, .hero-linework-scan, .location-track, .hero-role-track'),
+      !animation.effect.target.matches('.name-period, .hero-linework-scan, .hero-detail-dot, .location-track, .hero-role-track'),
     ).length,
     nativeScroll: getComputedStyle(document.documentElement).scrollBehavior === 'auto',
   }))
   assert.equal(effects.expensiveSurfaces, 0, 'Do not reintroduce filter/backdrop surfaces')
-  assert.equal(effects.unexpectedLoops, 0, 'Only the requested punctuation, line scan, city names, and roles may loop')
+  assert.equal(effects.unexpectedLoops, 0, 'Only the requested punctuation, linework, city names, and roles may loop')
   assert.ok(effects.nativeScroll, 'Keep native scrolling')
 
   const period = await page.$eval('.name-period', (element) => {

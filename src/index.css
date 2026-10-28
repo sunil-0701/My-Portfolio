@@ -275,6 +275,40 @@ html, body {
   to { transform: scaleX(1); }
 }
 
+@keyframes hero-linework-symbols-in {
+  from { transform: translateY(6px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.hero-detail-crosshair {
+  opacity: 0.4;
+  transition: opacity 0.4s ease;
+}
+
+.hero-detail-dot {
+  opacity: 0.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .hero-linework-symbols:hover .hero-detail-crosshair {
+    opacity: 0.8;
+  }
+
+  .hero-linework .hero-linework-symbols:hover .hero-detail-dot {
+    animation: none;
+    opacity: 1;
+    transform: scale(1.8);
+  }
+}
+
+@keyframes hero-detail-ripple {
+  0%, 65%, 100% { opacity: 0.35; transform: scale(1); }
+  30% { opacity: 0.85; transform: scale(1.5); }
+}
+
 @keyframes hero-linework-scan {
   0%, 100% { transform: translateY(0); }
   35% { transform: translateY(-3rem); }
@@ -282,8 +316,12 @@ html, body {
 }
 
 @media screen and (min-width: 1024px) and (prefers-reduced-motion: no-preference) and (forced-colors: none) {
-  .hero-linework[data-ready="false"] :is(.hero-linework-vertical, .hero-linework-tick) {
+  .hero-linework[data-ready="false"] .hero-linework-vertical {
     transform: scaleY(0);
+  }
+
+  .hero-linework[data-ready="false"] .hero-linework-symbols {
+    opacity: 0;
   }
 
   .hero-linework[data-ready="false"] .hero-linework-crossbar {
@@ -294,8 +332,12 @@ html, body {
     animation: hero-linework-draw-vertical 1s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
-  .hero-linework[data-ready="true"] .hero-linework-tick {
-    animation: hero-linework-draw-vertical 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  .hero-linework[data-ready="true"] .hero-linework-symbols {
+    animation: hero-linework-symbols-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  }
+
+  .hero-linework[data-ready="true"] .hero-detail-dot {
+    animation: hero-detail-ripple 3.6s ease-in-out var(--dot-delay) infinite;
   }
 
   .hero-linework[data-ready="true"] .hero-linework-crossbar {
