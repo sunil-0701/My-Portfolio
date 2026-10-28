@@ -83,6 +83,17 @@ export default function DinoGame({ active = true, onClose }) {
   useEffect(() => { canvasRef.current?.focus({ preventScroll: true }) }, [])
 
   useEffect(() => {
+    const syncBest = (event) => {
+      if (event.key !== BEST_KEY && event.key !== null) return
+      const saved = readBest()
+      bestRef.current = saved
+      setBest(saved)
+    }
+    window.addEventListener('storage', syncBest)
+    return () => window.removeEventListener('storage', syncBest)
+  }, [])
+
+  useEffect(() => {
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')
     if (!context) return
@@ -123,10 +134,14 @@ export default function DinoGame({ active = true, onClose }) {
         GROUND + game.y - 2 > GROUND - obstacle.height + 3,
       )
       if (collided) {
-        if (score > bestRef.current) {
-          bestRef.current = score
-          setBest(score)
-          try { localStorage.setItem(BEST_KEY, String(score)) } catch { /* Play still works without storage. */ }
+        const storedBest = readBest()
+        const nextBest = Math.max(score, bestRef.current, storedBest)
+        if (nextBest !== bestRef.current) {
+          bestRef.current = nextBest
+          setBest(nextBest)
+        }
+        if (nextBest > storedBest) {
+          try { localStorage.setItem(BEST_KEY, String(nextBest)) } catch { /* Play still works without storage. */ }
         }
         setFinalScore(score)
         setPhase('over')
