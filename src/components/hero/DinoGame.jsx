@@ -160,7 +160,7 @@ export default function DinoGame({ active = true, onClose }) {
       ref={containerRef}
       className="w-full font-mono text-paper"
       onKeyDown={(event) => {
-        if (event.key === 'Escape') {
+        if (event.key === 'Escape' && !event.ctrlKey && !event.metaKey && !event.altKey) {
           event.stopPropagation()
           onClose()
         }
@@ -189,11 +189,16 @@ export default function DinoGame({ active = true, onClose }) {
           role="application"
           aria-label="Dino runner. Space or Arrow Up to jump. P to pause. Escape to close."
           className="dino-canvas block w-full touch-manipulation"
-          onPointerDown={(event) => { event.preventDefault(); jump() }}
+          onPointerDown={(event) => {
+            if (event.button !== 0 || !event.isPrimary) return
+            event.preventDefault()
+            jump()
+          }}
           onBlur={(event) => {
             if (phase === 'running' && !containerRef.current.contains(event.relatedTarget)) setPhase('paused')
           }}
           onKeyDown={(event) => {
+            if (event.ctrlKey || event.metaKey || event.altKey) return
             if (['Space', 'ArrowUp', 'KeyP', 'Escape'].includes(event.code)) event.preventDefault()
             if ((event.code === 'Space' || event.code === 'ArrowUp') && !event.repeat) {
               if (phase === 'paused') togglePause()
