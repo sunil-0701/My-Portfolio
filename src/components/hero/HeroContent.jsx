@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import Button, { ArrowRight } from '../ui/Button'
 import ConnectionNotice from '../ConnectionNotice'
 import HeroRoles from './HeroRoles'
+import HeroPlayground from './HeroPlayground'
 import usePageVisible from '../../hooks/usePageVisible'
 import { SITE } from '../../config/site'
 
@@ -73,12 +74,9 @@ export default function HeroContent({ ready = true }) {
         <HeroRoles ready={ready} active={ready && pageVisible} />
       </motion.div>
 
-      <motion.p
-        variants={rise}
-        className="mb-9 max-w-[50ch] text-[0.85rem] font-normal leading-[1.8] tracking-[0.025em] text-paper/90 [text-wrap:pretty] sm:text-[0.9rem] xl:mb-10 xl:text-[0.95rem]"
-      >
-        {SITE.summary}
-      </motion.p>
+      <motion.div variants={rise} className="mb-9 xl:mb-10">
+        <HeroPlayground active={ready && pageVisible} />
+      </motion.div>
 
       <motion.div variants={rise} className="flex flex-wrap items-center gap-4 lg:gap-6">
         <Button href="#work" variant="outline" icon={<ArrowRight />}>

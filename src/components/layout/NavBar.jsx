@@ -7,31 +7,17 @@ import LocationClock from './LocationClock'
 const easeOutExpo = [0.16, 1, 0.3, 1]
 
 function NavItem({ section, isActive, onNavigate, number }) {
-  const [hintDismissed, setHintDismissed] = useState(false)
-  const hintHandlers = number ? {
-    onPointerEnter: () => setHintDismissed(false),
-    onPointerLeave: () => setHintDismissed(false),
-    onFocus: () => setHintDismissed(false),
-    onBlur: () => setHintDismissed(false),
-    onKeyDown: (event) => {
-      if (event.key === 'Escape') setHintDismissed(true)
-    },
-  } : {}
   const base = 'group relative inline-flex min-h-11 min-w-11 items-center font-mono text-[0.72rem] tracking-[0.12em] transition-colors duration-150'
   const content = number ? (
     <>
       <span aria-hidden="true" className={`px-0.5 ${isActive ? 'bg-paper text-ink' : ''}`}>{number}</span>
       <span className="sr-only">{section.label}</span>
-      <span aria-hidden="true" className={`${hintDismissed ? 'hidden' : ''} pointer-events-none absolute top-1/2 left-10 -translate-y-1/2 whitespace-nowrap border border-paper/20 bg-ink px-2 py-1 text-[0.6rem] text-paper opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100`}>
-        {section.label}{!section.ready && ' — soon'}
-      </span>
     </>
   ) : section.label
 
   if (!section.ready) {
     return (
       <span
-        {...hintHandlers}
         aria-disabled="true"
         title={number ? undefined : `${section.label} — section in progress`}
         className={`${base} cursor-default text-faint`}
@@ -43,7 +29,6 @@ function NavItem({ section, isActive, onNavigate, number }) {
 
   return (
     <a
-      {...hintHandlers}
       href={`#${section.id}`}
       onClick={onNavigate}
       aria-current={isActive ? 'location' : undefined}

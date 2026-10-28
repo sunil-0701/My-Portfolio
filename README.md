@@ -96,7 +96,11 @@ Additional recovery and contact features:
   from `src/config/site.js`; it does not send data to a service.
 - An offline notice reflects the browser's connectivity signal, not a guarantee
   that any particular external service is reachable.
-- Navigation hints can be dismissed with Escape.
+- Numbered navigation keeps accessible section names without visible hover labels.
+
+The hero's Play control loads a small Canvas Dino runner only when opened. Closing
+it restores the contours. The best score is saved on the visitor's device, not a
+shared leaderboard; no backend, game engine, or external service is required.
 
 ## Manual review (no automatic runs)
 

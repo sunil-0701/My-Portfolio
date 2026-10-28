@@ -172,6 +172,10 @@ html, body {
   outline: none;
 }
 
+.dino-canvas:focus {
+  outline: none;
+}
+
 @keyframes location-scroll {
   0%, 22% { transform: translateY(0); }
   33.333%, 55.333% { transform: translateY(-25%); }
@@ -488,6 +492,10 @@ html, body {
   }
 
   .portrait-fallback {
+    display: none;
+  }
+
+  .hero-playground {
     display: none;
   }
 
