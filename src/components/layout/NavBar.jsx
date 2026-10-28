@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { SECTIONS, SITE } from '../../config/site'
+import { SECTIONS } from '../../config/site'
 import MobileMenu from './MobileMenu'
+import LocationClock from './LocationClock'
 
 const easeOutExpo = [0.16, 1, 0.3, 1]
 
@@ -62,16 +63,14 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
   return (
     <>
       <motion.header
-        className="glass-bar fixed inset-x-0 top-0 z-[var(--z-nav)]"
+        className="glass-bar absolute inset-x-0 top-0 z-[var(--z-nav)]"
         initial={{ opacity: 0, y: -26 }}
         animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: -26 }}
         transition={{ duration: 0.5, delay: 0.1, ease: easeOutExpo }}
       >
         <div className="site-header mx-auto flex max-w-[1800px] items-start justify-between gap-4 px-6 py-6 sm:px-10 lg:px-20 lg:py-8">
           <div>
-            <p className="mt-1 hidden border-b border-paper/20 pb-3 font-mono text-[0.65rem] uppercase tracking-[0.12em] text-faint sm:block lg:min-w-72">
-              {SITE.location} <span className="ml-4">{SITE.timezone}</span>
-            </p>
+            <LocationClock ready={ready} />
           </div>
 
           <button
@@ -80,7 +79,7 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             aria-haspopup="dialog"
-            className="flex h-11 w-11 items-center justify-center transition-transform duration-200 active:scale-95 md:hidden"
+            className="fixed top-6 right-6 flex h-11 w-11 items-center justify-center transition-transform duration-200 active:scale-95 sm:right-10 md:hidden"
           >
             <span className="sr-only">{menuOpen ? 'Close menu' : 'Open menu'}</span>
             <span aria-hidden="true" className="relative block h-3 w-6">

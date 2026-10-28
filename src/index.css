@@ -172,6 +172,23 @@ html, body {
   outline: none;
 }
 
+@keyframes location-scroll {
+  0%, 22% { transform: translateY(0); }
+  33.333%, 55.333% { transform: translateY(-25%); }
+  66.667%, 88.667% { transform: translateY(-50%); }
+  100% { transform: translateY(-75%); }
+}
+
+@media screen and (min-width: 640px) and (prefers-reduced-motion: no-preference) {
+  .location-track {
+    animation: location-scroll 18s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  .location-status[data-active="false"] .location-track {
+    animation-play-state: paused;
+  }
+}
+
 .name-period {
   display: inline-block;
   margin-left: 0.04em;
