@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { AnimatePresence, MotionConfig } from 'framer-motion'
 import PageLoader from './components/PageLoader'
 import NavBar from './components/layout/NavBar'
@@ -16,10 +16,8 @@ const SECTION_IDS = SECTIONS.filter((section) => section.ready).map((section) =>
 function App() {
   const activeSection = useActiveSection(SECTION_IDS)
   const [loading, setLoading] = useState(shouldShowIntro)
-  const focusAfterIntro = useRef(false)
 
-  const finishIntro = ({ focusContent = false } = {}) => {
-    focusAfterIntro.current = focusContent
+  const finishIntro = () => {
     rememberIntro()
     setLoading(false)
   }
@@ -29,12 +27,7 @@ function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <AnimatePresence onExitComplete={() => {
-        if (focusAfterIntro.current) {
-          document.getElementById('main')?.focus({ preventScroll: true })
-          focusAfterIntro.current = false
-        }
-      }}>
+      <AnimatePresence>
         {loading && <PageLoader onDone={finishIntro} />}
       </AnimatePresence>
 

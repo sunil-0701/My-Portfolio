@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import HeroBackground from '../components/hero/HeroBackground'
 import HeroPortrait from '../components/hero/HeroPortrait'
 import HeroContent from '../components/hero/HeroContent'
+import HeroLinework from '../components/hero/HeroLinework'
 import { SITE } from '../config/site'
 import ExternalLink from '../components/ui/ExternalLink'
 
@@ -15,12 +16,7 @@ export default function Landing({ ready = true }) {
       <HeroBackground />
       <HeroPortrait ready={ready} />
 
-      <div aria-hidden="true" className="pointer-events-none absolute top-[20%] right-[4.5%] bottom-[18%] hidden w-[10%] border-r border-paper/20 lg:block">
-        <span className="absolute top-0 left-0 h-12 w-px bg-paper/30" />
-        <p className="absolute top-[24%] left-4 font-mono text-[0.65rem] leading-6 tracking-[0.15em] text-faint">IDEAS<br />SYSTEMS<br />CODE<br />IMPACT</p>
-        <span className="absolute top-[60%] right-0 h-px w-24 bg-paper/35" />
-        <span className="absolute top-[60%] -right-1 h-2 w-2 -translate-y-1/2 border border-paper" />
-      </div>
+      <HeroLinework ready={ready} />
 
       <div
         aria-hidden="true"

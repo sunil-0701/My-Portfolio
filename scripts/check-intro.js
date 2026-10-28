@@ -5,11 +5,9 @@ await withBrowser(async ({ page, browser, url }) => {
   await page.goto(url, { waitUntil: 'domcontentloaded' })
   await page.waitForSelector('[aria-label="Loading"]')
   assert.ok(await page.$eval('main', (main) => main.closest('[inert]') !== null))
-  await page.focus('[aria-label="Loading"] button')
-  await page.keyboard.press('Enter')
+  assert.equal(await page.$('[aria-label="Loading"] button'), null, 'The loader must not offer a skip button')
   await waitForReady(page)
-  await page.waitForFunction(() => document.activeElement.id === 'main')
-  assert.equal(await page.$('main[inert]'), null)
+  assert.equal(await page.$eval('main', (main) => main.closest('[inert]')), null, 'Automatic completion must unlock the page')
   assert.equal(await page.evaluate(() => sessionStorage.getItem('portfolio:intro-seen')), 'true')
 
   await page.evaluateOnNewDocument(() => {
@@ -30,11 +28,10 @@ await withBrowser(async ({ page, browser, url }) => {
     })
     await fresh.goto(url, { waitUntil: 'domcontentloaded' })
     await fresh.waitForSelector('[aria-label="Loading"]')
-    await fresh.click('[aria-label="Loading"] button')
     await waitForReady(fresh)
     assert.equal(await fresh.evaluate(() => document.querySelector('main').closest('[inert]')), null)
   } finally {
     await fresh.close()
   }
-  console.log('Intro checks passed: skip, inert background, session persistence, and blocked-storage recovery.')
+  console.log('Intro checks passed: automatic completion, no skip button, inert background, session persistence, and blocked-storage recovery.')
 })

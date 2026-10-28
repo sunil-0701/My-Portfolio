@@ -27,8 +27,23 @@ try {
   await page.setViewport({ width: 1366, height: 768 })
   await page.goto(url, { waitUntil: 'domcontentloaded' })
   await page.waitForSelector('[role="status"]')
+  assert.ok(await page.$eval('.hero-portrait', (element) => {
+    const offset = new DOMMatrixReadOnly(getComputedStyle(element).transform).m42
+    return offset >= element.offsetHeight - 1
+  }), 'The portrait must start below the hero while the intro is visible')
+  await page.waitForFunction(() => {
+    const portrait = document.querySelector('.hero-portrait')
+    const offset = new DOMMatrixReadOnly(getComputedStyle(portrait).transform).m42
+    return document.querySelector('[aria-label="Loading"]') &&
+      !document.querySelector('main').closest('[inert]') &&
+      offset > 0 && offset < portrait.offsetHeight - 1
+  })
   await page.waitForFunction(() => !document.querySelector('[role="status"]'))
   await page.waitForFunction(() => getComputedStyle(document.querySelector('h1')).opacity === '1')
+  await page.waitForFunction(() => {
+    const style = getComputedStyle(document.querySelector('.hero-portrait'))
+    return new DOMMatrixReadOnly(style.transform).m42 === 0 && style.opacity === '1'
+  })
 
   const counts = await page.evaluate(() => window.loaderCounts)
   assert.ok(counts.length > 2, 'The loading counter must still animate')
@@ -43,12 +58,12 @@ try {
     }).length,
     unexpectedLoops: document.getAnimations().filter((animation) =>
       animation.effect.getTiming().iterations === Infinity &&
-      !animation.effect.target.matches('.name-period'),
+      !animation.effect.target.matches('.name-period, .hero-linework-scan'),
     ).length,
     nativeScroll: getComputedStyle(document.documentElement).scrollBehavior === 'auto',
   }))
   assert.equal(effects.expensiveSurfaces, 0, 'Do not reintroduce filter/backdrop surfaces')
-  assert.equal(effects.unexpectedLoops, 0, 'Only the requested name punctuation may loop')
+  assert.equal(effects.unexpectedLoops, 0, 'Only the requested name punctuation and decorative line scan may loop')
   assert.ok(effects.nativeScroll, 'Keep native scrolling')
 
   const period = await page.$eval('.name-period', (element) => {
@@ -65,6 +80,51 @@ try {
   })
   assert.deepEqual(period, { text: '.', decorative: 'true', visible: '1', hidden: '0', stableWidth: true })
   assert.equal(await page.$('.blink-toggle'), null, 'The blinking-dot pause button must be removed')
+
+  const linework = await page.$eval('.hero-linework', (element) => {
+    const rail = element.querySelector('.hero-linework-vertical')
+    const crossbar = element.querySelector('.hero-linework-crossbar')
+    const scan = element.querySelector('.hero-linework-scan')
+    const animation = scan.getAnimations()[0]
+    animation.pause()
+    animation.currentTime = 1000
+    const start = new DOMMatrixReadOnly(getComputedStyle(scan).transform).m42
+    animation.currentTime = 3800
+    const raised = new DOMMatrixReadOnly(getComputedStyle(scan).transform).m42
+    animation.currentTime = 6600
+    const lowered = new DOMMatrixReadOnly(getComputedStyle(scan).transform).m42
+    const square = scan.lastElementChild.getBoundingClientRect()
+    const bar = crossbar.getBoundingClientRect()
+    const railBounds = rail.getBoundingClientRect()
+    const connected = Math.abs(square.top + square.height / 2 - bar.top - bar.height / 2) < 1 &&
+      Math.abs(square.left + square.width / 2 - railBounds.right) < 1
+    animation.play()
+    return {
+      decorative: element.getAttribute('aria-hidden'),
+      drawIn: rail.getAnimations().some((effect) => effect.animationName === 'hero-linework-draw-vertical') &&
+        crossbar.getAnimations().some((effect) => effect.animationName === 'hero-linework-draw-horizontal'),
+      start, raised, lowered, connected,
+    }
+  })
+  assert.equal(linework.decorative, 'true')
+  assert.ok(linework.drawIn, 'The vertical and horizontal lines must draw into view')
+  assert.equal(linework.start, 0)
+  assert.ok(linework.raised < 0 && linework.lowered > 0, 'The line and square must scan gently up and down')
+  assert.ok(linework.connected, 'Keep the square connected to both lines while moving')
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'visibilityState', { configurable: true, value: 'hidden' })
+    document.dispatchEvent(new Event('visibilitychange'))
+  })
+  await page.waitForFunction(() =>
+    getComputedStyle(document.querySelector('.hero-linework-scan')).animationPlayState === 'paused',
+  )
+  await page.evaluate(() => {
+    delete document.visibilityState
+    document.dispatchEvent(new Event('visibilitychange'))
+  })
+  await page.waitForFunction(() =>
+    getComputedStyle(document.querySelector('.hero-linework-scan')).animationPlayState === 'running',
+  )
 
   await page.mouse.move(0, 0)
   await page.mouse.move(1000, 500, { steps: 10 })
@@ -95,10 +155,15 @@ try {
   await page.waitForFunction(() => !document.querySelector('[role="status"]'), { timeout: 2000 })
   await page.waitForFunction(() => document.querySelector('main').textContent.includes('BACKEND ENGINEER'))
   assert.equal(await page.$eval('.name-period', (element) => getComputedStyle(element).opacity), '1')
+  assert.equal(await page.$eval('.hero-portrait', (element) =>
+    new DOMMatrixReadOnly(getComputedStyle(element).transform).m42,
+  ), 0, 'Reduced motion must show the portrait without a slide')
   assert.equal(await page.evaluate(() => document.getAnimations().filter((animation) => animation.effect.getTiming().iterations === Infinity).length), 0, 'Reduced motion must disable blinking')
+  await page.setViewport({ width: 1366, height: 768 })
+  assert.equal(await page.$eval('.hero-linework', (element) => element.getAnimations({ subtree: true }).length), 0, 'Reduced motion must keep the desktop linework static')
   assert.deepEqual(errors, [], 'There must be no browser runtime errors')
 
-  console.log('Motion checks passed: blinking period, counter, native scrolling, static backgrounds, responsive layout, mobile menu, and reduced motion.')
+  console.log('Motion checks passed: animated linework, portrait slide-in, blinking period, counter, native scrolling, static backgrounds, responsive layout, mobile menu, and reduced motion.')
 } finally {
   if (browser) await browser.close()
   await server.close()

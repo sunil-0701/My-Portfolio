@@ -66,9 +66,13 @@ not require client-side route rewrites.
   and the portrait, and captures the period in its visible state. Set `OG_URL`
   only when you want to capture an already running site instead.
 
-The intro can be skipped and is remembered for the current tab session. Reduced
+The intro finishes automatically, has no skip button, and is remembered for the current tab session. Reduced
 motion preferences are respected. Mobile navigation traps focus, closes on Escape,
 restores focus, and releases its scroll lock when switching to desktop.
+
+The desktop hero linework draws into view, then its horizontal line and square
+gently scan along the vertical rail. The scan pauses in hidden tabs; reduced-motion
+and forced-colors modes keep the linework static.
 
 The decorative period after the name blinks every 1.2 seconds without shifting
 the heading. No pause button is displayed. It stays solid when the visitor

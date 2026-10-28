@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import portrait from '../../assets/profile-portrait.jpg'
 import { SITE } from '../../config/site'
 
@@ -8,12 +8,14 @@ const MASK =
 
 export default function HeroPortrait({ ready = true }) {
   const [failed, setFailed] = useState(false)
+  const reduceMotion = useReducedMotion()
   return (
     <motion.div
-      className="pointer-events-none absolute inset-y-0 right-0 z-[var(--z-behind)] w-full md:right-[7%] md:w-[51%]"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: ready ? 1 : 0 }}
-      transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+      className="hero-portrait pointer-events-none absolute inset-y-0 right-0 z-[var(--z-behind)] w-full md:right-[7%] md:w-[51%]"
+      initial={{ opacity: 0, y: reduceMotion ? '0%' : '100%' }}
+      animate={{ opacity: ready ? 1 : 0, y: ready || reduceMotion ? '0%' : '100%' }}
+      // Rise alongside the loading screen's exit, without an extra delay.
+      transition={{ duration: reduceMotion ? 0 : 0.9, ease: [0.16, 1, 0.3, 1] }}
     >
       <div
         aria-hidden="true"

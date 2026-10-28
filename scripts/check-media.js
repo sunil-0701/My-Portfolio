@@ -25,5 +25,7 @@ await withBrowser(async ({ page, url }) => {
   assert.ok(await page.evaluate(() => matchMedia('(forced-colors: active)').matches))
   assert.equal(await page.$eval('h1', (heading) => getComputedStyle(heading).textShadow), 'none')
   assert.equal(await page.$eval('.name-period', (period) => period.getAnimations().length), 0)
+  await page.setViewport({ width: 1366, height: 768 })
+  assert.equal(await page.$eval('.hero-linework', (linework) => linework.getAnimations({ subtree: true }).length), 0, 'High-contrast linework must stay static')
   console.log('Media checks passed: printable links, ink-friendly A4 PDF, hidden controls, and static high-contrast presentation.')
 })

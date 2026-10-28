@@ -168,6 +168,10 @@ html, body {
   text-shadow: 0 0 18px rgb(231 229 217 / 0.2);
 }
 
+.hero-name:focus {
+  outline: none;
+}
+
 .name-period {
   display: inline-block;
   margin-left: 0.04em;
@@ -191,6 +195,52 @@ html, body {
   width: 5px;
   height: 5px;
   pointer-events: none;
+}
+
+@keyframes hero-linework-draw-vertical {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes hero-linework-draw-horizontal {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes hero-linework-scan {
+  0%, 100% { transform: translateY(0); }
+  35% { transform: translateY(-3rem); }
+  70% { transform: translateY(2rem); }
+}
+
+@media screen and (min-width: 1024px) and (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  .hero-linework[data-ready="false"] :is(.hero-linework-vertical, .hero-linework-tick) {
+    transform: scaleY(0);
+  }
+
+  .hero-linework[data-ready="false"] .hero-linework-crossbar {
+    transform: scaleX(0);
+  }
+
+  .hero-linework[data-ready="true"] .hero-linework-vertical {
+    animation: hero-linework-draw-vertical 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero-linework[data-ready="true"] .hero-linework-tick {
+    animation: hero-linework-draw-vertical 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  }
+
+  .hero-linework[data-ready="true"] .hero-linework-crossbar {
+    animation: hero-linework-draw-horizontal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  }
+
+  .hero-linework[data-ready="true"] .hero-linework-scan {
+    animation: hero-linework-scan 8s ease-in-out 1s infinite;
+  }
+
+  .hero-linework[data-ready="true"][data-active="false"] * {
+    animation-play-state: paused;
+  }
 }
 
 .terminal-button::before {
