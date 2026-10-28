@@ -58,12 +58,12 @@ try {
     }).length,
     unexpectedLoops: document.getAnimations().filter((animation) =>
       animation.effect.getTiming().iterations === Infinity &&
-      !animation.effect.target.matches('.name-period, .hero-linework-scan, .location-track'),
+      !animation.effect.target.matches('.name-period, .hero-linework-scan, .location-track, .hero-role-track'),
     ).length,
     nativeScroll: getComputedStyle(document.documentElement).scrollBehavior === 'auto',
   }))
   assert.equal(effects.expensiveSurfaces, 0, 'Do not reintroduce filter/backdrop surfaces')
-  assert.equal(effects.unexpectedLoops, 0, 'Only the requested name punctuation, decorative line scan, and city names may loop')
+  assert.equal(effects.unexpectedLoops, 0, 'Only the requested punctuation, line scan, city names, and roles may loop')
   assert.ok(effects.nativeScroll, 'Keep native scrolling')
 
   const period = await page.$eval('.name-period', (element) => {
@@ -130,7 +130,7 @@ try {
   await page.mouse.move(1000, 500, { steps: 10 })
   assert.equal(await page.evaluate(() => document.documentElement.style.getPropertyValue('--px')), '')
 
-  assert.ok(await page.$eval('main', (main) => main.textContent.includes('SPRING BOOT')), 'Expertise remains visible without rotation')
+  assert.ok(await page.$eval('.hero-role-track', (track) => track.textContent.includes('SOFTWARE ENGINEER')), 'The role ticker must include the primary engineering role')
 
   for (const [width, height] of [[1440, 900], [390, 844], [360, 640]]) {
     await page.setViewport({ width, height })
@@ -153,7 +153,7 @@ try {
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }])
   await page.reload({ waitUntil: 'domcontentloaded' })
   await page.waitForFunction(() => !document.querySelector('[role="status"]'), { timeout: 2000 })
-  await page.waitForFunction(() => document.querySelector('main').textContent.includes('BACKEND ENGINEER'))
+  await page.waitForFunction(() => document.querySelector('.hero-role-track').textContent.includes('SOFTWARE ENGINEER'))
   assert.equal(await page.$eval('.name-period', (element) => getComputedStyle(element).opacity), '1')
   assert.equal(await page.$eval('.hero-portrait', (element) =>
     new DOMMatrixReadOnly(getComputedStyle(element).transform).m42,

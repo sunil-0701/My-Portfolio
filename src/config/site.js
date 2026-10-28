@@ -3,6 +3,7 @@ export const SITE = {
   firstName: 'SUNIL',
   lastName: 'AMARTHYA',
   expertise: ['BACKEND ENGINEER', 'JAVA', 'SPRING BOOT'],
+  roles: ['SOFTWARE ENGINEER', 'INTERN', 'STUDENT'],
   greeting: "Hello world, I'm",
   summary:
     'I build the APIs, data models, and infrastructure that sit behind the product — the part users never see and always feel.',

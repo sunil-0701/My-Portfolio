@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import Button, { ArrowRight } from '../ui/Button'
 import ConnectionNotice from '../ConnectionNotice'
+import HeroRoles from './HeroRoles'
 import usePageVisible from '../../hooks/usePageVisible'
 import { SITE } from '../../config/site'
 
@@ -65,21 +66,12 @@ export default function HeroContent({ ready = true }) {
         </span>
       </motion.h1>
 
-      <motion.ul
+      <motion.div
         variants={rise}
-        role="list"
-        aria-label="Engineering specialties"
-        className="mt-6 mb-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[0.65rem] uppercase tracking-[0.06em] sm:text-[0.8rem]"
+        className="my-6 font-mono text-[0.65rem] uppercase tracking-[0.06em] sm:text-[0.8rem]"
       >
-        <li aria-hidden="true" role="presentation" className="text-faint">[</li>
-        {SITE.expertise.map((item, index) => (
-          <li key={item} className="inline-flex items-center gap-3">
-            {index > 0 && <span aria-hidden="true" className="text-faint">|</span>}
-            {item}
-          </li>
-        ))}
-        <li aria-hidden="true" role="presentation" className="text-faint">]</li>
-      </motion.ul>
+        <HeroRoles ready={ready} active={ready && pageVisible} />
+      </motion.div>
 
       <motion.p
         variants={rise}
