@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useInView } from 'framer-motion'
+import { useInView, useReducedMotion } from 'framer-motion'
 import usePageVisible from '../../hooks/usePageVisible'
 
 const WIDTH = 480
@@ -79,6 +79,7 @@ export default function DinoGame({ active = true, onClose }) {
   const fallbackButtonRef = useRef(null)
   const inView = useInView(containerRef)
   const pageVisible = usePageVisible()
+  const reducedMotion = useReducedMotion()
   const gameActive = active && pageVisible
   const paused = phase === 'paused' || (phase === 'running' && (!gameActive || !inView))
 
@@ -114,7 +115,6 @@ export default function DinoGame({ active = true, onClose }) {
     context.setTransform(ratio, 0, 0, ratio, 0, 0)
     context.imageSmoothingEnabled = false
     const color = getComputedStyle(canvas).color
-    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
     draw(context, gameRef.current, color, reducedMotion)
     if (phase !== 'running' || !gameActive || !inView) return
     let frame
@@ -163,7 +163,7 @@ export default function DinoGame({ active = true, onClose }) {
 
     frame = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frame)
-  }, [gameActive, inView, phase, canvasUnavailable])
+  }, [gameActive, inView, phase, canvasUnavailable, reducedMotion])
 
   const jump = () => {
     if (!gameActive || !inView || phase === 'paused') return

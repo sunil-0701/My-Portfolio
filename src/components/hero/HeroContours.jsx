@@ -26,7 +26,15 @@ export default function HeroContours({ active = true }) {
   const inView = useInView(containerRef)
 
   useEffect(() => {
-    if (!active || reduceMotion || !inView) return
+    if (reduceMotion) {
+      pointerRef.current = { ...restingPointer }
+      energyRef.current = 0
+      pathsRef.current.forEach((path, row) => {
+        path?.setAttribute('d', contourPath(row, 0, restingPointer, 0))
+      })
+      return
+    }
+    if (!active || !inView) return
     let frame
     let previous = performance.now()
     let lastDraw = 0
