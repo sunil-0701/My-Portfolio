@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { useInView, useReducedMotion } from 'framer-motion'
 import usePageVisible from '../../hooks/usePageVisible'
 
@@ -67,6 +67,7 @@ function draw(context, game, color, reducedMotion) {
 }
 
 export default function DinoGame({ active = true, onClose }) {
+  const instructionsId = useId()
   const [phase, setPhase] = useState('ready')
   const [best, setBest] = useState(readBest)
   const [finalScore, setFinalScore] = useState(0)
@@ -82,6 +83,10 @@ export default function DinoGame({ active = true, onClose }) {
   const reducedMotion = useReducedMotion()
   const gameActive = active && pageVisible
   const paused = phase === 'paused' || (phase === 'running' && (!gameActive || !inView))
+
+  useEffect(() => {
+    if (phase === 'running' && (!gameActive || !inView)) setPhase('paused')
+  }, [gameActive, inView, phase])
 
   useEffect(() => { canvasRef.current?.focus({ preventScroll: true }) }, [])
 
@@ -177,6 +182,7 @@ export default function DinoGame({ active = true, onClose }) {
   }
 
   const togglePause = () => {
+    if (!gameActive || !inView) return
     setPhase((current) => current === 'paused' ? 'running' : current === 'running' ? 'paused' : current)
     canvasRef.current?.focus({ preventScroll: true })
   }
@@ -194,6 +200,9 @@ export default function DinoGame({ active = true, onClose }) {
     <div
       ref={containerRef}
       className="relative h-full w-full font-mono text-paper"
+      onBlur={(event) => {
+        if (phase === 'running' && !event.currentTarget.contains(event.relatedTarget)) setPhase('paused')
+      }}
       onKeyDown={(event) => {
         if (event.key === 'Escape' && !event.ctrlKey && !event.metaKey && !event.altKey) {
           event.stopPropagation()
@@ -223,14 +232,12 @@ export default function DinoGame({ active = true, onClose }) {
           tabIndex={0}
           role="application"
           aria-label="Dino runner. Space or Arrow Up to jump. P to pause. Escape to close."
+          aria-describedby={instructionsId}
           className="dino-canvas block h-full w-full touch-manipulation object-contain"
           onPointerDown={(event) => {
             if (event.button !== 0 || !event.isPrimary) return
             event.preventDefault()
             jump()
-          }}
-          onBlur={(event) => {
-            if (phase === 'running' && !containerRef.current.contains(event.relatedTarget)) setPhase('paused')
           }}
           onKeyDown={(event) => {
             if (event.ctrlKey || event.metaKey || event.altKey) return
@@ -250,7 +257,8 @@ export default function DinoGame({ active = true, onClose }) {
           </div>
         )}
       </div>
-      <p role="status" className="sr-only">{phase === 'over' ? `Game over. Score ${finalScore}. Best on this device ${best}.` : paused ? 'Game paused.' : phase === 'running' ? 'Run started.' : 'Ready to play.'}</p>
+      <p id={instructionsId} className="sr-only">Jump over the cacti. Leaving the game or hiding the page pauses your run. Choose Resume, or press Space or Arrow Up on the game, to continue.</p>
+      <p role="status" className="sr-only">{phase === 'over' ? `Game over. Score ${finalScore}. Best on this device ${best}.` : paused ? 'Game paused. Resume when you are ready.' : phase === 'running' ? 'Run started.' : 'Ready to play.'}</p>
     </div>
   )
 }
