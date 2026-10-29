@@ -13,7 +13,7 @@ const bitmap = [
   '001111100000', '000111100000',
 ]
 
-const newRun = () => ({ y: 0, velocity: 0, distance: 0, elapsed: 0, nextSpawn: 1.5, obstacles: [] })
+const newRun = () => ({ y: 0, velocity: 0, distance: 0, elapsed: 0, nextSpawn: 1.1, obstacles: [] })
 const scoreOf = (game) => Math.min(99999, Math.floor(game.distance / 12))
 const digits = (score) => String(score).padStart(5, '0')
 
@@ -113,7 +113,7 @@ export default function DinoGame({ active = true, onClose }) {
       const delta = Math.min((now - previous) / 1000, 0.034)
       previous = now
       const game = gameRef.current
-      const speed = 180 + Math.min(scoreOf(game) * 0.18, 150)
+      const speed = 225 + Math.min(scoreOf(game) * 0.35, 195)
       game.elapsed += delta
       game.distance += speed * delta
       game.velocity += 1100 * delta
@@ -121,8 +121,8 @@ export default function DinoGame({ active = true, onClose }) {
       if (game.y === 0) game.velocity = 0
       game.nextSpawn -= delta
       if (game.nextSpawn <= 0) {
-        game.obstacles.push({ x: WIDTH + 20, width: 12 + Math.floor(Math.random() * 5), height: 20 + Math.floor(Math.random() * 10) })
-        game.nextSpawn = 1 + Math.random() * 0.7
+        game.obstacles.push({ x: WIDTH + 20, width: 12 + Math.floor(Math.random() * 13), height: 22 + Math.floor(Math.random() * 13) })
+        game.nextSpawn = 0.85 - Math.min(scoreOf(game) * 0.0004, 0.15) + Math.random() * 0.45
       }
       game.obstacles.forEach((obstacle) => { obstacle.x -= speed * delta })
       game.obstacles = game.obstacles.filter((obstacle) => obstacle.x + obstacle.width > 0)
@@ -173,7 +173,7 @@ export default function DinoGame({ active = true, onClose }) {
   return (
     <div
       ref={containerRef}
-      className="w-full font-mono text-paper"
+      className="relative h-full w-full font-mono text-paper"
       onKeyDown={(event) => {
         if (event.key === 'Escape' && !event.ctrlKey && !event.metaKey && !event.altKey) {
           event.stopPropagation()
@@ -181,12 +181,12 @@ export default function DinoGame({ active = true, onClose }) {
         }
       }}
     >
-      <div className="flex min-h-11 items-center justify-between gap-2 text-[0.6rem] uppercase tracking-[0.08em]">
-        <div className="flex flex-wrap gap-x-3 gap-y-1 tabular">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex min-h-11 items-start justify-between gap-2 text-[0.6rem] uppercase tracking-[0.08em]">
+        <div className="flex flex-wrap gap-x-3 gap-y-1 pt-1 tabular">
           <span><span className="sr-only">Score </span><span ref={scoreRef}>00000</span></span>
           <span className="text-muted">Best <span>{digits(best)}</span></span>
         </div>
-        <div className="flex items-center">
+        <div className="pointer-events-auto flex items-center">
           <button type="button" onClick={togglePause} disabled={phase === 'ready' || phase === 'over'} aria-label={paused ? 'Resume game' : 'Pause game'} className="inline-flex h-11 w-11 items-center justify-center text-muted hover:text-paper disabled:opacity-30">
             <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor">{paused ? <path d="M3 1L10 6L3 11V1Z" /> : <path d="M4 1V11M8 1V11" />}</svg>
           </button>
@@ -195,7 +195,7 @@ export default function DinoGame({ active = true, onClose }) {
           </button>
         </div>
       </div>
-      <div className="relative">
+      <div className="absolute inset-0">
         <canvas
           ref={canvasRef}
           width={WIDTH}
@@ -203,7 +203,7 @@ export default function DinoGame({ active = true, onClose }) {
           tabIndex={0}
           role="application"
           aria-label="Dino runner. Space or Arrow Up to jump. P to pause. Escape to close."
-          className="dino-canvas block w-full touch-manipulation"
+          className="dino-canvas block h-full w-full touch-manipulation object-contain"
           onPointerDown={(event) => {
             if (event.button !== 0 || !event.isPrimary) return
             event.preventDefault()
