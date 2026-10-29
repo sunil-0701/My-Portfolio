@@ -70,17 +70,23 @@ export default function DinoGame({ active = true, onClose }) {
   const [phase, setPhase] = useState('ready')
   const [best, setBest] = useState(readBest)
   const [finalScore, setFinalScore] = useState(0)
+  const [canvasUnavailable, setCanvasUnavailable] = useState(false)
   const containerRef = useRef(null)
   const canvasRef = useRef(null)
   const scoreRef = useRef(null)
   const gameRef = useRef(newRun())
   const bestRef = useRef(best)
+  const fallbackButtonRef = useRef(null)
   const inView = useInView(containerRef)
   const pageVisible = usePageVisible()
   const gameActive = active && pageVisible
   const paused = phase === 'paused' || (phase === 'running' && (!gameActive || !inView))
 
   useEffect(() => { canvasRef.current?.focus({ preventScroll: true }) }, [])
+
+  useEffect(() => {
+    if (canvasUnavailable) fallbackButtonRef.current?.focus({ preventScroll: true })
+  }, [canvasUnavailable])
 
   useEffect(() => {
     const syncBest = (event) => {
@@ -94,9 +100,14 @@ export default function DinoGame({ active = true, onClose }) {
   }, [])
 
   useEffect(() => {
+    if (canvasUnavailable) return
     const canvas = canvasRef.current
-    const context = canvas.getContext('2d')
-    if (!context) return
+    let context
+    try { context = canvas.getContext('2d') } catch { /* Some browsers disable canvas rendering. */ }
+    if (!context) {
+      setCanvasUnavailable(true)
+      return
+    }
     const ratio = Math.min(window.devicePixelRatio || 1, 2)
     canvas.width = WIDTH * ratio
     canvas.height = HEIGHT * ratio
@@ -152,7 +163,7 @@ export default function DinoGame({ active = true, onClose }) {
 
     frame = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frame)
-  }, [gameActive, inView, phase])
+  }, [gameActive, inView, phase, canvasUnavailable])
 
   const jump = () => {
     if (!gameActive || !inView || phase === 'paused') return
@@ -168,6 +179,15 @@ export default function DinoGame({ active = true, onClose }) {
   const togglePause = () => {
     setPhase((current) => current === 'paused' ? 'running' : current === 'running' ? 'paused' : current)
     canvasRef.current?.focus({ preventScroll: true })
+  }
+
+  if (canvasUnavailable) {
+    return (
+      <div className="flex h-full items-center justify-between gap-3 font-mono text-xs text-muted">
+        <p role="status">This browser can’t render the game.</p>
+        <button ref={fallbackButtonRef} type="button" onClick={onClose} className="min-h-11 px-2 underline underline-offset-4">Back to contours</button>
+      </div>
+    )
   }
 
   return (
