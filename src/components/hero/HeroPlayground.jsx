@@ -1,12 +1,14 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion, useIsPresent, useReducedMotion } from 'framer-motion'
 import HeroContours from './HeroContours'
 
 function GameUnavailable({ onClose }) {
+  const backRef = useRef(null)
+  useEffect(() => { backRef.current?.focus({ preventScroll: true }) }, [])
   return (
     <div className="flex h-full items-center justify-between gap-3 font-mono text-xs text-muted">
-      <span>The game couldn’t load.</span>
-      <button type="button" onClick={onClose} className="min-h-11 px-2 underline underline-offset-4">Back</button>
+      <span role="status">The game couldn’t load.</span>
+      <button ref={backRef} type="button" onClick={onClose} className="min-h-11 px-2 underline underline-offset-4">Back</button>
     </div>
   )
 }
@@ -18,6 +20,25 @@ const loadGame = () => {
 }
 const DinoGame = lazy(loadGame)
 
+function GamePanel({ active, onClose, transition }) {
+  const present = useIsPresent()
+  return (
+    <motion.div
+      className="absolute inset-0"
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 6, pointerEvents: 'none' }}
+      transition={transition}
+      inert={!present}
+      aria-hidden={!present}
+    >
+      <Suspense fallback={null}>
+        <DinoGame active={active && present} onClose={onClose} />
+      </Suspense>
+    </motion.div>
+  )
+}
+
 export default function HeroPlayground({ active = true }) {
   const [playing, setPlaying] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -28,10 +49,6 @@ export default function HeroPlayground({ active = true }) {
   const pendingRef = useRef(false)
 
   useEffect(() => () => { requestRef.current += 1 }, [])
-
-  useEffect(() => {
-    if (!playing && openedRef.current) playButtonRef.current?.focus({ preventScroll: true })
-  }, [playing])
 
   const close = () => setPlaying(false)
   const open = async () => {
@@ -74,20 +91,19 @@ export default function HeroPlayground({ active = true }) {
         </button>
         {loading && <span role="status" className="sr-only">Loading game…</span>}
       </motion.div>
-      <AnimatePresence initial={false}>
+      <AnimatePresence initial={false} onExitComplete={() => {
+        if (!playing && openedRef.current) {
+          playButtonRef.current?.focus({ preventScroll: true })
+          openedRef.current = false
+        }
+      }}>
         {playing && (
-          <motion.div
+          <GamePanel
             key="game"
-            className="absolute inset-0"
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 6, pointerEvents: 'none' }}
+            active={active}
+            onClose={close}
             transition={transition}
-          >
-            <Suspense fallback={null}>
-              <DinoGame active={active} onClose={close} />
-            </Suspense>
-          </motion.div>
+          />
         )}
       </AnimatePresence>
     </div>
