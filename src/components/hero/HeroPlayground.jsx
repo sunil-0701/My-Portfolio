@@ -24,6 +24,10 @@ export default function HeroPlayground({ active = true }) {
   const reduceMotion = useReducedMotion()
   const playButtonRef = useRef(null)
   const openedRef = useRef(false)
+  const requestRef = useRef(0)
+  const pendingRef = useRef(false)
+
+  useEffect(() => () => { requestRef.current += 1 }, [])
 
   useEffect(() => {
     if (!playing && openedRef.current) playButtonRef.current?.focus({ preventScroll: true })
@@ -31,9 +35,14 @@ export default function HeroPlayground({ active = true }) {
 
   const close = () => setPlaying(false)
   const open = async () => {
-    openedRef.current = true
+    if (pendingRef.current) return
+    pendingRef.current = true
+    const request = ++requestRef.current
     setLoading(true)
     await loadGame()
+    if (request !== requestRef.current) return
+    pendingRef.current = false
+    openedRef.current = true
     setPlaying(true)
     setLoading(false)
   }
