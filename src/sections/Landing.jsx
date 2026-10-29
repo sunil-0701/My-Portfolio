@@ -33,18 +33,14 @@ export default function Landing({ ready = true }) {
         </div>
 
         <motion.footer
-          aria-label="Portfolio links and copyright"
-          className="hero-rail flex flex-wrap items-center justify-between gap-4 font-mono text-[0.6rem] uppercase tracking-[0.13em] text-muted sm:text-[0.65rem]"
+          aria-label="Profile links"
+          className="hero-rail flex flex-wrap items-center gap-6 font-mono text-[0.6rem] uppercase tracking-[0.13em] text-muted sm:text-[0.65rem]"
           initial={{ opacity: 0, y: 16 }}
           animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
           transition={{ duration: 0.5, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span>// Design &gt; Code &gt; Build &gt; Repeat</span>
-          <span aria-hidden="true" className="hidden h-px flex-1 bg-paper/25 sm:block" />
           <ExternalLink href={SITE.github}>GitHub</ExternalLink>
           <ExternalLink href={SITE.linkedin}>LinkedIn</ExternalLink>
-          <a href="#home" onClick={() => document.getElementById('hero-heading')?.focus({ preventScroll: true })} className="back-to-top inline-flex min-h-11 items-center hover:text-paper">Back to top ↑</a>
-          <span>© {new Date().getFullYear()}<span className="sr-only"> {SITE.name}</span></span>
         </motion.footer>
       </div>
     </section>

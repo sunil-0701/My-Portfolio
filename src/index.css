@@ -260,15 +260,6 @@ html, body {
   }
 }
 
-.terminal-button::before,
-.terminal-button::after {
-  content: '';
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  pointer-events: none;
-}
-
 @keyframes hero-linework-draw-vertical {
   from { transform: scaleY(0); }
   to { transform: scaleY(1); }
@@ -355,20 +346,6 @@ html, body {
   .hero-linework[data-ready="true"][data-active="false"] * {
     animation-play-state: paused;
   }
-}
-
-.terminal-button::before {
-  top: 2px;
-  left: 2px;
-  border-top: 1px solid var(--color-paper);
-  border-left: 1px solid var(--color-paper);
-}
-
-.terminal-button::after {
-  right: 2px;
-  bottom: 2px;
-  border-right: 1px solid var(--color-paper);
-  border-bottom: 1px solid var(--color-paper);
 }
 
 @media (min-width: 768px) {

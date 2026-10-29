@@ -40,8 +40,6 @@ await withBrowser(async ({ page, url }) => {
   const savedContact = await page.$eval('.save-contact', (link) => ({ filename: link.download, content: decodeURIComponent(link.getAttribute('href').split(',').slice(1).join(',')) }))
   assert.equal(savedContact.filename, 'sunil-amarthya.vcf')
   assert.ok(savedContact.content.includes(`EMAIL;TYPE=INTERNET:${SITE.email}`))
-  await page.click('.back-to-top')
-  assert.equal(await page.evaluate(() => document.activeElement.id), 'hero-heading')
   await page.setRequestInterception(true)
   let failPortrait = true
   page.on('request', (request) => {

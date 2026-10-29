@@ -91,7 +91,6 @@ Additional recovery and contact features:
 
 - A rendering-error fallback keeps email and GitHub links available.
 - Failed portraits show initials and a retry button.
-- The footer's Back to top link also restores heading focus.
 - Save contact downloads a vCard containing only the public identity and links
   from `src/config/site.js`; it does not send data to a service.
 - An offline notice reflects the browser's connectivity signal, not a guarantee
