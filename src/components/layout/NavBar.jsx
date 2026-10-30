@@ -30,7 +30,9 @@ function NavItem({ section, isActive, onNavigate, number }) {
   return (
     <a
       href={`#${section.id}`}
-      onClick={onNavigate}
+      onClick={(event) => {
+        if (!event.defaultPrevented && event.button === 0 && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey) onNavigate?.()
+      }}
       aria-current={isActive ? 'location' : undefined}
       title={number ? undefined : section.label}
       className={`${base} ${isActive ? 'text-paper' : 'text-muted hover:text-paper'}`}

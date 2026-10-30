@@ -27,7 +27,10 @@ export default function MobileMenu({ children, onClose }) {
       window.removeEventListener('popstate', closeOnNavigation)
       dialog.close()
       document.body.style.overflow = previousOverflow
-      if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus()
+      const focusTarget = previousFocus instanceof HTMLElement && previousFocus.isConnected && previousFocus.getClientRects().length
+        ? previousFocus
+        : document.querySelector('nav[aria-label="Primary"] a[aria-current="location"]')
+      focusTarget?.focus({ preventScroll: true })
     }
   }, [])
 
@@ -68,7 +71,9 @@ export default function MobileMenu({ children, onClose }) {
         {children}
         <a
           href={`mailto:${SITE.email}`}
-          onClick={() => dialogRef.current.close()}
+          onClick={(event) => {
+            if (!event.defaultPrevented && event.button === 0 && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey) dialogRef.current.close()
+          }}
           className="mt-8 break-all py-3 font-mono text-[0.72rem] tracking-[0.08em] text-muted hover:text-paper"
         >
           {SITE.email}
