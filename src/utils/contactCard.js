@@ -6,6 +6,23 @@ const escapeField = (value) => String(value)
   .replace(/,/g, '\\,')
   .replace(/;/g, '\\;')
 
+// vCard content lines are folded at 75 UTF-8 octets, never inside a character.
+const foldLine = (line) => {
+  const encoder = new TextEncoder()
+  let folded = ''
+  let octets = 0
+  for (const character of line) {
+    const size = encoder.encode(character).length
+    if (octets + size > 75) {
+      folded += '\r\n '
+      octets = 1
+    }
+    folded += character
+    octets += size
+  }
+  return folded
+}
+
 export function createContactCard(site = SITE) {
   return [
     'BEGIN:VCARD',
@@ -17,5 +34,5 @@ export function createContactCard(site = SITE) {
     `NOTE:${escapeField(site.location)}`,
     'END:VCARD',
     '',
-  ].join('\r\n')
+  ].map(foldLine).join('\r\n')
 }
