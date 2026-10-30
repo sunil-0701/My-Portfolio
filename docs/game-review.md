@@ -12,6 +12,12 @@ run without authorization. The quality workflow remains manual-only.
   request should be accepted, with a loading announcement while it is pending.
 - If the playground unmounts during loading, the completed request must not
   reopen the removed game.
+- While loading, press Escape or activate Cancel. Focus should remain on or
+  return to Play, and the completed request must not open the game. Play should
+  work again afterward. Cancellation stops opening the UI, not the underlying
+  module download, which may still finish and be reused.
+- Hide the tab during a slow load. Returning should not open the game or steal
+  focus; a fresh Play activation is required.
 - Close with Escape or the close button. During the exit transition, game
   controls should stop receiving keyboard or pointer input. After the transition,
   focus should return to Play.

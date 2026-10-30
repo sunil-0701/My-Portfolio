@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useIsPresent, useReducedMotion } from 'framer-motion'
 import HeroContours from './HeroContours'
 
@@ -50,9 +50,19 @@ export default function HeroPlayground({ active = true }) {
 
   useEffect(() => () => { requestRef.current += 1 }, [])
 
+  const cancelLoad = useCallback(() => {
+    requestRef.current += 1
+    pendingRef.current = false
+    setLoading(false)
+  }, [])
+
+  useEffect(() => {
+    if (!active && pendingRef.current) cancelLoad()
+  }, [active, cancelLoad])
+
   const close = () => setPlaying(false)
   const open = async () => {
-    if (pendingRef.current) return
+    if (!active || pendingRef.current) return
     pendingRef.current = true
     const request = ++requestRef.current
     setLoading(true)
@@ -66,7 +76,14 @@ export default function HeroPlayground({ active = true }) {
   const transition = { duration: reduceMotion ? 0 : 0.32, ease: [0.22, 1, 0.36, 1] }
 
   return (
-    <div className="hero-playground relative h-20 w-full max-w-[28rem]">
+    <div className="hero-playground relative h-20 w-full max-w-[28rem]" onKeyDown={(event) => {
+      if (event.key === 'Escape' && !event.ctrlKey && !event.metaKey && !event.altKey && pendingRef.current) {
+        event.preventDefault()
+        event.stopPropagation()
+        cancelLoad()
+        playButtonRef.current?.focus({ preventScroll: true })
+      }
+    }}>
       <motion.div
         className="absolute inset-0 flex items-center"
         initial={false}
@@ -80,16 +97,22 @@ export default function HeroPlayground({ active = true }) {
         <button
           ref={playButtonRef}
           type="button"
-          aria-label="Play Dino"
+          aria-label={loading ? 'Loading Dino' : 'Play Dino'}
           onClick={open}
-          disabled={loading}
+          aria-disabled={loading}
           aria-busy={loading}
-          className="absolute -bottom-3 right-0 inline-flex min-h-11 items-center gap-2 px-2 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-muted transition-colors hover:text-paper disabled:opacity-50"
+          className="absolute -bottom-3 right-0 inline-flex min-h-11 items-center gap-2 px-2 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-muted transition-colors hover:text-paper aria-disabled:opacity-50"
         >
           <svg aria-hidden="true" width="9" height="10" viewBox="0 0 9 10" fill="none"><path d="M1 1L8 5L1 9V1Z" stroke="currentColor" strokeWidth="0.8" /></svg>
           Play
         </button>
-        {loading && <span role="status" className="sr-only">Loading game…</span>}
+        {loading && <>
+          <span role="status" className="sr-only">Loading game. Press Escape or choose Cancel to stop opening it.</span>
+          <button type="button" onClick={() => {
+            cancelLoad()
+            playButtonRef.current?.focus({ preventScroll: true })
+          }} className="absolute -bottom-3 left-0 inline-flex min-h-11 items-center px-2 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-muted underline underline-offset-4 hover:text-paper">Cancel</button>
+        </>}
       </motion.div>
       <AnimatePresence initial={false} onExitComplete={() => {
         if (!playing && openedRef.current) {
