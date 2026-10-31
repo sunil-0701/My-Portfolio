@@ -9,6 +9,7 @@ export default function CopyEmail() {
   const pending = useRef(false)
   const mounted = useRef(true)
   const timeoutRef = useRef()
+  const manualEmailRef = useRef(null)
 
   useEffect(() => {
     mounted.current = true
@@ -51,8 +52,29 @@ export default function CopyEmail() {
       </button>
       <p id={feedbackId} aria-live="polite" aria-atomic="true" className="break-words" data-copy-feedback>
         {status}
-        {failed && <>{' '}<a href={`mailto:${SITE.email}`} className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-paper">Open email application</a></>}
       </p>
+      {failed && <div className="mt-3 w-full max-w-sm">
+        <label htmlFor={`${feedbackId}-manual`} className="block leading-6">Copy email manually</label>
+        <input
+          ref={manualEmailRef}
+          id={`${feedbackId}-manual`}
+          type="text"
+          readOnly
+          value={SITE.email}
+          spellCheck={false}
+          aria-describedby={`${feedbackId}-hint`}
+          onFocus={(event) => event.currentTarget.select()}
+          className="min-h-11 w-full min-w-0 border border-paper/30 bg-ink px-3 text-paper"
+        />
+        <p id={`${feedbackId}-hint`} className="mt-2 leading-6">Select the address and use your device’s copy command.</p>
+        <div className="flex flex-wrap gap-x-4">
+          <button type="button" data-select-email onClick={() => {
+            manualEmailRef.current?.focus({ preventScroll: true })
+            manualEmailRef.current?.select()
+          }} className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-paper">Select email</button>
+          <a href={`mailto:${SITE.email}`} className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-paper">Open email application</a>
+        </div>
+      </div>}
     </div>
   )
 }
