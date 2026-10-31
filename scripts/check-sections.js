@@ -27,6 +27,16 @@ await withBrowser(async ({ page, url }) => {
   }
   assert.equal(await page.$eval('#contact .contact-email', (link) => link.getAttribute('href')), `mailto:${SITE.email}`)
   assert.equal(await page.$$eval('#work article', (cards) => cards.length), PROJECTS.length)
+  await page.evaluate(() => {
+    document.documentElement.style.overflowAnchor = 'none'
+    document.querySelectorAll('.content-section').forEach((section) => { section.style.minHeight = '2000px' })
+    window.scrollTo(0, document.getElementById('work').getBoundingClientRect().top + window.scrollY + 1500)
+  })
+  await page.waitForFunction(() => document.querySelector('nav[aria-label="Primary"] a[aria-current="location"]')?.getAttribute('href') === '#work')
+  const scrollBeforeResize = await page.evaluate(() => window.scrollY)
+  await page.evaluate(() => { document.getElementById('work').style.minHeight = '' })
+  await page.waitForFunction(() => document.querySelector('nav[aria-label="Primary"] a[aria-current="location"]')?.getAttribute('href') === '#about')
+  assert.ok(Math.abs(await page.evaluate(() => window.scrollY) - scrollBeforeResize) < 2, 'Content resizing should refresh the active section without requiring a scroll')
   await page.goto(`${url}#about`, { waitUntil: 'domcontentloaded' })
   await page.reload({ waitUntil: 'domcontentloaded' })
   await waitForReady(page)

@@ -37,4 +37,14 @@ builds, and GitHub Actions must not be started without authorization.
   open the same section without waiting through the intro.
 - Permalink controls should be omitted from print without hiding the headings.
 
+## Section tracking after layout changes
+
+- Expand content above the current viewport without scrolling. The numbered
+  navigation should update to the section now occupying the reading position.
+- Repeat with a delayed web font, a resized viewport, and browser Back/Forward
+  restoration. There should be no need to jiggle the scroll position to refresh
+  the active link.
+- Where ResizeObserver is unavailable, ordinary scroll and viewport-resize
+  updates should still work.
+
 No execution-based validation was performed when these checks were added.
