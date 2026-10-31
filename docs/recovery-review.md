@@ -47,4 +47,16 @@ builds, and GitHub Actions must not be started without authorization.
 - Where ResizeObserver is unavailable, ordinary scroll and viewport-resize
   updates should still work.
 
+## Contact recovery and offline notices
+
+- Deny clipboard access. Focus should remain on Copy email address, with a
+  labelled, read-only email field and Select email action available below it.
+- Select email should focus the field and select the complete address for the
+  device's normal copy command. A successful clipboard retry should remove the
+  manual fallback. No deprecated clipboard command is used.
+- Switch the browser between online and offline. The same polite status region
+  should stay mounted, receiving the offline message and clearing it on return.
+  This reports only the browser's signal; it does not prove network reachability
+  or send test requests to external services.
+
 No execution-based validation was performed when these checks were added.

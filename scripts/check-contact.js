@@ -50,6 +50,20 @@ await withBrowser(async ({ page, url }) => {
   const savedContact = await page.$eval('.save-contact', (link) => ({ filename: link.download, content: decodeURIComponent(link.getAttribute('href').split(',').slice(1).join(',')) }))
   assert.equal(savedContact.filename, 'sunil-amarthya.vcf')
   assert.ok(savedContact.content.includes(`EMAIL;TYPE=INTERNET:${SITE.email}`))
+  await page.evaluate(() => {
+    window.connectionNotice = document.querySelector('.connection-notice')
+    Object.defineProperty(navigator, 'onLine', { configurable: true, value: false })
+    window.dispatchEvent(new Event('offline'))
+  })
+  await page.waitForFunction(() => document.querySelector('.connection-notice').textContent.includes('Your browser reports that you are offline.'))
+  assert.equal(await page.$eval('.connection-notice', (notice) => notice.getAttribute('role')), 'status')
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'onLine', { configurable: true, value: true })
+    window.dispatchEvent(new Event('online'))
+  })
+  await page.waitForFunction(() => document.querySelector('.connection-notice').textContent.trim() === '')
+  assert.ok(await page.evaluate(() => window.connectionNotice === document.querySelector('.connection-notice')), 'Keep the live region mounted across connectivity changes')
+  await page.evaluate(() => { delete navigator.onLine })
   await page.setRequestInterception(true)
   let failPortrait = true
   page.on('request', (request) => {
