@@ -27,4 +27,14 @@ builds, and GitHub Actions must not be started without authorization.
   hidden mobile trigger. Desktop numbered links retain screen-reader labels;
   removed hover hints should not be reintroduced by regression checks.
 
+## Sharing a section
+
+- Work, About, and Contact headings have a `#` link with an accessible section
+  name. Copy its link address or open it in a new tab using the browser's normal
+  link controls.
+- Activating the link in the current tab should move focus to that section's
+  heading, including when its hash is already current. A direct visit should
+  open the same section without waiting through the intro.
+- Permalink controls should be omitted from print without hiding the headings.
+
 No execution-based validation was performed when these checks were added.

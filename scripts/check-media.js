@@ -16,6 +16,7 @@ await withBrowser(async ({ page, url }) => {
   }))
   assert.deepEqual(printed, { ink: 'rgb(0, 0, 0)', paper: 'rgb(255, 255, 255)', hiddenControls: true, destinations: true, noOverflow: true, headingVisible: true })
   assert.ok(await page.$$eval('.content-section h2', (headings) => headings.length === 3 && headings.every((heading) => getComputedStyle(heading).color === 'rgb(0, 0, 0)')))
+  assert.ok(await page.$$eval('.section-permalink', (links) => links.length === 3 && links.every((link) => getComputedStyle(link).display === 'none')), 'Permalink controls should not appear in print')
   const pdf = await page.pdf({ format: 'A4', printBackground: false })
   assert.equal(Buffer.from(pdf).subarray(0, 4).toString(), '%PDF')
 

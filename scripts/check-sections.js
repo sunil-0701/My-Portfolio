@@ -21,6 +21,9 @@ await withBrowser(async ({ page, url }) => {
       document.activeElement.id === `${sectionId}-heading` &&
       document.querySelector('nav[aria-label="Primary"] a[aria-current="location"]')?.getAttribute('href') === `#${sectionId}`,
     {}, id)
+    assert.equal(await page.$eval(`#${id} .section-permalink`, (link) => link.getAttribute('href')), `#${id}`)
+    await page.click(`#${id} .section-permalink`)
+    await page.waitForFunction((sectionId) => document.activeElement.id === `${sectionId}-heading`, {}, id)
   }
   assert.equal(await page.$eval('#contact .contact-email', (link) => link.getAttribute('href')), `mailto:${SITE.email}`)
   assert.equal(await page.$$eval('#work article', (cards) => cards.length), PROJECTS.length)

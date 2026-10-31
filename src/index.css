@@ -520,7 +520,7 @@ html, body {
     color: black !important;
   }
 
-  header, nav, dialog, .skip-link, .copy-email, .save-contact, .back-to-top, .connection-notice,
+  header, nav, dialog, .skip-link, .copy-email, .save-contact, .back-to-top, .connection-notice, .section-permalink,
   .technical-surface, #home img, [aria-label="Loading"],
   #home > [aria-hidden="true"] {
     display: none !important;
