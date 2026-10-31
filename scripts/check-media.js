@@ -27,5 +27,15 @@ await withBrowser(async ({ page, url }) => {
   assert.equal(await page.$eval('.name-period', (period) => period.getAnimations().length), 0)
   await page.setViewport({ width: 1366, height: 768 })
   assert.equal(await page.$eval('.hero-linework', (linework) => linework.getAnimations({ subtree: true }).length), 0, 'High-contrast linework must stay static')
+  await page.click('button[aria-label="Play Dino"]')
+  await page.waitForSelector('.dino-canvas')
+  await page.keyboard.press('Tab')
+  await page.keyboard.down('Shift')
+  await page.keyboard.press('Tab')
+  await page.keyboard.up('Shift')
+  assert.ok(await page.$eval('.dino-canvas', (canvas) => {
+    const style = getComputedStyle(canvas)
+    return canvas === document.activeElement && canvas.matches(':focus-visible') && style.outlineStyle === 'solid' && style.outlineWidth === '2px'
+  }), 'Keyboard focus must remain visible on the game canvas in high contrast')
   console.log('Media checks passed: printable links, ink-friendly A4 PDF, hidden controls, and static high-contrast presentation.')
 })

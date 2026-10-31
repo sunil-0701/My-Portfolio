@@ -34,6 +34,8 @@ run without authorization. The quality workflow remains manual-only.
 
 ## Input and pausing
 
+- Tab to the game canvas. It should show a visible inset focus outline, including
+  in forced-colors mode. Pointer focus should not add an unnecessary outline.
 - Start a run, then use Space, Arrow Up, and a primary tap or click to jump.
   Holding a jump key should not trigger repeated jumps.
 - Right-clicks and secondary touches should not jump. Modified keyboard
