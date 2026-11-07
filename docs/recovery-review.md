@@ -10,10 +10,11 @@ builds, and GitHub Actions must not be started without authorization.
 - Confirm keyboard focus moves to “Something interrupted the page.” The heading
   should be programmatically focusable without adding an extra Tab stop.
 - The recovery main landmark should be named by that heading.
-- Tab should reach Retry page, Email, and View GitHub in that order. Links should
+- Tab should reach Retry page, Reload page, Email, and View GitHub in that order. Links should
   retain their normal browser behavior.
 - After removing the temporary fault, Retry page should render the portfolio
   again. A persistent fault should return to the focused recovery heading.
+- Reload page should perform a full browser reload, preserving the current URL.
 
 ## Mobile navigation
 
@@ -54,9 +55,21 @@ builds, and GitHub Actions must not be started without authorization.
 - Select email should focus the field and select the complete address for the
   device's normal copy command. A successful clipboard retry should remove the
   manual fallback. No deprecated clipboard command is used.
+- The manual field should have a visible keyboard focus outline, including in
+  forced-colors mode, without autofill or text-correction suggestions.
 - Switch the browser between online and offline. The same polite status region
   should stay mounted, receiving the offline message and clearing it on return.
   This reports only the browser's signal; it does not prove network reachability
   or send test requests to external services.
+
+## Simple content and print checks
+
+- Engineering focus should name the skills list. Contact profiles should be
+  grouped as a named list, and each project's source link should identify the
+  project while retaining its new-tab announcement.
+- Print preview should show each configured role once, without clipped ticker
+  text, duplicated loop entries, decorative brackets, or dashed lines.
+- With JavaScript disabled, section spacing and safe-area padding should keep
+  content readable. Printed section links should not append meaningless hashes.
 
 No execution-based validation was performed when these checks were added.

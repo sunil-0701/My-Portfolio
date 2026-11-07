@@ -79,9 +79,12 @@ the heading. No pause button is displayed. It stays solid when the visitor
 requests reduced motion and stops while its tab is hidden. With
 JavaScript disabled, visitors still see the summary and working contact links.
 
-The email-copy control announces success or shows the address if clipboard access
-is denied. Profile links announce when they open a new tab. Print output hides
-interactive controls and includes readable contact destinations.
+The email-copy control announces success or offers a read-only field and Select
+email action if clipboard access is denied. That field disables autofill and text
+correction, and uses the same keyboard focus outline as other controls. Profile
+links announce when they open a new tab; project source links also identify their
+project. Print output hides interactive controls, includes readable contact
+destinations, and shows each configured role once without ticker clipping.
 
 Reduced-transparency preferences remove the texture and header
 fade. Clipboard requests time out after eight seconds and offer a direct email
@@ -89,7 +92,8 @@ link on failure. Mobile navigation also closes on browser Back/Forward navigatio
 
 Additional recovery and contact features:
 
-- A rendering-error fallback keeps email and GitHub links available.
+- A rendering-error fallback keeps email and GitHub links available. Retry page
+  remounts the portfolio; Reload page performs a full browser reload if needed.
 - Failed portraits show initials and a retry button.
 - Save contact downloads a vCard containing only the public identity and links
   from `src/config/site.js`; it does not send data to a service.
@@ -108,6 +112,10 @@ permission denial, contact-card import, portrait retry, and the no-JavaScript
 fallback. Rendering recovery can be exercised in development with a deliberately
 throwing child component. Do not trigger Actions or local suites unless wanted;
 pushes alone leave the manual-only workflow idle.
+
+Detailed opt-in review guides are in [recovery and navigation](docs/recovery-review.md)
+and [the Dino playground](docs/game-review.md). Added regression checks are not
+evidence of passing results: execute them only when explicitly authorized.
 
 ### Section review checklist
 

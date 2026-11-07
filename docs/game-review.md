@@ -24,6 +24,7 @@ run without authorization. The quality workflow remains manual-only.
 - If the module cannot load, expect a failure announcement and a focused Back
   button. The failed module is cached for this page session; a fresh page load is
   needed to attempt the download again.
+- Escape should also close this failure screen and return focus to Play.
 
 ## Canvas availability
 
@@ -31,6 +32,7 @@ run without authorization. The quality workflow remains manual-only.
   message instead of a blank, apparently playable surface.
 - The Back to contours button should receive focus and restore the playground
   when activated. The rest of the portfolio should remain usable.
+- Escape from the focused fallback button should also return to the contours.
 
 ## Input and pausing
 
