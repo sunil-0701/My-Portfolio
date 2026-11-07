@@ -485,6 +485,20 @@ html, body {
     display: none;
   }
 
+  .hero-role-window {
+    height: auto;
+    overflow: visible;
+    margin-inline: 0;
+  }
+
+  .hero-role-bracket, .hero-role-dashes, .hero-role-track > :last-child {
+    display: none;
+  }
+
+  .hero-role-track > span {
+    text-align: left;
+  }
+
   .content-section {
     padding-block: 1.5rem;
     break-inside: auto;
