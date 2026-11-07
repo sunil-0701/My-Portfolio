@@ -46,16 +46,19 @@
   <body>
     <noscript>
       <style>
-        .no-script { max-width: 42rem; margin: 12vh auto; padding: 1.5rem; color: #e7e5d9; font: 1rem/1.8 ui-monospace, monospace; }
+        .no-script { max-width: 42rem; margin: 12vh auto; padding: max(1.5rem, env(safe-area-inset-top)) max(1.5rem, env(safe-area-inset-right)) max(1.5rem, env(safe-area-inset-bottom)) max(1.5rem, env(safe-area-inset-left)); color: #e7e5d9; font: 1rem/1.8 ui-monospace, monospace; overflow-wrap: anywhere; }
         .no-script h1 { font-size: clamp(1.8rem, 6vw, 3rem); line-height: 1.2; }
         .no-script a { display: inline-block; padding: .75rem 0; color: #a6dfc1; overflow-wrap: anywhere; }
         .no-script a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
         .no-script nav { margin-top: 1.5rem; }
+        .no-script section { scroll-margin-top: 1.5rem; }
+        .no-script section + section { margin-top: 2.5rem; }
         @media print {
           body { background: white !important; }
           .no-script { margin: 0; color: black; }
           .no-script a { color: black; }
           .no-script a::after { content: ' (' attr(href) ')'; overflow-wrap: anywhere; }
+          .no-script a[href^="#"]::after { content: none; }
         }
         body { margin: 0; background: #0b0c0a; }
       </style>
