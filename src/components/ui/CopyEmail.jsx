@@ -61,6 +61,9 @@ export default function CopyEmail() {
           type="text"
           readOnly
           value={SITE.email}
+          autoComplete="off"
+          autoCapitalize="none"
+          autoCorrect="off"
           spellCheck={false}
           aria-describedby={`${feedbackId}-hint`}
           onFocus={(event) => event.currentTarget.select()}
