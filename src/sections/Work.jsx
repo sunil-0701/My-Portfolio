@@ -14,7 +14,7 @@ export default function Work() {
             <ul aria-label={`${project.title} technologies`} className="mb-6 flex flex-wrap gap-2">
               {project.technologies.map((technology) => <li key={technology} className="border border-paper/15 px-3 py-2 text-xs text-muted">{technology}</li>)}
             </ul>
-            <ExternalLink href={project.source} className="text-xs underline underline-offset-4">View source</ExternalLink>
+            <ExternalLink href={project.source} className="text-xs underline underline-offset-4">View source<span className="sr-only"> for {project.title}</span></ExternalLink>
           </article>
         ))}
       </div>
