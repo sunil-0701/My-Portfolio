@@ -31,6 +31,13 @@ function GamePanel({ active, onClose, transition }) {
       transition={transition}
       inert={!present}
       aria-hidden={!present}
+      onKeyDown={(event) => {
+        if (present && event.key === 'Escape' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+          event.preventDefault()
+          event.stopPropagation()
+          onClose()
+        }
+      }}
     >
       <Suspense fallback={null}>
         <DinoGame active={active && present} onClose={onClose} />
