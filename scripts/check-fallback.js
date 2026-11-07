@@ -12,6 +12,7 @@ await withBrowser(async ({ page, url }) => {
   assert.equal(await page.$eval(`.no-script a[href="${SITE.github}"]`, (link) => link.href), SITE.github)
   for (const id of ['work', 'about', 'contact']) assert.ok(await page.$(`.no-script #${id}`), `Fallback must include ${id}`)
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Fallback must fit a narrow screen')
+  assert.ok(await page.$eval('.no-script #about', (section) => parseFloat(getComputedStyle(section).marginTop) > 0), 'Fallback sections should have readable separation')
 
   await page.setJavaScriptEnabled(true)
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }])

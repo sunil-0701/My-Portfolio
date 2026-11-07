@@ -27,6 +27,12 @@ await withBrowser(async ({ page, url }) => {
   }
   assert.equal(await page.$eval('#contact .contact-email', (link) => link.getAttribute('href')), `mailto:${SITE.email}`)
   assert.equal(await page.$$eval('#work article', (cards) => cards.length), PROJECTS.length)
+  for (const project of PROJECTS) {
+    const sourceText = await page.$eval(`#project-${project.id}`, (heading) => heading.closest('article').querySelector('a').textContent)
+    assert.ok(sourceText.includes(project.title), 'Source links must name their project')
+    assert.ok(sourceText.includes('opens in a new tab'), 'Source links must retain the new-tab announcement')
+  }
+  assert.equal(await page.$eval('#about ul', (list) => document.getElementById(list.getAttribute('aria-labelledby'))?.textContent), 'Engineering focus')
   await page.evaluate(() => {
     document.documentElement.style.overflowAnchor = 'none'
     document.querySelectorAll('.content-section').forEach((section) => { section.style.minHeight = '2000px' })

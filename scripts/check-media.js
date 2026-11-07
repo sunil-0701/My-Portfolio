@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { withBrowser, waitForReady } from './helpers/browser.js'
+import { SITE } from '../src/config/site.js'
 
 await withBrowser(async ({ page, url }) => {
   await page.setViewport({ width: 794, height: 1123 })
@@ -17,6 +18,9 @@ await withBrowser(async ({ page, url }) => {
   assert.deepEqual(printed, { ink: 'rgb(0, 0, 0)', paper: 'rgb(255, 255, 255)', hiddenControls: true, destinations: true, noOverflow: true, headingVisible: true })
   assert.ok(await page.$$eval('.content-section h2', (headings) => headings.length === 3 && headings.every((heading) => getComputedStyle(heading).color === 'rgb(0, 0, 0)')))
   assert.ok(await page.$$eval('.section-permalink', (links) => links.length === 3 && links.every((link) => getComputedStyle(link).display === 'none')), 'Permalink controls should not appear in print')
+  const printedRoles = await page.$$eval('.hero-role-track > span', (roles) => roles.filter((role) => getComputedStyle(role).display !== 'none').map((role) => role.textContent.trim()))
+  assert.deepEqual(printedRoles, SITE.roles, 'Print each role once without the ticker loop duplicate')
+  assert.equal(await page.$eval('.hero-role-window', (window) => getComputedStyle(window).overflowY), 'visible')
   const pdf = await page.pdf({ format: 'A4', printBackground: false })
   assert.equal(Buffer.from(pdf).subarray(0, 4).toString(), '%PDF')
 
