@@ -11,11 +11,12 @@ await withBrowser(async ({ page, url }) => {
     ink: getComputedStyle(document.querySelector('h1')).color,
     paper: getComputedStyle(document.body).backgroundColor,
     hiddenControls: ['header', '.copy-email', '.save-contact', 'nav'].every((selector) => getComputedStyle(document.querySelector(selector)).display === 'none'),
-    destinations: [...document.querySelectorAll('.hero-copy a')].filter((link) => link.getClientRects().length > 0).every((link) => getComputedStyle(link, '::after').content.includes(link.getAttribute('href'))),
+    destinations: [...document.querySelectorAll('.content-section a[href^="https:"], .hero-rail a[href^="https:"]')].filter((link) => link.getClientRects().length > 0).every((link) => getComputedStyle(link, '::after').content.includes(link.getAttribute('href'))),
+    internalLinksClean: [...document.querySelectorAll('.hero-copy a[href^="#"]')].every((link) => getComputedStyle(link, '::after').content === 'none'),
     noOverflow: document.documentElement.scrollWidth <= innerWidth,
     headingVisible: getComputedStyle(document.querySelector('h1')).opacity === '1',
   }))
-  assert.deepEqual(printed, { ink: 'rgb(0, 0, 0)', paper: 'rgb(255, 255, 255)', hiddenControls: true, destinations: true, noOverflow: true, headingVisible: true })
+  assert.deepEqual(printed, { ink: 'rgb(0, 0, 0)', paper: 'rgb(255, 255, 255)', hiddenControls: true, destinations: true, internalLinksClean: true, noOverflow: true, headingVisible: true })
   assert.ok(await page.$$eval('.content-section h2', (headings) => headings.length === 3 && headings.every((heading) => getComputedStyle(heading).color === 'rgb(0, 0, 0)')))
   assert.ok(await page.$$eval('.section-permalink', (links) => links.length === 3 && links.every((link) => getComputedStyle(link).display === 'none')), 'Permalink controls should not appear in print')
   const printedRoles = await page.$$eval('.hero-role-track > span', (roles) => roles.filter((role) => getComputedStyle(role).display !== 'none').map((role) => role.textContent.trim()))

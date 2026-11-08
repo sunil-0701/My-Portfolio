@@ -601,6 +601,10 @@ html, body {
     overflow-wrap: anywhere;
   }
 
+  .hero-copy a[href^="#"]::after {
+    content: none;
+  }
+
   .hero-rail a::after {
     content: ' (' attr(href) ')';
     text-transform: none;
