@@ -66,7 +66,7 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             aria-haspopup="dialog"
-            className="fixed top-6 right-6 flex h-11 w-11 items-center justify-center transition-transform duration-200 active:scale-95 sm:right-10 md:hidden"
+            className="mobile-menu-trigger fixed flex h-11 w-11 items-center justify-center transition-transform duration-200 active:scale-95 md:hidden"
           >
             <span className="sr-only">{menuOpen ? 'Close menu' : 'Open menu'}</span>
             <span aria-hidden="true" className="relative block h-3 w-6">

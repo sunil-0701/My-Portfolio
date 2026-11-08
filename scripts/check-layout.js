@@ -18,6 +18,8 @@ await withBrowser(async ({ page, url }) => {
         const headingBounds = range.getBoundingClientRect()
         const actions = [...document.querySelectorAll('.hero-copy a')]
         const rail = document.querySelector('nav[aria-label="Primary"]')
+        const menuButton = document.querySelector('.mobile-menu-trigger')
+        const menuBounds = menuButton.getBoundingClientRect()
         return {
           noOverflow: document.documentElement.scrollWidth <= viewport,
           nameFits: headingBounds.left >= 0 && headingBounds.right <= viewport,
@@ -26,6 +28,9 @@ await withBrowser(async ({ page, url }) => {
             return bounds.left >= 0 && bounds.right <= viewport && bounds.height >= 44
           }),
           railClear: getComputedStyle(rail).display === 'none' || rail.getBoundingClientRect().right <= heading.getBoundingClientRect().left,
+          menuButtonFits: getComputedStyle(menuButton).display === 'none' || (
+            menuBounds.top >= 0 && menuBounds.left >= 0 && menuBounds.right <= viewport && menuBounds.bottom <= innerHeight && menuBounds.width >= 44 && menuBounds.height >= 44
+          ),
         }
       })
       for (const [name, passes] of Object.entries(result)) {

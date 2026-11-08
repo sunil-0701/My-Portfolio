@@ -134,6 +134,11 @@ html, body {
   padding-right: max(1.5rem, env(safe-area-inset-right));
 }
 
+.mobile-menu-trigger {
+  top: max(1.5rem, env(safe-area-inset-top));
+  right: max(1.5rem, env(safe-area-inset-right));
+}
+
 .mobile-menu {
   overscroll-behavior: contain;
   padding-top: max(1.5rem, env(safe-area-inset-top));
@@ -143,6 +148,10 @@ html, body {
 }
 
 @media (min-width: 640px) {
+  .mobile-menu-trigger {
+    right: max(2.5rem, env(safe-area-inset-right));
+  }
+
   .hero-shell, .site-header {
     padding-left: max(2.5rem, env(safe-area-inset-left));
     padding-right: max(2.5rem, env(safe-area-inset-right));
