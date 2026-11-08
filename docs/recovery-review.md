@@ -61,6 +61,8 @@ builds, and GitHub Actions must not be started without authorization.
   should stay mounted, receiving the offline message and clearing it on return.
   This reports only the browser's signal; it does not prove network reachability
   or send test requests to external services.
+- After browser Back/Forward restores the page, the notice should refresh from
+  the browser's current connectivity signal rather than retain a stale message.
 
 ## Simple content and print checks
 

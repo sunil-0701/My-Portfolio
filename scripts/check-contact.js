@@ -66,6 +66,16 @@ await withBrowser(async ({ page, url }) => {
     window.dispatchEvent(new Event('online'))
   })
   await page.waitForFunction(() => document.querySelector('.connection-notice').textContent.trim() === '')
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'onLine', { configurable: true, value: false })
+    window.dispatchEvent(new Event('pageshow'))
+  })
+  await page.waitForFunction(() => document.querySelector('.connection-notice').textContent.includes('Your browser reports that you are offline.'))
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'onLine', { configurable: true, value: true })
+    window.dispatchEvent(new Event('pageshow'))
+  })
+  await page.waitForFunction(() => document.querySelector('.connection-notice').textContent.trim() === '')
   assert.ok(await page.evaluate(() => window.connectionNotice === document.querySelector('.connection-notice')), 'Keep the live region mounted across connectivity changes')
   await page.evaluate(() => { delete navigator.onLine })
   await page.setRequestInterception(true)
