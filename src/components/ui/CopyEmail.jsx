@@ -50,7 +50,7 @@ export default function CopyEmail() {
       <button type="button" onClick={copy} aria-busy={busy} aria-disabled={busy} aria-describedby={feedbackId} className="min-h-11 px-2 underline underline-offset-4 hover:text-paper aria-disabled:opacity-50">
         {busy ? 'Copying…' : 'Copy email address'}
       </button>
-      <p id={feedbackId} aria-live="polite" aria-atomic="true" className="break-words" data-copy-feedback>
+      <p id={feedbackId} aria-live="polite" aria-atomic="true" className="min-h-4 break-words leading-4" data-copy-feedback>
         {status}
       </p>
       {failed && <div className="mt-3 w-full max-w-sm">
