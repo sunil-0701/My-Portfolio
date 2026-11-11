@@ -16,7 +16,7 @@ export default function Contact() {
         <li><ExternalLink href={SITE.github}>GitHub</ExternalLink></li>
         <li><ExternalLink href={SITE.linkedin}>LinkedIn</ExternalLink></li>
       </ul>
-      <a className="back-to-top mt-10 inline-flex min-h-11 items-center text-xs text-muted underline underline-offset-4 hover:text-paper" href="#home">Back to top ↑</a>
+      <a className="back-to-top mt-10 inline-flex min-h-11 items-center gap-1 text-xs text-muted underline underline-offset-4 transition-colors duration-150 hover:text-paper" href="#home">Back to top <span aria-hidden="true">↑</span></a>
     </ContentSection>
   )
 }
