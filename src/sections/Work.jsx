@@ -12,7 +12,7 @@ export default function Work() {
             <h3 id={`project-${project.id}`} className="font-display text-2xl font-bold">{project.title}</h3>
             <p className="my-6 text-sm leading-8 text-muted">{project.description}</p>
             <ul aria-label={`${project.title} technologies`} className="mb-6 flex flex-wrap gap-2">
-              {project.technologies.map((technology) => <li key={technology} className="border border-paper/15 px-3 py-2 text-xs text-muted">{technology}</li>)}
+              {project.technologies.map((technology) => <li key={technology} className="border border-paper/15 px-3 py-2 text-xs text-muted transition-colors duration-150 hover:border-paper/40 hover:text-paper">{technology}</li>)}
             </ul>
             <ExternalLink href={project.source} className="text-xs underline underline-offset-4">View source<span className="sr-only"> for {project.title}</span></ExternalLink>
           </article>
