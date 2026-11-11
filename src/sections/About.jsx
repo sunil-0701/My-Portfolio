@@ -8,7 +8,7 @@ export default function About() {
         <div>
           <h3 id="engineering-focus-heading" className="mb-5 font-mono text-xs uppercase tracking-widest text-muted">Engineering focus</h3>
           <ul aria-labelledby="engineering-focus-heading" className="flex flex-wrap gap-3">
-            {SITE.expertise.map((item) => <li key={item} className="border border-paper/25 px-4 py-3 text-xs tracking-wide">{item}</li>)}
+            {SITE.expertise.map((item) => <li key={item} className="border border-paper/25 px-4 py-3 text-xs tracking-wide transition-colors duration-150 hover:border-paper/50 hover:text-paper">{item}</li>)}
           </ul>
         </div>
         <dl className="grid gap-6 text-sm">
