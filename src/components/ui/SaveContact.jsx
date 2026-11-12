@@ -7,7 +7,7 @@ export default function SaveContact() {
       download="sunil-amarthya.vcf"
       className="save-contact inline-flex min-h-11 items-center px-2 text-[0.65rem] text-muted underline underline-offset-4 transition-colors duration-150 hover:text-paper"
     >
-      Save contact <span className="sr-only">as a vCard file</span>
+      Save contact <span aria-hidden="true" className="ml-1">↓</span><span className="sr-only">as a vCard file</span>
     </a>
   )
 }
