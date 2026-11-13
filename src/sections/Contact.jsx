@@ -7,7 +7,7 @@ import { SITE } from '../config/site'
 export default function Contact() {
   return (
     <ContentSection id="contact" number="04" title="Start a conversation." intro="Email is the direct way to get in touch. You can also copy the address, save the contact card, or find me on the profiles below.">
-      <a className="contact-email inline-block max-w-full break-all py-3 font-mono text-base text-paper underline decoration-paper/40 underline-offset-4 transition-colors duration-150 hover:text-signal hover:decoration-signal sm:text-lg" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      <a className="contact-email inline-block max-w-full break-all py-3 font-mono text-base text-paper underline decoration-paper/40 underline-offset-4 transition-colors duration-150 hover:text-signal hover:decoration-signal focus-visible:text-signal focus-visible:decoration-signal sm:text-lg" href={`mailto:${SITE.email}`}>{SITE.email}</a>
       <div className="flex flex-wrap items-start gap-x-6">
         <CopyEmail />
         <div className="mt-4"><SaveContact /></div>
