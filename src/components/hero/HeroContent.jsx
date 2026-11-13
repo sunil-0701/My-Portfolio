@@ -78,7 +78,7 @@ export default function HeroContent({ ready = true }) {
         <HeroPlayground active={ready && pageVisible} />
       </motion.div>
 
-      <motion.div variants={rise} className="flex flex-wrap items-center gap-4 lg:gap-6">
+      <motion.div variants={rise} className="flex flex-col items-stretch gap-4 min-[480px]:flex-row min-[480px]:flex-wrap min-[480px]:items-center lg:gap-6">
         <Button href="#work" variant="outline" icon={<ArrowRight />}>
           View work
         </Button>
