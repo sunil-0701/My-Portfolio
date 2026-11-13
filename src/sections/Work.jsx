@@ -7,7 +7,7 @@ export default function Work() {
     <ContentSection id="work" number="02" title="Built, not just described." intro="A closer look at the code behind this portfolio.">
       <div className="grid gap-6 lg:grid-cols-2">
         {PROJECTS.map((project) => (
-          <article key={project.id} aria-labelledby={`project-${project.id}`} className="project-card min-w-0 border border-paper/25 bg-ink-2 p-6 transition-colors duration-200 hover:border-paper/50 hover:bg-ink-3 sm:p-8">
+          <article key={project.id} aria-labelledby={`project-${project.id}`} className="project-card min-w-0 border border-paper/25 bg-ink-2 p-6 transition-colors duration-200 hover:border-paper/50 hover:bg-ink-3 focus-within:border-paper/50 focus-within:bg-ink-3 sm:p-8">
             <p className="mb-4 font-mono text-xs uppercase tracking-widest text-faint">{project.type}</p>
             <h3 id={`project-${project.id}`} className="font-display text-2xl font-bold">{project.title}</h3>
             <p className="my-6 text-sm leading-8 text-muted">{project.description}</p>
