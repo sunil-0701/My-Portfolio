@@ -67,7 +67,7 @@ export default function CopyEmail() {
           spellCheck={false}
           aria-describedby={`${feedbackId}-hint`}
           onFocus={(event) => event.currentTarget.select()}
-          className="min-h-11 w-full min-w-0 border border-paper/30 bg-ink px-3 text-paper"
+          className="min-h-11 w-full min-w-0 border border-paper/30 bg-ink px-3 font-mono text-base text-paper transition-colors duration-150 focus:border-paper/70"
         />
         <p id={`${feedbackId}-hint`} className="mt-2 leading-6">Select the address and use your device’s copy command.</p>
         <div className="flex flex-wrap gap-x-4">
