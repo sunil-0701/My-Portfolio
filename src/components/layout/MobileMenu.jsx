@@ -62,7 +62,7 @@ export default function MobileMenu({ children, onClose }) {
           type="button"
           autoFocus
           onClick={() => dialogRef.current.close()}
-          className="min-h-11 px-3 font-mono text-sm text-paper"
+          className="min-h-11 border border-paper/25 px-3 font-mono text-sm text-paper transition-colors duration-150 hover:border-paper/50 hover:bg-ink-3 focus-visible:border-paper/50 focus-visible:bg-ink-3"
         >
           Close menu
         </button>
