@@ -12,7 +12,7 @@ export default function Contact() {
         <CopyEmail />
         <div className="mt-4"><SaveContact /></div>
       </div>
-      <ul aria-label="Professional profiles" className="mt-8 flex flex-wrap gap-6 text-sm text-muted">
+      <ul aria-label="Professional profiles" className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-paper/15 pt-4 text-sm text-muted">
         <li><ExternalLink href={SITE.github}>GitHub</ExternalLink></li>
         <li><ExternalLink href={SITE.linkedin}>LinkedIn</ExternalLink></li>
       </ul>
