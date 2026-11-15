@@ -22,7 +22,7 @@ export default class ErrorBoundary extends Component {
         <p className="font-mono text-xs uppercase tracking-widest text-muted">Portfolio unavailable</p>
         <h1 id="error-heading" ref={this.headingRef} tabIndex={-1} className="font-display text-3xl">Something interrupted the page.</h1>
         <p className="leading-7 text-muted">Try the portfolio again, reload the page, or use the contact links below.</p>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:flex-wrap sm:items-center">
           <Button onClick={() => this.setState({ failed: false })} variant="outline">Retry page</Button>
           <Button onClick={() => window.location.reload()} variant="outline">Reload page</Button>
           <Button href={`mailto:${SITE.email}`} variant="outline">Email {SITE.firstName}</Button>
