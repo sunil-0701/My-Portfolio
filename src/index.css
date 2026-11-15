@@ -54,6 +54,10 @@ html, body {
 }
 
 .skip-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  box-sizing: border-box;
   position: fixed;
   top: max(0.75rem, env(safe-area-inset-top));
   left: max(0.75rem, env(safe-area-inset-left));
@@ -79,7 +83,6 @@ html, body {
 @media (max-width: 479px) {
   .skip-link {
     max-width: calc(100vw - 3rem);
-    box-sizing: border-box;
   }
 }
 
