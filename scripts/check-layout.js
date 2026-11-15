@@ -6,7 +6,7 @@ await withBrowser(async ({ page, url }) => {
   await page.goto(url, { waitUntil: 'networkidle0' })
   await waitForReady(page)
 
-  const viewports = [[320, 568], [360, 640], [390, 844], [640, 480], [768, 1024], [844, 390], [1024, 768], [1366, 768], [1920, 1080]]
+  const viewports = [[320, 568], [360, 640], [390, 844], [640, 480], [768, 1024], [844, 240], [844, 390], [1024, 768], [1366, 768], [1920, 1080]]
   const checkLayout = async (label) => {
     for (const [width, height] of viewports) {
       await page.setViewport({ width, height })
@@ -20,6 +20,7 @@ await withBrowser(async ({ page, url }) => {
         const rail = document.querySelector('nav[aria-label="Primary"]')
         const menuButton = document.querySelector('.mobile-menu-trigger')
         const menuBounds = menuButton.getBoundingClientRect()
+        const railBounds = rail.getBoundingClientRect()
         return {
           noOverflow: document.documentElement.scrollWidth <= viewport,
           nameFits: headingBounds.left >= 0 && headingBounds.right <= viewport,
@@ -28,6 +29,8 @@ await withBrowser(async ({ page, url }) => {
             return bounds.left >= 0 && bounds.right <= viewport && bounds.height >= 44
           }),
           railClear: getComputedStyle(rail).display === 'none' || rail.getBoundingClientRect().right <= heading.getBoundingClientRect().left,
+          railFits: getComputedStyle(rail).display === 'none' || (railBounds.top >= 0 && railBounds.bottom <= innerHeight),
+          skipTarget: document.querySelector('.skip-link').getBoundingClientRect().height >= 44,
           menuButtonFits: getComputedStyle(menuButton).display === 'none' || (
             menuBounds.top >= 0 && menuBounds.left >= 0 && menuBounds.right <= viewport && menuBounds.bottom <= innerHeight && menuBounds.width >= 44 && menuBounds.height >= 44
           ),
@@ -49,5 +52,5 @@ await withBrowser(async ({ page, url }) => {
   await page.reload({ waitUntil: 'networkidle0' })
   await waitForReady(page)
   await checkLayout('Fallback fonts')
-  console.log('Layout checks passed: nine viewports, heading containment, action targets, navigation clearance, and fallback fonts.')
+  console.log('Layout checks passed: ten viewports, heading containment, skip/action targets, short-screen navigation, and fallback fonts.')
 })

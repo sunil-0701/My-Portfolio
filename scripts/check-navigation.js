@@ -14,6 +14,12 @@ await withBrowser(async ({ page, url }) => {
   assert.equal(await page.$eval('h1', (heading) => heading.getBoundingClientRect().left), headingLeft, 'Opening navigation must not shift the page')
   assert.equal(await page.$eval('#mobile-menu', (menu) => getComputedStyle(menu).overscrollBehavior), 'contain')
   assert.equal(await page.evaluate(() => document.activeElement.textContent.trim()), 'Close menu')
+  assert.ok(await page.$$eval('#mobile-menu nav a[href^="#"]', (links) => links.every((link) => {
+    const bounds = link.getBoundingClientRect()
+    const rowBounds = link.parentElement.getBoundingClientRect()
+    return Math.abs(bounds.width - rowBounds.width) < 2 && bounds.height >= 44
+  })), 'Mobile section links should fill their row and retain comfortable targets')
+  assert.equal(await page.$eval('#mobile-menu a[aria-current="location"]', (link) => getComputedStyle(link).borderLeftWidth), '2px')
   await page.keyboard.down('Shift')
   await page.keyboard.press('Tab')
   await page.keyboard.up('Shift')
@@ -56,6 +62,7 @@ await withBrowser(async ({ page, url }) => {
   await page.keyboard.press('Tab')
   await page.keyboard.up('Shift')
   assert.equal(await page.$eval(desktopHome, (link) => link.getAttribute('aria-current')), 'location')
+  assert.equal(await page.$eval(desktopHome, (link) => getComputedStyle(link).outlineWidth), '2px', 'Keyboard focus should use a visible two-pixel outline')
   const desktopLinks = await page.$$eval('nav[aria-label="Primary"] a', (links) => links.map((link) => ({
     href: link.getAttribute('href'),
     label: link.querySelector('.sr-only')?.textContent,
