@@ -67,7 +67,7 @@ export default function NavBar({ activeLink = 'HOME', ready = true }) {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             aria-haspopup="dialog"
-            className="mobile-menu-trigger fixed flex h-11 w-11 items-center justify-center transition-transform duration-200 active:scale-95 md:hidden"
+            className="mobile-menu-trigger fixed flex h-11 w-11 items-center justify-center border border-paper/20 bg-ink transition-[background-color,border-color,transform] duration-200 hover:border-paper/50 hover:bg-ink-3 focus-visible:border-paper/50 focus-visible:bg-ink-3 active:scale-95 md:hidden"
           >
             <span className="sr-only">{menuOpen ? 'Close menu' : 'Open menu'}</span>
             <span aria-hidden="true" className="relative block h-3 w-6">
