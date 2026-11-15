@@ -15,11 +15,15 @@ builds, and GitHub Actions must not be started without authorization.
 - After removing the temporary fault, Retry page should render the portfolio
   again. A persistent fault should return to the focused recovery heading.
 - Reload page should perform a full browser reload, preserving the current URL.
+- At phone widths, recovery actions should stack at equal width; at larger
+  widths they should return to a wrapping horizontal row.
 
 ## Mobile navigation
 
 - Open the menu at a narrow width. Escape should close it and return focus to
   the visible trigger without moving the page.
+- Section links should fill the available menu row, with a left marker for the
+  active section. Hover and keyboard focus should both show their background.
 - Activate a section link normally: the menu should close and the section should
   receive navigation. Ctrl/Cmd/Shift-clicks should retain native link behavior
   without forcibly closing the menu. The contact link follows the same rule.
@@ -27,6 +31,10 @@ builds, and GitHub Actions must not be started without authorization.
   and focus should move to the visible active section link rather than the now
   hidden mobile trigger. Desktop numbered links retain screen-reader labels;
   removed hover hints should not be reintroduced by regression checks.
+- At desktop widths with a short landscape viewport, the rail should remain
+  inside the screen. If it needs to scroll, every section must stay reachable.
+- Keyboard controls should use two-pixel focus outlines. The focused Skip to
+  content link should provide a target at least 44 pixels tall.
 
 ## Sharing a section
 
@@ -52,6 +60,8 @@ builds, and GitHub Actions must not be started without authorization.
 
 - Deny clipboard access. Focus should remain on Copy email address, with a
   labelled, read-only email field and Select email action available below it.
+- A successful confirmation should use the signal accent; failure guidance
+  should use the main text color. Both still need explicit readable wording.
 - Select email should focus the field and select the complete address for the
   device's normal copy command. A successful clipboard retry should remove the
   manual fallback. No deprecated clipboard command is used.
@@ -63,12 +73,17 @@ builds, and GitHub Actions must not be started without authorization.
   or send test requests to external services.
 - After browser Back/Forward restores the page, the notice should refresh from
   the browser's current connectivity signal rather than retain a stale message.
+- The offline message should have space above it and an accent rail, without
+  reserving that space when the message is empty.
 
 ## Simple content and print checks
 
 - Engineering focus should name the skills list. Contact profiles should be
   grouped as a named list, and each project's source link should identify the
   project while retaining its new-tab announcement.
+- Try long skill names on a narrow viewport: chips should wrap their text rather
+  than force horizontal page scrolling. Source actions should sit at the bottom
+  of equal-height project cards and remain aligned to the left.
 - Print preview should show each configured role once, without clipped ticker
   text, duplicated loop entries, decorative brackets, or dashed lines.
 - With JavaScript disabled, section spacing and safe-area padding should keep

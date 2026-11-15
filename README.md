@@ -28,7 +28,7 @@ or run an individual suite with
 `test:contact-card`, or `test:sections`.
 
 The tests cover the blinking name period, reduced motion, intro persistence,
-mobile focus handling, nine viewport sizes, unavailable web fonts, button
+mobile focus handling, ten viewport sizes, unavailable web fonts, button
 semantics, clipboard failures, print/PDF output, high contrast, and the
 no-JavaScript fallback. Production checks serve the actual build at both `/` and
 `/My-Portfolio/` and verify assets and interactive navigation. GitHub Actions is
@@ -123,8 +123,14 @@ evidence of passing results: execute them only when explicitly authorized.
 - The numbered rail should follow the visible section as the page scrolls.
 - Open `#about` directly, then use Back/Forward and check heading focus.
 - On mobile, selecting a section should close the menu and release its scroll lock.
+- Mobile section links fill their row and mark the active section with a left
+  border. The menu trigger has an opaque outlined target over the portrait.
+- At short landscape heights, the desktop rail uses tighter spacing and allows
+  scrolling inside the rail if needed. Its links keep their minimum target size.
 - Copy email, Save contact, and the full email address now live in Contact.
 - Review all sections at narrow widths, with unavailable web fonts, and in print.
+- Check long skill/technology labels for wrapping, source links for bottom
+  alignment in cards, and error recovery actions for full-width phone layout.
 - With JavaScript disabled, Work, About, and Contact should still be readable.
 
 All navigation remains normal `<a href>` linking. Ctrl/Cmd-click, copy-link,
