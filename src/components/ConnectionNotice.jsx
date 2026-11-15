@@ -17,7 +17,7 @@ export default function ConnectionNotice() {
   const online = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
   return (
     <div role="status" aria-live="polite" aria-atomic="true" className="connection-notice">
-      {!online && <p className="mb-6 border border-paper/20 bg-ink-2 px-4 py-3 text-xs leading-6 text-muted">
+      {!online && <p className="mt-6 mb-6 border border-paper/20 border-l-2 border-l-signal bg-ink-2 px-4 py-3 text-xs leading-6 text-muted">
         Your browser reports that you are offline. Contact details are still available below;
         external profiles may need a connection.
       </p>}
