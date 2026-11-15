@@ -8,6 +8,7 @@ const easeOutExpo = [0.16, 1, 0.3, 1]
 
 function NavItem({ section, isActive, onNavigate, number }) {
   const base = 'group relative inline-flex min-h-11 min-w-11 items-center font-mono text-[0.72rem] tracking-[0.12em] transition-colors duration-150'
+  const mobileStyle = number ? '' : `w-full border-l-2 px-3 hover:bg-ink-3 focus-visible:bg-ink-3 ${isActive ? 'border-paper bg-ink-2' : 'border-transparent'}`
   const content = number ? (
     <>
       <span aria-hidden="true" className={`px-0.5 ${isActive ? 'bg-paper text-ink' : ''}`}>{number}</span>
@@ -35,7 +36,7 @@ function NavItem({ section, isActive, onNavigate, number }) {
       }}
       aria-current={isActive ? 'location' : undefined}
       title={number ? undefined : section.label}
-      className={`${base} ${isActive ? 'text-paper' : 'text-muted hover:text-paper'}`}
+      className={`${base} ${mobileStyle} ${isActive ? 'text-paper' : 'text-muted hover:text-paper'}`}
     >
       {content}
     </a>
