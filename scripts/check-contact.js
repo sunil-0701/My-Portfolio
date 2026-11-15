@@ -14,6 +14,7 @@ await withBrowser(async ({ page, url }) => {
   await page.click('.copy-email button')
   await page.waitForFunction(() => document.querySelector('[data-copy-feedback]').textContent === 'Email copied')
   assert.equal(await page.evaluate(() => window.copiedEmail), SITE.email)
+  const confirmationColor = await page.$eval('[data-copy-feedback]', (feedback) => getComputedStyle(feedback).color)
   await page.evaluate(() => {
     window.copyCalls = 0
     navigator.clipboard.writeText = () => {
@@ -34,6 +35,7 @@ await withBrowser(async ({ page, url }) => {
   await page.click('.copy-email button')
   await page.waitForFunction(() => document.querySelector('[data-copy-feedback]').textContent.startsWith('Copy unavailable.'))
   assert.ok((await page.$eval('[data-copy-feedback]', (element) => element.textContent)).includes(SITE.email))
+  assert.notEqual(await page.$eval('[data-copy-feedback]', (feedback) => getComputedStyle(feedback).color), confirmationColor, 'Recovery guidance and successful confirmations should have distinct emphasis')
   assert.equal(await page.$eval('.copy-email button', (button) => button.disabled), false)
   assert.ok(await page.$eval('.copy-email button', (button) => button === document.activeElement), 'A failed request must not steal focus')
   assert.equal(await page.$eval('.copy-email input', (input) => input.value), SITE.email)
@@ -61,6 +63,10 @@ await withBrowser(async ({ page, url }) => {
   })
   await page.waitForFunction(() => document.querySelector('.connection-notice').textContent.includes('Your browser reports that you are offline.'))
   assert.equal(await page.$eval('.connection-notice', (notice) => notice.getAttribute('role')), 'status')
+  assert.ok(await page.$eval('.connection-notice p', (message) => {
+    const style = getComputedStyle(message)
+    return parseFloat(style.marginTop) > 0 && style.borderLeftWidth === '2px'
+  }), 'The offline notice should be separated from hero actions and have an accent rail')
   await page.evaluate(() => {
     Object.defineProperty(navigator, 'onLine', { configurable: true, value: true })
     window.dispatchEvent(new Event('online'))

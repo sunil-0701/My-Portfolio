@@ -33,6 +33,19 @@ await withBrowser(async ({ page, url }) => {
     assert.ok(sourceText.includes('opens in a new tab'), 'Source links must retain the new-tab announcement')
   }
   assert.equal(await page.$eval('#about ul', (list) => document.getElementById(list.getAttribute('aria-labelledby'))?.textContent), 'Engineering focus')
+  assert.ok(await page.$$eval('#work article', (cards) => cards.every((card) => getComputedStyle(card).flexDirection === 'column' && getComputedStyle(card.querySelector('a')).alignSelf === 'flex-start')), 'Source actions should remain left-aligned in column cards')
+  await page.setViewport({ width: 320, height: 568 })
+  const chipLabels = await page.$$eval('#work ul li, #about ul li', (chips) => chips.map((chip) => {
+    const original = chip.textContent
+    chip.textContent = 'LongTechnologyLabel'.repeat(12)
+    return original
+  }))
+  assert.ok(await page.$$eval('#work ul li, #about ul li', (chips) => chips.every((chip) => {
+    const bounds = chip.getBoundingClientRect()
+    return bounds.left >= 0 && bounds.right <= document.documentElement.clientWidth && chip.scrollWidth <= chip.clientWidth + 1
+  })), 'Long skill labels should wrap within narrow cards')
+  await page.$$eval('#work ul li, #about ul li', (chips, labels) => chips.forEach((chip, index) => { chip.textContent = labels[index] }), chipLabels)
+  await page.setViewport({ width: 1366, height: 768 })
   await page.evaluate(() => {
     document.documentElement.style.overflowAnchor = 'none'
     document.querySelectorAll('.content-section').forEach((section) => { section.style.minHeight = '2000px' })
